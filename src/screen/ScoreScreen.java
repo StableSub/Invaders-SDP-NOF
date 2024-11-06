@@ -38,7 +38,7 @@ public class ScoreScreen extends Screen {
 	/** Number of coins earned in the game */
 	private int coinsEarned;
 	/** Player's name */
-	private String name1, name2;
+	private String name1;
 	/** Two player mode flags*/
 	private boolean isMultiplay;
 
@@ -59,12 +59,10 @@ public class ScoreScreen extends Screen {
 	 *            Current game state.
 	 */
 	public ScoreScreen(final String name1, final int width, final int height, final int fps,
-			final GameState gameState, final Wallet wallet, final AchievementManager achievementManager,
-		    final boolean isMultiplay) {
+			final GameState gameState, final Wallet wallet, final AchievementManager achievementManager) {
 		super(width, height, fps);
 
 		this.name1 = name1;
-		this.name2 = name2;
 
 		this.score = gameState.getScore();
 		this.livesRemaining = gameState.getLivesRemaining();
