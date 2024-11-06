@@ -54,7 +54,7 @@ public class GameSettingScreen extends Screen {
 		super(width, height, fps);
 
 		// row 0: multiplayer
-		this.name1 = "P1";
+		this.name1 = "NOF";
 
 		// row 1: difficulty level
 		this.difficultyLevel = 1; 	// 0: easy, 1: normal, 2: hard
@@ -185,7 +185,7 @@ public class GameSettingScreen extends Screen {
 
 		drawManager.drawGameSettingRow(this, this.selectedRow);
 
-		drawManager.drawGameSettingElements(this, this.selectedRow, false, name1, null ,this.difficultyLevel);
+		drawManager.drawGameSettingElements(this, this.selectedRow, name1 ,this.difficultyLevel);
 
 		drawManager.completeDrawing(this);
 
