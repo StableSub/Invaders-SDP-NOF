@@ -36,6 +36,8 @@ public class GameState {
 
 	private int hitBullets;
 
+	private boolean start;
+
 	/**
 	 * Constructor.
 	 * 
