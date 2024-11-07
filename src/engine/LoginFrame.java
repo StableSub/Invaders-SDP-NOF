@@ -85,9 +85,16 @@ public class LoginFrame extends JFrame {
         resetPasswordButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ResetPassword_ID(db); // 비밀번호 재설정 창 생성 및 표시
+                new ResetPassword(db); // 비밀번호 재설정 창 생성 및 표시
             }
         });
+        findIDButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Finde_ID(db); // 비밀번호 재설정 창 생성 및 표시
+            }
+        });
+
 
         setVisible(true); // 로그인 창 표시
     }
