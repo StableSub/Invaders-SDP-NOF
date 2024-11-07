@@ -97,12 +97,8 @@ public class GameSettingScreen extends Screen {
 			}
 
 			if (this.selectedRow == 0) {
-				if (inputManager.isKeyDown(KeyEvent.VK_LEFT)) {
-					this.selectionCooldown.reset();
-					soundManager.playSound(Sound.MENU_MOVE);
-				} // Delete Selection of Two Player Mode
-				else if (inputManager.isKeyDown(KeyEvent.VK_BACK_SPACE)) {
-					// Delete Setting of name2 Option
+				// Delete selection of two player mode and key event
+				if (inputManager.isKeyDown(KeyEvent.VK_BACK_SPACE)) {
 					if (!this.name1.isEmpty()) {
 						this.name1 = this.name1.substring(0, this.name1.length() - 1);
 						this.selectionCooldown.reset();

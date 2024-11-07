@@ -1248,7 +1248,9 @@ public final class DrawManager {
 		backBufferGraphics.setFont(fontSmall);
 		backBufferGraphics.drawString(string, screen.getWidth() *65/100-
 				fontRegularMetrics.stringWidth(string)/2, height);
-	}public void drawRightSideAchievementSmallEventString2(final Screen screen,
+	}
+
+	public void drawRightSideAchievementSmallEventString2(final Screen screen,
 												  final String string, final int height) {
 		backBufferGraphics.setFont(fontSmall);
 		backBufferGraphics.drawString(string, screen.getWidth() *68/100-
@@ -1261,23 +1263,29 @@ public final class DrawManager {
 		backBufferGraphics.drawString(string, screen.getWidth() *63/100-
 						fontRegularMetrics.stringWidth(string), height);
 	}
+
 	public void drawRightSideAchievementComboString_1(final Screen screen,
 													  final String string, final int height) {
 		backBufferGraphics.setFont(fontSmall);
 		backBufferGraphics.drawString(string, screen.getWidth() *52/100-
 				fontRegularMetrics.stringWidth(string), height);
-	}public void drawRightSideAchievementComboString_2(final Screen screen,
+	}
+
+	public void drawRightSideAchievementComboString_2(final Screen screen,
 													  final String string, final int height) {
 		backBufferGraphics.setFont(fontSmall);
 		backBufferGraphics.drawString(string, screen.getWidth() *74/100-
 				fontRegularMetrics.stringWidth(string), height);
 	}
+
 	public void drawRightSideAchievementSmallString_1(final Screen screen,
 												  final String string, final int height) {
 		backBufferGraphics.setFont(fontSmall);
 		backBufferGraphics.drawString(string, screen.getWidth() *59/100-
 				fontRegularMetrics.stringWidth(string), height);
-	}public void drawRightSideAchievementSmallString_2(final Screen screen,
+	}
+
+	public void drawRightSideAchievementSmallString_2(final Screen screen,
 												  final String string, final int height) {
 		backBufferGraphics.setFont(fontSmall);
 		backBufferGraphics.drawString(string, screen.getWidth() *77/100-
@@ -1805,12 +1813,6 @@ public final class DrawManager {
 	 *            Screen to draw on.
 	 * @param selectedRow
 	 *            Selected row.
-	 * @param isMultiPlayer
-	 *            If the game is multiplayer.
-	 * @param name1
-	 *            Player 1 name.
-	 * @param name2
-	 *            Player 2 name.
 	 * @param difficultyLevel
 	 *            Difficulty level.
 	 *
