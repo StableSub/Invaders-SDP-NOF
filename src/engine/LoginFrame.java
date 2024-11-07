@@ -43,9 +43,14 @@ public class LoginFrame extends JFrame {
         registerButton.setBounds(200, 150, 100, 25); // 위치 및 크기 설정
         add(registerButton); // 버튼 추가
 
+        JButton findIDButton = new JButton("Find ID"); // 아이디 찾기 버튼 생성
+        findIDButton.setBounds(150, 200, 100, 25); // 위치 및 크기 설정
+        add(findIDButton); // 버튼 추가
+
         JButton resetPasswordButton = new JButton("Reset Password"); // 비밀번호 재설정 버튼 설정
         resetPasswordButton.setBounds(250, 200, 150, 25); // 위치 및 크기 설정
         add(resetPasswordButton); // 버튼 추가
+
 
         // 로그인 버튼 동작 정의
         loginButton.addActionListener(new ActionListener() {
