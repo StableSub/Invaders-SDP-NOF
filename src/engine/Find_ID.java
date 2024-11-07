@@ -3,10 +3,10 @@ package engine;
 import javax.swing.*;
 import java.sql.*;
 
-public class Finde_ID {
+public class Find_ID {
     private UserDatabase db;
 
-    public Finde_ID(UserDatabase db) {
+    public Find_ID(UserDatabase db) {
         this.db = db;
         createFindIDUI();
     }

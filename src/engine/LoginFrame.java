@@ -91,7 +91,7 @@ public class LoginFrame extends JFrame {
         findIDButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Finde_ID(db); // 비밀번호 재설정 창 생성 및 표시
+                new Find_ID(db); // 비밀번호 재설정 창 생성 및 표시
             }
         });
 
