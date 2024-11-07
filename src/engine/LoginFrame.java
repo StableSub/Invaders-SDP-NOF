@@ -43,6 +43,10 @@ public class LoginFrame extends JFrame {
         registerButton.setBounds(200, 150, 100, 25); // 위치 및 크기 설정
         add(registerButton); // 버튼 추가
 
+        JButton resetPasswordButton = new JButton("Reset Password"); // 비밀번호 재설정 버튼 설정
+        resetPasswordButton.setBounds(250, 200, 150, 25); // 위치 및 크기 설정
+        add(resetPasswordButton); // 버튼 추가
+
         // 로그인 버튼 동작 정의
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -70,6 +74,13 @@ public class LoginFrame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new RegisterFrame(db); // 회원가입 창 생성 및 표시
+            }
+        });
+        // 비밀번호 재설정 버튼 동작 정의
+        resetPasswordButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ResetPassword_ID(db); // 비밀번호 재설정 창 생성 및 표시
             }
         });
 

@@ -5,10 +5,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-public class UserDatabase {
+public class UserDatabase { //아이디,비밀번호 찾기에서 사용하기 위해 public으로 변경
 
     // 데이터베이스 연결 메서드
-    private Connection connect() {
+    public Connection connect() {
         String url = "jdbc:sqlite:user_data.db";
         Connection conn = null;
         try {
@@ -21,7 +21,7 @@ public class UserDatabase {
     }
 
     // 비밀번호 해시화 메서드 (SHA-256 사용)
-    private String hashPassword(String password) {
+    public String hashPassword(String password) {//아이디,비밀번호 찾기에서 사용하기 위해 public으로 변경
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hashedBytes = md.digest(password.getBytes());
