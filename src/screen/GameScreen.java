@@ -62,7 +62,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/** Set of all bullets fired by on screen ships. */
 	private Set<Bullet> bullets;
 	/** Current score. */
-	private String name1;
+	private String name;
 
 	private int score;
 	/** tempScore records the score up to the previous level. */
@@ -333,35 +333,15 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	protected final void update() {
 		super.update();
 		if (this.inputDelay.checkFinished() && !this.levelFinished) {
-			boolean player1Attacking = inputManager.isKeyDown(KeyEvent.VK_SPACE);
-			boolean player2Attacking = inputManager.isKeyDown(KeyEvent.VK_SHIFT);
+			boolean playerAttacking = inputManager.isKeyDown(KeyEvent.VK_SPACE);
 
-			if (player1Attacking && player2Attacking) {
-				// Both players are attacking
-				if (this.ship.shoot(this.bullets, this.itemManager.getShotNum()))
+			if (playerAttacking) {
+				float direction = (playerNumber == 0) ? -1.0f : 0.0f;
+				if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), direction)) {
 					this.bulletsShot += this.itemManager.getShotNum();
-			} else {
-				switch (playerNumber) {
-					case 1:
-						if (player2Attacking) {
-							if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), 1.0f)) // Player 1 attack
-								this.bulletsShot += this.itemManager.getShotNum();
-						}
-						break;
-					case 0:
-						if (player1Attacking) {
-							if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), -1.0f)) // Player 1 attack
-								this.bulletsShot += this.itemManager.getShotNum();
-						}
-						break;
-					default: //playerNumber = -1
-						if (player1Attacking) {
-							if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), 0.0f)) // Player 1 attack
-								this.bulletsShot += this.itemManager.getShotNum();
-						}
-						break;
 				}
 			}
+
 			/*Elapsed Time Update*/
 			long currentTime = System.currentTimeMillis();
 
@@ -697,7 +677,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 		// Show GameOver if one player ends first
 		if (this.levelFinished && this.screenFinishedCooldown.checkFinished() && this.lives <= 0) {
-			drawManager.drawInGameOver(this, this.height, playerNumber);
+			drawManager.drawInGameOver(this, playerNumber);
 			drawManager.drawHorizontalLine(this, this.height / 2 - this.height
 					/ 12, playerNumber);
 			drawManager.drawHorizontalLine(this, this.height / 2 + this.height

@@ -15,9 +15,7 @@ public class Score implements Comparable<Score> {
 
 	/**
 	 * Constructor.
-	 * 
-	 * @param name
-	 *            Player name, three letters.
+	 *
 	 * @param score
 	 *            Player score.
 	 */

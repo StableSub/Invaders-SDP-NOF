@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 import entity.*;
-import screen.GameSettingScreen;
 import screen.Screen;
 
 /**
@@ -72,7 +71,7 @@ public final class DrawManager {
 
 
 	/** Sprite types. */
-	public static enum SpriteType {
+	public enum SpriteType {
 		/** Player ship. */
 		Ship,
 		/** Destroyed player ship. */
@@ -125,7 +124,7 @@ public final class DrawManager {
 		EnemyShipE2,
 		/** Elite enemy ship - first form. */
 		EnemyShipF1
-	};
+	}
 
 	/**
 	 * Private constructor.
@@ -839,17 +838,12 @@ public final class DrawManager {
 
 
 	/**
-	 * Draws game over for 2player mode
-	 *
 	 * @param screen
 	 *            Screen to draw on.
-	 * @param height
-	 *            Height of the drawing.
 	 * @param threadNumber
 	 *            Thread number for two player mode
 	 */
-	public void drawInGameOver(final Screen screen,
-							 final int height, final int threadNumber) {
+	public void drawInGameOver(final Screen screen, final int threadNumber) {
 		String gameOverString = "Game Over";
 
 		int rectWidth = screen.getWidth();
@@ -934,7 +928,7 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.GRAY);
 		drawCenteredRegularString(screen, instructionsString,
 				screen.getHeight() / 8 + fontRegularMetrics.getHeight());
-		
+
 
 		// draw "high score"
 		backBufferGraphics.setColor(Color.GREEN);
@@ -1805,12 +1799,8 @@ public final class DrawManager {
 	 *            Screen to draw on.
 	 * @param selectedRow
 	 *            Selected row.
-	 * @param isMultiPlayer
-	 *            If the game is multiplayer.
-	 * @param name1
+	 * @param name
 	 *            Player 1 name.
-	 * @param name2
-	 *            Player 2 name.
 	 * @param difficultyLevel
 	 *            Difficulty level.
 	 *
@@ -1820,7 +1810,7 @@ public final class DrawManager {
 	public void drawGameSettingElements(final Screen screen, final int selectedRow,
 										final String name, final int difficultyLevel) {
 		String spaceString = " ";
-		String player1String = "Player";
+		String playerString = "Player";
 		String levelEasyString = "Easy";
 		String levelNormalString = "Normal";
 		String levelHardString = "Hard";
@@ -1828,7 +1818,7 @@ public final class DrawManager {
 
 		backBufferGraphics.setColor(Color.GREEN);
 
-		drawCenteredRegularString(screen, player1String, screen.getHeight() / 100 * 43);
+		drawCenteredRegularString(screen, playerString, screen.getHeight() / 100 * 43);
 		drawCenteredRegularString(screen, name , screen.getHeight() / 100 * 58);
 
 		if (difficultyLevel==0) backBufferGraphics.setColor(Color.GREEN);
