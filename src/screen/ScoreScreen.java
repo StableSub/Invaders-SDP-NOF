@@ -38,9 +38,7 @@ public class ScoreScreen extends Screen {
 	/** Number of coins earned in the game */
 	private int coinsEarned;
 	/** Player's name */
-	private String name1;
-	/** Two player mode flags*/
-	private boolean isMultiplay;
+	private String name;
 
 	// Set ratios for each coin_lv - placed in an array in the order of lv1, lv2, lv3, lv4, and will be used accordingly,
 	// e.g., lv1; score 100 * 0.1
@@ -58,17 +56,16 @@ public class ScoreScreen extends Screen {
 	 * @param gameState
 	 *            Current game state.
 	 */
-	public ScoreScreen(final String name1, final int width, final int height, final int fps,
+	public ScoreScreen(final String name, final int width, final int height, final int fps,
 			final GameState gameState, final Wallet wallet, final AchievementManager achievementManager) {
 		super(width, height, fps);
 
-		this.name1 = name1;
+		this.name = name;
 
 		this.score = gameState.getScore();
 		this.livesRemaining = gameState.getLivesRemaining();
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
-		this.isMultiplay = isMultiplay;
 
 		// Get the user's coin_lv
 		int coin_lv = wallet.getCoin_lv();
@@ -120,13 +117,6 @@ public class ScoreScreen extends Screen {
 				soundManager.stopSound(Sound.BGM_GAMEOVER);
 				soundManager.playSound(Sound.MENU_BACK);
 				saveScore();
-			} else if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
-				// Play again.
-				this.returnCode = isMultiplay ? 8 : 2;
-				this.isRunning = false;
-				soundManager.stopSound(Sound.BGM_GAMEOVER);
-				soundManager.playSound(Sound.MENU_CLICK);
-				saveScore();
 			}
 
 		}
@@ -141,10 +131,10 @@ public class ScoreScreen extends Screen {
 		if (highScores.size() > MAX_HIGH_SCORE_NUM) {
 			int index = 0;
 			for (Score loadScore : highScores) {
-				if (name1.equals(loadScore.getName())) {
+				if (name.equals(loadScore.getName())) {
 					if (score > loadScore.getScore()) {
 						highScores.remove(index);
-						highScores.add(new Score(name1, score));
+						highScores.add(new Score(name, score));
 						break;
 					}
 				}
@@ -154,18 +144,18 @@ public class ScoreScreen extends Screen {
 			boolean checkDuplicate = false;
 			int index = 0;
 			for (Score loadScore : highScores) {
-				if (name1.equals(loadScore.getName())) {
+				if (name.equals(loadScore.getName())) {
 					checkDuplicate = true;
 					if (score > loadScore.getScore()) {
 						highScores.remove(index);
-						highScores.add(new Score(name1, score));
+						highScores.add(new Score(name, score));
 						break;
 					}
 				}
 				index += 1;
 			}
 			if (!checkDuplicate) {
-				highScores.add(new Score(name1, score));
+				highScores.add(new Score(name, score));
 			}
 		}
 		Collections.sort(highScores);

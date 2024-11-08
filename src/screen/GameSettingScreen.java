@@ -24,9 +24,8 @@ public class GameSettingScreen extends Screen {
 	private static final int NAME_LIMIT = 4;
 
 
-	/** Player name1 for record input. */
-	private static String name1;
-	/** Player name2 for record input. */
+	/** Player name for record input. */
+	private static String name;
 	/** Difficulty level. */
 	private int difficultyLevel;
 	/** Selected row. */
@@ -97,10 +96,14 @@ public class GameSettingScreen extends Screen {
 			}
 
 			if (this.selectedRow == 0) {
-				// Delete selection of two player mode and key event
-				if (inputManager.isKeyDown(KeyEvent.VK_BACK_SPACE)) {
-					if (!this.name1.isEmpty()) {
-						this.name1 = this.name1.substring(0, this.name1.length() - 1);
+				if (inputManager.isKeyDown(KeyEvent.VK_LEFT)) {
+					this.selectionCooldown.reset();
+					soundManager.playSound(Sound.MENU_MOVE);
+				} // Delete Selection of Two Player Mode
+				else if (inputManager.isKeyDown(KeyEvent.VK_BACK_SPACE)) {
+					// Delete Setting of name2 Option
+					if (!this.name.isEmpty()) {
+						this.name = this.name.substring(0, this.name.length() - 1);
 						this.selectionCooldown.reset();
 						soundManager.playSound(Sound.MENU_TYPING);
 					}
@@ -147,8 +150,8 @@ public class GameSettingScreen extends Screen {
 		for (int keyCode = KeyEvent.VK_A; keyCode <= KeyEvent.VK_Z; keyCode++) {
 			if (inputManager.isKeyDown(keyCode)) {
 				// Delete Naming of name2
-				if (this.name1.length() < NAME_LIMIT) {
-					this.name1 += (char) keyCode;
+				if (this.name.length() < NAME_LIMIT) {
+					this.name += (char) keyCode;
 					this.selectionCooldown.reset();
 					soundManager.playSound(Sound.MENU_TYPING);
 				}
@@ -169,7 +172,7 @@ public class GameSettingScreen extends Screen {
 	 * 			Player's number
 	 * @return Player's name
 	 */
-	public static String getName(int playerNumber) { return name1;}
+	public static String getName(int playerNumber) { return name;}
 
 	/**
 	 * Draws the elements associated with the screen.
@@ -181,7 +184,7 @@ public class GameSettingScreen extends Screen {
 
 		drawManager.drawGameSettingRow(this, this.selectedRow);
 
-		drawManager.drawGameSettingElements(this, this.selectedRow, name1 ,this.difficultyLevel);
+		drawManager.drawGameSettingElements(this, this.selectedRow, name ,this.difficultyLevel);
 
 		drawManager.completeDrawing(this);
 
