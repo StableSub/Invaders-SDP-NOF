@@ -17,6 +17,7 @@ public class Find_ID {
         frame.setSize(400, 200);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(null);
+        frame.setLocationRelativeTo(null);// 가운데 출력.
 
         JLabel labelEmail = new JLabel("Email:");
         labelEmail.setBounds(50, 50, 80, 25);
