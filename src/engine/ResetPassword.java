@@ -20,6 +20,8 @@ public class ResetPassword {
         frame.setSize(400, 300);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(null);
+        frame.setLocationRelativeTo(null);// 가운데 출력.
+
 
         JLabel labelID = new JLabel("ID:");
         labelID.setBounds(50, 30, 80, 25);
