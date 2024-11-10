@@ -63,7 +63,6 @@ public class LoginFrame extends JFrame {
 
         JButton loginButton = new JButton("Login"); // 로그인 버튼 생성
         loginButton.setBounds(60, 170, 100, 25); // 위치 및 크기 설정
-        loginButton.setBackground(new Color(70, 130, 180)); // 버튼 배경색
         loginButton.setForeground(Color.WHITE); // 버튼 텍스트 색상
         loginButton.setBackground(new Color(0,198,237)); // 버튼 배경색
 
@@ -71,8 +70,7 @@ public class LoginFrame extends JFrame {
         add(loginButton); // 버튼 추가
 
         JButton registerButton = new JButton("Register"); // 회원가입 버튼 생성
-        registerButton.setBounds(210, 170, 100, 25); // 위치 및 크기 설정
-        registerButton.setBackground(new Color(70, 130, 180)); // 버튼 배경색
+        registerButton.setBounds(210, 170, 110, 25); // 위치 및 크기 설정
         registerButton.setBackground(new Color(0,198,237)); // 버튼 배경색
 
         registerButton.setForeground(Color.WHITE); // 버튼 텍스트 색상
@@ -92,7 +90,7 @@ public class LoginFrame extends JFrame {
         add(findIDButton); // 버튼 추가
 
         JButton resetPasswordButton = new JButton("Reset Password"); // 비밀번호 재설정 버튼 생성
-        resetPasswordButton.setBounds(190, 265, 130, 25); // 위치 및 크기 설정
+        resetPasswordButton.setBounds(190, 265, 140, 25); // 위치 및 크기 설정
         resetPasswordButton.setBackground(Color.DARK_GRAY); // 버튼 배경색
         resetPasswordButton.setForeground(Color.lightGray); // 버튼 텍스트 색상
 

@@ -34,7 +34,7 @@ public class UserDatabase { //아이디,비밀번호 찾기에서 사용하기 �
     // users 테이블 생성 메서드
     public void createTable() {
         String sql = "CREATE TABLE IF NOT EXISTS users (\n"
-                + "    id TEXT PRIMARY KEY,\n"
+                + "    id TEXT NOT NULL PRIMARY KEY,\n"
                 + "    password TEXT NOT NULL,\n"
                 + "    email TEXT\n"
                 + ");";
