@@ -25,60 +25,67 @@ public class LoginFrame extends JFrame {
 
         // 폰트 설정 및 색상 설정
         Font font = new Font("Arial", Font.BOLD, 16); // Arial 폰트 설정
-        Font titleFont = new Font("Arial", Font.BOLD, 25); // Arial 폰트 설정
+        Font titleFont = new Font("Arial", Font.BOLD, 35); // Arial 폰트 설정
         Color textColor = new Color(101, 255, 94); // 텍스트 색상 설정 (어두운 회색)
         Color buttonBorderColor = (Color.BLACK); // 버튼 테두리 색상
 
-        JLabel welcome_string = new JLabel("Welcome to invaders !!"); // 환영 메시지 레이블 생성
-        welcome_string.setBounds(55, 27, 400, 25); // 레이블 위치 및 크기 설정
-        welcome_string.setFont(new Font("Arial", Font.BOLD, 25)); // 폰트 크기 조정
+        JLabel welcome_string = new JLabel("SPACE INVADERS"); // 환영 메시지 레이블 생성
+        welcome_string.setBounds(40, 27, 400, 25); // 레이블 위치 및 크기 설정
+        welcome_string.setFont(titleFont); // 폰트 크기 조정
         welcome_string.setForeground(textColor);
-
         add(welcome_string); // 레이블 추가
+        JLabel InstructionsString= new JLabel(" Login and start INVADERS !!"); // 환영 메시지 레이블 생성
+        InstructionsString.setBounds(95, 58, 400, 25); // 레이블 위치 및 크기 설정
+        InstructionsString.setFont(new Font("Arial", Font.ITALIC, 15)); // 폰트 크기 조정
+        InstructionsString.setForeground(Color.GRAY);
+        add(InstructionsString); // 레이블 추가
+
+        //Log in and start exploring the world of [게임 이름]!
+
 
         JLabel labelID = new JLabel("ID:"); // ID 레이블 생성
-        labelID.setBounds(60, 80, 80, 25); // 레이블 위치 및 크기 설정
+        labelID.setBounds(60, 90, 80, 25); // 레이블 위치 및 크기 설정
         labelID.setFont(font); // 폰트 설정
         labelID.setForeground(textColor);
         add(labelID); // 레이블 추가
 
         textID = new JTextField(20); // ID 입력 필드 생성 (최대 20자)
-        textID.setBounds(160, 80, 160, 25); // 위치 및 크기 설정
+        textID.setBounds(160, 90, 160, 25); // 위치 및 크기 설정
         textID.setFont(font); // 폰트 설정
         add(textID); // 필드 추가
 
         JLabel labelPassword = new JLabel("Password:"); // 비밀번호 레이블 생성
-        labelPassword.setBounds(60, 120, 80, 25); // 위치 및 크기 설정
+        labelPassword.setBounds(60, 130, 80, 25); // 위치 및 크기 설정
         labelPassword.setFont(font); // 폰트 설정
         labelPassword.setForeground(textColor);
 
         add(labelPassword); // 레이블 추가
 
         textPassword = new JPasswordField(20); // 비밀번호 입력 필드 생성 (최대 20자)
-        textPassword.setBounds(160, 120, 160, 25); // 위치 및 크기 설정
+        textPassword.setBounds(160, 130, 160, 25); // 위치 및 크기 설정
         textPassword.setFont(font); // 폰트 설정
 
 
         add(textPassword); // 필드 추가
 
         JButton loginButton = new JButton("Login"); // 로그인 버튼 생성
-        loginButton.setBounds(60, 170, 100, 25); // 위치 및 크기 설정
+        loginButton.setBounds(60, 180, 100, 25); // 위치 및 크기 설정
         loginButton.setForeground(Color.WHITE); // 버튼 텍스트 색상
-        loginButton.setBackground(new Color(0,198,237)); // 버튼 배경색
+        loginButton.setBackground(new Color(0, 216, 251)); // 버튼 배경색
 
         loginButton.setFont(font); // 폰트 설정
         add(loginButton); // 버튼 추가
 
         JButton registerButton = new JButton("Register"); // 회원가입 버튼 생성
-        registerButton.setBounds(210, 170, 110, 25); // 위치 및 크기 설정
-        registerButton.setBackground(new Color(0,198,237)); // 버튼 배경색
+        registerButton.setBounds(210, 180, 110, 25); // 위치 및 크기 설정
+        registerButton.setBackground(new Color(0, 216, 251)); // 버튼 배경색
 
         registerButton.setForeground(Color.WHITE); // 버튼 텍스트 색상
         registerButton.setFont(font); // 폰트 설정
         add(registerButton); // 버튼 추가
 
         JLabel find_user = new JLabel("Did you forget your ID, Password?"); // 비밀번호 찾기 메시지 레이블 생성
-        find_user.setBounds(65, 220, 300, 25); // 레이블 위치 및 크기 설정
+        find_user.setBounds(65, 225, 300, 25); // 레이블 위치 및 크기 설정
         find_user.setFont(font); // 폰트 설정
         find_user.setForeground(Color.GRAY);
 
