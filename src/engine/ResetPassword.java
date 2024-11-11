@@ -94,11 +94,11 @@ public class ResetPassword {
              PreparedStatement pstmtUpdate = conn.prepareStatement(updateSql)) {
 
             pstmtSelect.setString(1, id);
-            pstmtSelect.setString(2, email);
+            pstmtSelect.setString(2, db.hashValue(email));
             ResultSet rs = pstmtSelect.executeQuery();
 
             if (rs.next()) {
-                String encryptedPassword = db.hashPassword(newPassword);
+                String encryptedPassword = db.hashValue(newPassword);
                 pstmtUpdate.setString(1, encryptedPassword);
                 pstmtUpdate.setString(2, id);
                 pstmtUpdate.executeUpdate();
