@@ -60,7 +60,7 @@ public class Find_ID {
 
         try (Connection conn = db.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, email);
+            pstmt.setString(1, db.hashValue(email));
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
