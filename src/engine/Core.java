@@ -64,10 +64,17 @@ public final class Core {
 	 *            Program args, ignored.
 	 */
 	public static void main (final String[] args) throws IOException {
+		try {
+			// Cross-platform Look and Feel 설정
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		UserDatabase db = new UserDatabase(); // UserDatabase 객체 생성
 		db.createTable(); // 데이터베이스 users 테이블 생성 (최초 1회 실행 필요)
 		new LoginFrame(db); // 로그인 창 생성 및 표시
+
 
 		while (welcome_frame.getStart()) {
 			try {

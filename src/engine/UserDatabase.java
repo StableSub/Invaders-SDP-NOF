@@ -20,8 +20,8 @@ public class UserDatabase { //아이디,비밀번호 찾기에서 사용하기 �
         return conn;
     }
 
-    // 비밀번호 해시화 메서드 (SHA-256 사용)
-    public String hashPassword(String password) {//아이디,비밀번호 찾기에서 사용하기 위해 public으로 변경
+    // 비밀번호&이메일 해시화 메서드 (SHA-256 사용)
+    public String hashValue(String password) {//아이디,비밀번호 찾기에서 사용하기 위해 public으로 변경
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hashedBytes = md.digest(password.getBytes());
@@ -34,7 +34,7 @@ public class UserDatabase { //아이디,비밀번호 찾기에서 사용하기 �
     // users 테이블 생성 메서드
     public void createTable() {
         String sql = "CREATE TABLE IF NOT EXISTS users (\n"
-                + "    id TEXT PRIMARY KEY,\n"
+                + "    id TEXT NOT NULL PRIMARY KEY,\n"
                 + "    password TEXT NOT NULL,\n"
                 + "    email TEXT\n"
                 + ");";
@@ -54,8 +54,8 @@ public class UserDatabase { //아이디,비밀번호 찾기에서 사용하기 �
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
-            pstmt.setString(2, hashPassword(password)); // 비밀번호 해시화 후 저장
-            pstmt.setString(3, email);
+            pstmt.setString(2, hashValue(password)); // 비밀번호 해시화 후 저장
+            pstmt.setString(3, hashValue(email));
             pstmt.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -71,7 +71,7 @@ public class UserDatabase { //아이디,비밀번호 찾기에서 사용하기 �
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
-            pstmt.setString(2, hashPassword(password)); // 입력된 비밀번호를 해시화 후 비교
+            pstmt.setString(2, hashValue(password)); // 입력된 비밀번호를 해시화 후 비교
             ResultSet rs = pstmt.executeQuery();
 
             return rs.next(); // 결과가 있으면 true 반환
