@@ -53,7 +53,7 @@ public class GameSettingScreen extends Screen {
 		super(width, height, fps);
 
 		// row 0: multiplayer
-		this.name1 = "NOF";
+		this.name = "NOF";
 
 		// row 1: difficulty level
 		this.difficultyLevel = 1; 	// 0: easy, 1: normal, 2: hard
