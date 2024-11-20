@@ -53,9 +53,9 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
         // CREATE TABLE 쿼리 정의
         String sqlCreate_ach = "CREATE TABLE IF NOT EXISTS user_ach (\n"
                 + "    id TEXT NOT NULL PRIMARY KEY,\n"
-                + "    HighScore INT DEFAULT NULL,\n"
-                + "    TotalScore INT DEFAULT NULL,\n"
-                + "    TotalPlaytime INT DEFAULT NULL,\n"
+                + "    HighScore INT DEFAULT 0,\n"
+                + "    TotalScore INT DEFAULT 0,\n"
+                + "    TotalPlaytime INT DEFAULT 0,\n"
                 + "    Accuracy  NUMERIC(4,2) DEFAULT 0.00,\n"
                 + "    MaxCombo INT DEFAULT 0,\n"
                 + "    Ach_1 BOOLEAN DEFAULT FALSE,\n"
@@ -63,7 +63,7 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
                 + ");";
         String sqlCreate_wallet = "CREATE TABLE IF NOT EXISTS user_wallet (\n"
                 + "    id TEXT NOT NULL PRIMARY KEY,\n"
-                + "    Coin INT DEFAULT NULL,\n"
+                + "    Coin INT DEFAULT 0,\n"
                 + "    BulletSpeed INT DEFAULT 0,\n"
                 + "    ShotInterval INT DEFAULT 0,\n"
                 + "    AdditionalLife INT DEFAULT 0,\n"
