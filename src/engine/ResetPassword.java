@@ -8,9 +8,9 @@ import java.sql.*;
 
 public class ResetPassword {
 
-    private UserDatabase db;
+    private DatabaseManager db;
 
-    public ResetPassword(UserDatabase db) {
+    public ResetPassword(DatabaseManager db) {
         this.db = db;
         createPasswordResetUI();
     }
@@ -86,8 +86,8 @@ public class ResetPassword {
 
     // 비밀번호 찾기 및 재설정 메서드
     public boolean finder_PASSWORD(String id, String email, String newPassword) {
-        String selectSql = "SELECT id FROM users WHERE id = ? AND email = ?";
-        String updateSql = "UPDATE users SET password = ? WHERE id = ?";
+        String selectSql = "SELECT id FROM user_account WHERE id = ? AND email = ?";
+        String updateSql = "UPDATE user_account SET password = ? WHERE id = ?";
 
         try (Connection conn = db.connect();
              PreparedStatement pstmtSelect = conn.prepareStatement(selectSql);

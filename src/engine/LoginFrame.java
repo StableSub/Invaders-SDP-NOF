@@ -9,9 +9,9 @@ import java.awt.event.ActionListener; // 이벤트 리스너
 public class LoginFrame extends JFrame {
     private JTextField textID; // ID 입력 필드
     private JPasswordField textPassword; // 비밀번호 입력 필드
-    private UserDatabase db; // UserDatabase 객체 (데이터베이스 작업 담당)
+    private DatabaseManager db; // UserDatabase 객체 (데이터베이스 작업 담당)
 
-    public LoginFrame(UserDatabase db) {
+    public LoginFrame(DatabaseManager db) {
         this.db = db; // 전달받은 UserDatabase 객체를 인스턴스 변수에 저장
 
         // GUI 구성
@@ -115,6 +115,7 @@ public class LoginFrame extends JFrame {
                     String user_name = id;
 
                     welcome_frame aa = new welcome_frame(user_name);
+                    db.createUsersTable(user_name);
                     dispose(); // 로그인 창 닫기
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid ID or Password", "Error", JOptionPane.ERROR_MESSAGE); // 로그인 실패 메시지 출력

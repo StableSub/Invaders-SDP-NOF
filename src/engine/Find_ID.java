@@ -5,9 +5,9 @@ import java.awt.*;
 import java.sql.*;
 
 public class Find_ID {
-    private UserDatabase db;
+    private DatabaseManager db;
 
-    public Find_ID(UserDatabase db) {
+    public Find_ID(DatabaseManager db) {
         this.db = db;
         createFindIDUI();
     }
@@ -56,7 +56,7 @@ public class Find_ID {
 
     // 이메일로 ID 찾기 메서드
     public String findIDByEmail(String email) {
-        String sql = "SELECT id FROM users WHERE email = ?";
+        String sql = "SELECT id FROM user_account WHERE email = ?";
 
         try (Connection conn = db.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

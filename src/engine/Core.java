@@ -56,6 +56,7 @@ public final class Core {
 	private static long startTime, endTime;
 
 	private static int DifficultySetting;// <- setting EASY(0), NORMAL(1), HARD(2);
+	private static DatabaseManager db;  // UserDatabase 객체 추가
 
 	/**
 	 * Test implementation.
@@ -71,7 +72,7 @@ public final class Core {
 			e.printStackTrace();
 		}
 
-		UserDatabase db = new UserDatabase(); // UserDatabase 객체 생성
+		db = new DatabaseManager(); // UserDatabase 객체 생성
 		db.createTable(); // 데이터베이스 users 테이블 생성 (최초 1회 실행 필요)
 		new LoginFrame(db); // 로그인 창 생성 및 표시
 
@@ -228,10 +229,14 @@ public final class Core {
 		fileHandler.flush();
 		fileHandler.close();
 		soundManager.closeAllSounds();
+		shutdown();
 
 		System.exit(0);
 	}
-
+	// 프로그램 종료 시 DB 연결 닫기
+	public static void shutdown() {
+		db.closeConnection();  // DB 연결을 닫는 메서드 호출
+	}
 	/**
 	 * Constructor, not called.
 	 */
