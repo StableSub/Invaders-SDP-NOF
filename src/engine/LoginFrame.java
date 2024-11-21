@@ -1,7 +1,8 @@
 package engine;
 
+import auth.*;
+import database.*;
 import javax.swing.*; // GUI 요소 가져오기
-import javax.swing.border.LineBorder;
 import java.awt.*; // Color, Font 등 가져오기
 import java.awt.event.ActionEvent; // 이벤트 처리
 import java.awt.event.ActionListener; // 이벤트 리스너
@@ -10,6 +11,8 @@ public class LoginFrame extends JFrame {
     private JTextField textID; // ID 입력 필드
     private JPasswordField textPassword; // 비밀번호 입력 필드
     private UserDatabase db; // UserDatabase 객체 (데이터베이스 작업 담당)
+    private FindID findID;
+    private ResetPassword resetPassword;
 
     public LoginFrame(UserDatabase db) {
         this.db = db; // 전달받은 UserDatabase 객체를 인스턴스 변수에 저장
@@ -114,7 +117,7 @@ public class LoginFrame extends JFrame {
                     JOptionPane.showMessageDialog(null, "Login successful!"); // 로그인 성공 메시지 출력
                     String user_name = id;
 
-                    welcome_frame aa = new welcome_frame(user_name);
+                    WelcomeFrame aa = new WelcomeFrame(user_name);
                     dispose(); // 로그인 창 닫기
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid ID or Password", "Error", JOptionPane.ERROR_MESSAGE); // 로그인 실패 메시지 출력
@@ -134,7 +137,7 @@ public class LoginFrame extends JFrame {
         findIDButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Find_ID(db); // 아이디 찾기 창 생성 및 표시
+                new FindID(db); // 아이디 찾기 창 생성 및 표시
             }
         });
 

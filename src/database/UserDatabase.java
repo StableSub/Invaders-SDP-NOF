@@ -1,4 +1,4 @@
-package engine;
+package database;
 
 import java.sql.*;
 import java.security.MessageDigest;

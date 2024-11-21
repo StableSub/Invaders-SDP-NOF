@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class welcome_frame extends JFrame {
+public class WelcomeFrame extends JFrame {
     static boolean start = true;
 
     public void wellcome(String user_name){
@@ -263,7 +263,7 @@ public class welcome_frame extends JFrame {
 
     }
 
-    public welcome_frame(String user_name){
+    public WelcomeFrame(String user_name){
         wellcome(user_name);
     }
 }

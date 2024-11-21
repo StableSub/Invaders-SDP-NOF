@@ -1,5 +1,6 @@
-package engine;
+package auth;
 
+import database.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

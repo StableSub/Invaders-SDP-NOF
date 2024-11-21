@@ -1,8 +1,6 @@
 package engine;
 
 import javax.swing.*; // GUI 요소 가져오기
-import java.awt.event.ActionEvent; // 이벤트 처리
-import java.awt.event.ActionListener; // 이벤트 리스너
 
 import java.io.IOException;
 import java.util.logging.ConsoleHandler;
@@ -11,12 +9,10 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import database.*;
 import entity.Ship;
 import entity.Wallet;
 import screen.*;
-
-
-import javax.swing.*;
 
 /**
  * Implements core game logic.
@@ -76,7 +72,7 @@ public final class Core {
 		new LoginFrame(db); // 로그인 창 생성 및 표시
 
 
-		while (welcome_frame.getStart()) {
+		while (WelcomeFrame.getStart()) {
 			try {
 				Thread.sleep(100); // CPU 부담을 줄이기 위해 대기
 			} catch (InterruptedException e) {

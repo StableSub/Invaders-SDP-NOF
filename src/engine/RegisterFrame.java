@@ -1,4 +1,6 @@
 package engine;
+
+import database.*;
 import javax.swing.*; // GUI 요소 가져오기
 import java.awt.*;
 import java.awt.event.ActionEvent; // 이벤트 처리

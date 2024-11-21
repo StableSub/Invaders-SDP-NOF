@@ -1,13 +1,14 @@
-package engine;
+package auth;
 
+import database.UserDatabase;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 
-public class Find_ID {
+public class FindID {
     private UserDatabase db;
 
-    public Find_ID(UserDatabase db) {
+    public FindID(UserDatabase db) {
         this.db = db;
         createFindIDUI();
     }
