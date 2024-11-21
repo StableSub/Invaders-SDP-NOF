@@ -3,9 +3,15 @@ package entity;
 import java.util.*;
 import java.util.logging.Logger;
 
-import engine.*;
-import engine.DrawManager.SpriteType;
-import screen.Screen;
+import engine.core.Core;
+import engine.core.GameSettings;
+import engine.core.GameState;
+import engine.manager.DrawManager;
+import engine.manager.DrawManager.SpriteType;
+import engine.manager.SoundManager;
+import engine.utility.Cooldown;
+import engine.utility.Sound;
+import ui.Screen;
 
 /**
  * Groups enemy ships into a formation that moves together.

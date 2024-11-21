@@ -14,7 +14,7 @@ Our team is responsible for dressing the game with the right sounds to help play
 We aim to design and implement sound to make users feel feedback from UI so that they can immerse themselves more in the game.
 
 ## Detailed Requirements
-- **Main theme(BGM)**: The theme song that plays on the first screen or main title screen of your game to set the tone of the game for the player.(It is an important element that can make or break the first impression of the game)
+- **Main theme(BGM)**: The theme song that plays on the first ui or main title ui of your game to set the tone of the game for the player.(It is an important element that can make or break the first impression of the game)
 - **Spaceship and alien interactions**: Alien makes a sound when it touches your fighter.
 - **Store**: Sound for the store.
 - **Loses health**: Sound when the fighter loses health

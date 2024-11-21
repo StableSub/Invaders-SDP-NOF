@@ -1,6 +1,6 @@
 package entity.ship;
 
-import engine.DrawManager;
+import engine.manager.DrawManager;
 import entity.Ship;
 import entity.ShipMultipliers;
 
