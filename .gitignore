@@ -173,3 +173,4 @@ log*
 .idea/
 *.iml
 *.db
+!src/ui/LoginFrame.java

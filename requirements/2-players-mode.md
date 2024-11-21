@@ -30,8 +30,8 @@ Hello
   - Differentiate controls for the first and second players.
   - For example, the first player can use arrow keys, and the second player can use WASD keys.
 - Screen split
-  - Allow both players to play simultaneously by splitting the screen.
-  - In the case of screen splitting, divide the game area for each player.
+  - Allow both players to play simultaneously by splitting the ui.
+  - In the case of ui splitting, divide the game area for each player.
 - Modify Game Logic
   - Adjust game over conditions, victory conditions, etc., to accommodate two players.
   - For example, the game should be over when both players run out of lives.
