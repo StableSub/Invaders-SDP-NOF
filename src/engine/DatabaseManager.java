@@ -4,9 +4,11 @@ import java.sql.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.logging.*;
 
 public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하기 위해 public으로 변경
     private Connection conn; // Connection 객체를 클래스 멤버로 정의
+    private static final Logger LOGGER = Logger.getLogger(DatabaseManager.class.getName());
 
     // 데이터베이스 연결 메서드
     public Connection connect() {
@@ -16,7 +18,7 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
             Class.forName("org.sqlite.JDBC");
             conn = DriverManager.getConnection(url);
         } catch (SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Database connection failed", e);
         }
         return conn;
     }
@@ -43,6 +45,7 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
         try (Connection conn = this.connect();
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -84,10 +87,10 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
 
         try (Connection conn = this.connect();
              PreparedStatement pstmtCheck = conn.prepareStatement(checkUserQuery1)) {
-             pstmtCheck.setString(1, userId);
-             ResultSet rs = pstmtCheck.executeQuery();
+            pstmtCheck.setString(1, userId);
+            ResultSet rs = pstmtCheck.executeQuery();
 
-            // userId가 이미 존재하면 INSERT하지 않음
+            // userId가 이미 존재하면 INSERT 하지 않음
             if (!rs.next()) {
                 // userId가 없으면 INSERT 실행
                 String sqlInsert = "INSERT INTO user_ach (id) VALUES (?)";
@@ -96,7 +99,7 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
                     pstmtInsert.executeUpdate(); // 실행
                 }
             } else {
-                System.out.println("User ID already exists, no insertion to user_ach.");
+                LOGGER.info("User " + userId + " is already exist in user_ach");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -104,8 +107,8 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
 
         try (Connection conn = this.connect();
              PreparedStatement pstmtCheck = conn.prepareStatement(checkUserQuery2)) {
-             pstmtCheck.setString(1, userId);
-             ResultSet rs = pstmtCheck.executeQuery();
+            pstmtCheck.setString(1, userId);
+            ResultSet rs = pstmtCheck.executeQuery();
 
             // userId가 이미 존재하면 INSERT하지 않음
             if (!rs.next()) {
@@ -116,23 +119,23 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
                     pstmtInsert.executeUpdate(); // 실행
                 }
             } else {
-                System.out.println("User ID already exists, no insertion to user_wallet.");
+                LOGGER.info("User " + userId + " is already exist in user_wallet");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
+    // 실수가 있을때 table 삭제
     public void deleteUserTable(String userId) {
         String tableName = "user_ach";  // 유저별 테이블 이름 설정
 
         // DELETE 쿼리 작성
-        String sqlDrop = "DROP TABLE IF EXISTS user_ach";
+        String sqlDrop = "DROP TABLE IF EXISTS"+ tableName;
 
         try (Connection conn = this.connect();
              Statement stmt = conn.createStatement()) {
             stmt.execute(sqlDrop);  // 테이블 삭제 실행
-            System.out.println("Table " + tableName + " has been deleted.");
+            LOGGER.info("Table " + tableName + " has been deleted.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -150,7 +153,7 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
             pstmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("ID already exists or registration failed.");
+            LOGGER.info(id + " is already exists , registration failed.");
             return false;
         }
     }
@@ -181,3 +184,4 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
         }
     }
 }
+

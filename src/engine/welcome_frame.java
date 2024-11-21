@@ -4,10 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Logger;
 
 
 public class welcome_frame extends JFrame {
     static boolean start = true;
+    private static final Logger LOGGER = Logger.getLogger(welcome_frame.class.getName());
 
     public void wellcome(String user_name){
 
@@ -99,6 +101,8 @@ public class welcome_frame extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setStart(false); // start 값을 false로 설정
+                LOGGER.info("Skip and start Invaders");
+
                 dispose();
             }
         });
@@ -109,6 +113,8 @@ public class welcome_frame extends JFrame {
                 setStart(true); // start 값을 true로 설정
                 Explain_story();
                 dispose();
+                LOGGER.info("Show story and guide for Invaders");
+
             }
         });
 
