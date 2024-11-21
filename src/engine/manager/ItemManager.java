@@ -1,5 +1,8 @@
-package engine;
+package engine.manager;
 
+import engine.utility.Cooldown;
+import engine.core.Core;
+import engine.utility.Sound;
 import entity.EnemyShip;
 import entity.EnemyShipFormation;
 import entity.Ship;

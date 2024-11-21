@@ -1,4 +1,4 @@
-package engine;
+package engine.manager;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -16,9 +16,12 @@ import java.util.Map;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
+import engine.utility.Cooldown;
+import engine.core.Core;
+import engine.utility.Score;
 import entity.*;
-import screen.GameSettingScreen;
-import screen.Screen;
+import ui.Frame;
+import ui.Screen;
 
 /**
  * Manages screen drawing.

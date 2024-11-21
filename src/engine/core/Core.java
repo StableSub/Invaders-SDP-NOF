@@ -1,4 +1,4 @@
-package engine;
+package engine.core;
 
 import javax.swing.*; // GUI 요소 가져오기
 
@@ -10,9 +10,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import database.*;
+import engine.utility.Cooldown;
+import engine.manager.FileManager;
+import engine.utility.MinimalFormatter;
+import engine.manager.AchievementManager;
+import engine.manager.DrawManager;
+import engine.manager.InputManager;
+import engine.manager.SoundManager;
 import entity.Ship;
 import entity.Wallet;
-import screen.*;
+import ui.*;
 
 /**
  * Implements core game logic.

@@ -1,10 +1,10 @@
-package screen;
+package ui;
 
-import engine.Cooldown;
-import engine.Core;
-import engine.GameSettings;
-import engine.InputManager;
-import engine.*;
+import engine.utility.Cooldown;
+import engine.core.Core;
+import engine.manager.InputManager;
+import engine.manager.SoundManager;
+import engine.utility.Sound;
 
 import java.awt.event.KeyEvent;
 

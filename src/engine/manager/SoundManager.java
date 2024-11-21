@@ -1,4 +1,7 @@
-package engine;
+package engine.manager;
+
+import engine.core.Core;
+import engine.utility.Sound;
 
 import javax.sound.sampled.*;
 import java.io.*;

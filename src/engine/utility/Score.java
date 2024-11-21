@@ -1,4 +1,4 @@
-package engine;
+package engine.utility;
 
 /**
  * Implements a high score record.

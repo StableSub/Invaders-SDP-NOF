@@ -1,4 +1,4 @@
-package engine;
+package ui;
 
 import database.*;
 import javax.swing.*; // GUI 요소 가져오기

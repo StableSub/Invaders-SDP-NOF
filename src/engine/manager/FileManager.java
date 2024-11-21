@@ -1,4 +1,4 @@
-package engine;
+package engine.manager;
 
 import java.awt.Font;
 import java.awt.FontFormatException;
@@ -19,7 +19,9 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.Properties;
 
-import engine.DrawManager.SpriteType;
+import engine.utility.Score;
+import engine.core.Core;
+import engine.manager.DrawManager.SpriteType;
 import entity.Wallet;
 import entity.Achievement;
 

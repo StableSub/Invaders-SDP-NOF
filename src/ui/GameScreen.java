@@ -1,4 +1,4 @@
-package screen;
+package ui;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -15,7 +15,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-import engine.*;
+import engine.core.Core;
+import engine.core.GameSettings;
+import engine.core.GameState;
+import engine.manager.DrawManager;
+import engine.manager.ItemManager;
+import engine.manager.SoundManager;
+import engine.utility.Cooldown;
+import engine.utility.Score;
+import engine.utility.Sound;
 import entity.*;
 
 

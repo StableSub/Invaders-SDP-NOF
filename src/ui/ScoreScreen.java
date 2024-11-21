@@ -1,11 +1,16 @@
-package screen;
+package ui;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import engine.*;
+import engine.core.Core;
+import engine.core.GameState;
+import engine.manager.AchievementManager;
+import engine.manager.SoundManager;
+import engine.utility.Score;
+import engine.utility.Sound;
 import entity.Wallet;
 
 /**
@@ -57,7 +62,7 @@ public class ScoreScreen extends Screen {
 	 *            Current game state.
 	 */
 	public ScoreScreen(final String name, final int width, final int height, final int fps,
-			final GameState gameState, final Wallet wallet, final AchievementManager achievementManager) {
+					   final GameState gameState, final Wallet wallet, final AchievementManager achievementManager) {
 		super(width, height, fps);
 
 		this.name = name;

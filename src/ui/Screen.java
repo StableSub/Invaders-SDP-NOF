@@ -1,13 +1,13 @@
-package screen;
+package ui;
 
 import java.awt.Insets;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import engine.Cooldown;
-import engine.Core;
-import engine.DrawManager;
-import engine.InputManager;
+import engine.utility.Cooldown;
+import engine.core.Core;
+import engine.manager.DrawManager;
+import engine.manager.InputManager;
 
 /**
  * Implements a generic screen.

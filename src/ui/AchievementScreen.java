@@ -1,14 +1,14 @@
-package screen;
+package ui;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.List;
 
-import engine.AchievementManager;
-import engine.Core;
-import engine.Score;
-import engine.Sound;
-import engine.SoundManager;
+import engine.manager.AchievementManager;
+import engine.core.Core;
+import engine.utility.Score;
+import engine.utility.Sound;
+import engine.manager.SoundManager;
 
 /**
  * Implements the achievement screen.

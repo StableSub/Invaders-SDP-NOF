@@ -1,10 +1,10 @@
-package engine;
+package ui;
 
 import java.awt.Insets;
 
 import javax.swing.JFrame;
 
-import screen.Screen;
+import engine.core.Core;
 
 /**
  * Implements a frame to show screens on.

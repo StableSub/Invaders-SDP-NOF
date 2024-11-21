@@ -1,4 +1,4 @@
-package engine;
+package engine.utility;
 
 /**
  * Enum representing the different sounds used in the game.

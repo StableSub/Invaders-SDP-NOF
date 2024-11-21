@@ -1,10 +1,10 @@
-package screen;
+package ui;
 
 import java.awt.event.KeyEvent;
-import engine.Cooldown;
-import engine.Core;
-import engine.Sound;
-import engine.SoundManager;
+import engine.utility.Cooldown;
+import engine.core.Core;
+import engine.utility.Sound;
+import engine.manager.SoundManager;
 import entity.Ship;
 
 public class SettingScreen extends Screen {

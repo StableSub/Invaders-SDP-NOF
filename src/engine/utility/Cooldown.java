@@ -1,4 +1,4 @@
-package engine;
+package engine.utility;
 
 /**
  * Imposes a cooldown period between two actions.

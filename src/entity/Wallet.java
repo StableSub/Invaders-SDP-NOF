@@ -1,6 +1,6 @@
 package entity;
 
-import engine.Core;
+import engine.core.Core;
 
 import java.io.BufferedReader;
 import java.io.IOException;
