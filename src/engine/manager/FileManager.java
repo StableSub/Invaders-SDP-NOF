@@ -52,7 +52,7 @@ public final class FileManager {
 	 *
 	 * @return Shared instance of FileManager.
 	 */
-	protected static FileManager getInstance() {
+	public static FileManager getInstance() {
 		if (instance == null)
 			instance = new FileManager();
 		return instance;
