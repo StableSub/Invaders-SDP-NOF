@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 public class WelcomeFrame extends JFrame {
     static boolean start = true;
-    private static final Logger LOGGER = Logger.getLogger(welcome_frame.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(WelcomeFrame.class.getName());
 
     public void wellcome(String user_name){
 
