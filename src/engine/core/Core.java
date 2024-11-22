@@ -1,5 +1,4 @@
 package engine.core;
-
 import javax.swing.*; // GUI 요소 가져오기
 
 import java.io.IOException;

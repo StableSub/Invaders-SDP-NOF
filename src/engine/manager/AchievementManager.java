@@ -11,7 +11,6 @@ public class AchievementManager {
 
     private static final Logger logger = Logger.getLogger(AchievementManager.class.getName());
 
-
     private Achievement achievement;
 
     // Variables related to Perfect Achievement
@@ -19,7 +18,8 @@ public class AchievementManager {
     private final int MAX_PERFECT_STAGE = 7;
 
     // Variables related to Accuracy Achievement
-    private int highMaxCombo; // List of accuracy achievements
+    private int highMaxCombo;
+    private double highAccuracy;
 
     // Variables related to Flawless Failure Achievement
     private boolean checkFlawlessFailure;
@@ -34,13 +34,13 @@ public class AchievementManager {
 
     private boolean checkPlayTimeAch;
 
-
     // Variables needed for each achievement are loaded through a file.
     public AchievementManager() throws IOException {
         achievement = FileManager.getInstance().loadAchievement();
         this.currentPerfectLevel = achievement.getPerfectStage();
         this.highMaxCombo = achievement.getHighmaxCombo();
         this.checkFlawlessFailure = achievement.getFlawlessFailure();
+        this.highAccuracy = achievement.getHighAccuracy();
     }
 
     public int getAchievementReward() {
@@ -59,7 +59,7 @@ public class AchievementManager {
     }
 
     /**
-     * Function to update the accuracy achievement.
+     * Updates the maximum combo achievement.
      */
     public void updateMaxCombo(int maxCombo) {
         if (highMaxCombo >= maxCombo) {
@@ -100,18 +100,62 @@ public class AchievementManager {
         // Save the updated achievement.
         achievement.setHighMaxcombo(highMaxCombo);
     }
+
     /**
-     * Check if the perfect achievement has been reached.
+     * Updates the accuracy achievement.
+     */
+    public void updateAccuracy(double accuracy) {
+        // 현재 높은 명중률(highAccuracy)보다 낮거나 같으면 아무 작업도 하지 않음
+        if (highAccuracy >= accuracy) {
+            return;
+        }
+
+        // 명중률 목표를 설정
+        int[] accuracyGoals = {50, 70, 90, 100}; // 업적 목표
+        int[] rewards = {100, 200, 300, 500}; // 각 목표 달성 보상
+        boolean[] achievedGoals = new boolean[accuracyGoals.length]; // 목표 달성 여부 추적
+
+        // 이전에 달성한 업적을 유지
+        for (int i = 0; i < accuracyGoals.length; i++) {
+            if (highAccuracy >= accuracyGoals[i]) {
+                achievedGoals[i] = true;
+            }
+        }
+
+        // 명중률 갱신
+        highAccuracy = accuracy;
+
+        // 새로운 업적 달성 및 보상 계산
+        int totalReward = 0;
+        for (int i = 0; i < accuracyGoals.length; i++) {
+            if (!achievedGoals[i] && highAccuracy >= accuracyGoals[i]) {
+                achievedGoals[i] = true; // 목표 달성
+                totalReward += rewards[i]; // 보상 추가
+            }
+        }
+
+        // 보상 지급
+        coinReward += totalReward;
+
+        // 업적 상태 업데이트
+        achievement.setHighAccuracy(highAccuracy);
+    }
+
+    /**
+     * Updates the perfect achievement.
      */
     public void updatePerfect(final int MAX_LIVES, int checkLives, int gameLevel) {
         if (checkLives >= MAX_LIVES && currentPerfectLevel < MAX_PERFECT_STAGE && gameLevel > currentPerfectLevel) {
             // Check if the current perfect stage has not exceeded the total stages.
             currentPerfectLevel += 1;
-            coinReward += PERFECT_COIN_REWARD[currentPerfectLevel-1];
+            coinReward += PERFECT_COIN_REWARD[currentPerfectLevel - 1];
             achievement.setCurrentPerfectStage(currentPerfectLevel);
         }
     }
 
+    /**
+     * Updates the flawless failure achievement.
+     */
     public void updateFlawlessFailure(double accuracy) {
         if (!checkFlawlessFailure && accuracy <= 0) {
             checkFlawlessFailure = true;
@@ -120,18 +164,22 @@ public class AchievementManager {
         }
     }
 
+    /**
+     * Saves all achievements.
+     */
     public void updateAllAchievements() throws IOException {
         FileManager.getInstance().saveAchievement(achievement);
     }
 
-    public void updatePlaying(int maxCombo ,int playtime, int max_lives, int LivesRemaining, int level ) throws IOException{
+    public void updatePlaying(int maxCombo, int playtime, int max_lives, int LivesRemaining, int level) throws IOException {
         updateTotalPlayTime(playtime);
-        updatePerfect(max_lives,LivesRemaining,level);
+        updatePerfect(max_lives, LivesRemaining, level);
         updateMaxCombo(maxCombo);
     }
 
-    public void updatePlayed(double accuracy, int score) throws IOException{
+    public void updatePlayed(double accuracy, int score) throws IOException {
         updateTotalScore(score);
         updateFlawlessFailure(accuracy);
+        updateAccuracy(accuracy);
     }
 }

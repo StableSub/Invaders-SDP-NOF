@@ -234,8 +234,10 @@ public final class FileManager {
 			achievementPath += "achievement";
 
 			File achievementFile = new File(achievementPath);
-			if (!achievementFile.exists())
-				achievementFile.createNewFile();
+			if (!achievementFile.exists()) {
+				logger.info("Achievement file not found. Creating a new one with default values.");
+				return new Achievement(0, 0, 0, 0, false, 0.0); // 기본 값 생성
+			}
 
 			inputStream = new FileInputStream(achievementFile);
 			bufferedReader = new BufferedReader(new InputStreamReader(
@@ -245,32 +247,28 @@ public final class FileManager {
 			Properties properties = new Properties();
 			properties.load(bufferedReader);
 
-			logger.info("Loading user total score.");
+			logger.info("Loading user achievements.");
 
 			int totalPlay = Integer.parseInt(properties.getProperty("total_play", "0"));
 			int totalScore = Integer.parseInt(properties.getProperty("total_score", "0"));
 			int maxCombo = Integer.parseInt(properties.getProperty("high_max_combo", "0"));
 			int perfectStage = Integer.parseInt(properties.getProperty("perfect_stage", "0"));
-			boolean flawlessFailure = properties.getProperty("flawless_failure", "0").equals("true");
+			boolean flawlessFailure = Boolean.parseBoolean(properties.getProperty("flawless_failure", "false"));
+			double highAccuracy = Double.parseDouble(properties.getProperty("high_accuracy", "0.0"));
 
-			achievement = new Achievement(totalPlay, totalScore, maxCombo, perfectStage, flawlessFailure);
-
+			achievement = new Achievement(totalPlay, totalScore, maxCombo, perfectStage, flawlessFailure, highAccuracy);
 		} catch (FileNotFoundException e) {
-			// loads default if there's no user scores.
-			logger.info("File not found.");
+			logger.warning("Achievement file not found. Using default values.");
+			achievement = new Achievement(0, 0, 0, 0, false, 0.0); // 기본 값 생성
 		} catch (NumberFormatException e) {
-			logger.warning("Invalid format for total score. Defaulting to 0.");
+			logger.warning("Invalid format for achievement properties. Using default values.");
+			achievement = new Achievement(0, 0, 0, 0, false, 0.0); // 기본 값 생성
 		} finally {
-			if (bufferedReader != null) {
-				bufferedReader.close();
-			}
-			if (inputStream != null) {
-				inputStream.close();
-			}
+			if (bufferedReader != null) bufferedReader.close();
+			if (inputStream != null) inputStream.close();
 		}
 		return achievement;
 	}
-
 
 	public List<String> loadCreditList() throws IOException {  // 사용자의 크레딧 파일을 로드
 
@@ -408,28 +406,26 @@ public final class FileManager {
 		return new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 	}
 
-	public void saveAchievement(final Achievement achievement)
-			throws IOException {
+	public void saveAchievement(final Achievement achievement) throws IOException {
 		OutputStream outputStream = null;
 		BufferedWriter bufferedWriter = null;
 
 		try {
 			String jarPath = FileManager.class.getProtectionDomain()
 					.getCodeSource().getLocation().getPath();
-			jarPath = URLDecoder.decode(jarPath, "UTF-8"); // 현재 파일 실행 경로. Current file execution path
+			jarPath = URLDecoder.decode(jarPath, "UTF-8"); // 현재 파일 실행 경로
 
-			String achievementPath = new File(jarPath).getParent(); // 상위 파일 경로. Parent file path
-			achievementPath += File.separator; // 파일 경로에 '/' 또는 '\' 추가(환경마다 다름). Add '/' or '\' to the file path (depends on the environment)
+			String achievementPath = new File(jarPath).getParent(); // 상위 파일 경로
+			achievementPath += File.separator; // 파일 경로에 '/' 또는 '\' 추가
 			achievementPath += "achievement";
 
 			File achievementFile = new File(achievementPath);
 
 			if (!achievementFile.exists())
-				achievementFile.createNewFile(); //파일이 없으면 새로 만듦. If the file does not exist, create a new one.
+				achievementFile.createNewFile(); // 파일이 없으면 새로 만듦
 
-			outputStream = new FileOutputStream(achievementFile); //덮어쓰기. Overwrite
-			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
-					outputStream, Charset.forName("UTF-8")));
+			outputStream = new FileOutputStream(achievementFile); // 덮어쓰기
+			bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, Charset.forName("UTF-8")));
 
 			logger.info("Saving achievement.");
 			bufferedWriter.write("total_play=" + achievement.getTotalPlayTime());
@@ -441,6 +437,8 @@ public final class FileManager {
 			bufferedWriter.write("perfect_stage=" + achievement.getPerfectStage());
 			bufferedWriter.newLine();
 			bufferedWriter.write("flawless_failure=" + achievement.getFlawlessFailure());
+			bufferedWriter.newLine();
+			bufferedWriter.write("high_accuracy=" + achievement.getHighAccuracy()); // 명중률 저장
 			bufferedWriter.newLine();
 
 		} finally {
