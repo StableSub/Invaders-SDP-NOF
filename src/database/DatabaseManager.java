@@ -1,11 +1,14 @@
 package database;
 
+import engine.utility.Score;
 import entity.Achievement;
 
 import java.sql.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.logging.*;
 
 public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하기 위해 public으로 변경 // Connection 객체를 클래스 멤버로 정의
@@ -215,6 +218,26 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
             LOGGER.log(Level.SEVERE,"User data not found for user ID: " + userID);
         }
         return userData;
+    }
+
+    public List<Score> getTop3HighScores() {
+        List<Score> highScores = new ArrayList<>();
+        String sql = "SELECT id, highscore FROM user_ach ORDER BY highscore DESC LIMIT 3";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                String userId = rs.getString("id");
+                int highscore = rs.getInt("highscore");
+
+                highScores.add(new Score(userId, highscore));  // Score는 user_id와 highscore를 포함한 객체
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return highScores;
     }
 
     public void closeConnection() {

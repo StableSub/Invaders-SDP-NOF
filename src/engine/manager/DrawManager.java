@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
+import database.DatabaseManager;
 import engine.utility.Cooldown;
 import engine.core.Core;
 import engine.utility.Score;
@@ -1105,29 +1106,33 @@ public final class DrawManager {
 	 * 
 	 * @param screen
 	 *            Screen to draw on.
-	 * @param highScores
-	 *            List of high scores.
 	 */
-	public void drawHighScores(final Screen screen,
-			final List<Score> highScores) {
+	public void drawHighScores(final Screen screen) {
+		// DatabaseManager 객체로부터 상위 3개 점수 리스트를 가져옵니다.
+		DatabaseManager dbManager = new DatabaseManager();
+		List<Score> highScores = dbManager.getTop3HighScores();
+
 		backBufferGraphics.setColor(Color.WHITE);
 		int i = 0;
 		String scoreString = "";
 
 		final int limitDrawingScore = 3;
 		int countDrawingScore = 0;
+
+		// 상위 3개의 점수를 출력합니다.
 		for (Score score : highScores) {
-			scoreString = String.format("%s        %04d", score.getName(),
-					score.getScore());
+			scoreString = String.format("%s        %04d", score.getUserId(), score.getScore());
 			drawLeftSideScoreRegularString(screen, scoreString, screen.getHeight()
 					/ 4 + fontRegularMetrics.getHeight() * (i + 1) * 2);
 			i++;
 			countDrawingScore++;
-			if(countDrawingScore>=limitDrawingScore){
+			if(countDrawingScore >= limitDrawingScore) {
 				break;
 			}
 		}
 	}
+
+
 
 	/**
 	 * Draws a centered string on small font.
@@ -1371,7 +1376,7 @@ public final class DrawManager {
 	 *            Recorded highscores.
    */
 
-	public void drawRecord(List<Score> highScores, final Screen screen) {
+	/*public void drawRecord(List<Score> highScores, final Screen screen) {
 
 		//add variable for highest score
 		int highestScore = -1;
@@ -1393,7 +1398,7 @@ public final class DrawManager {
 
 		backBufferGraphics.drawString(highScoreDisplay,
 				screen.getWidth() - metrics.stringWidth(highScoreDisplay) - 76, 25);
-	}
+	}*/
 	/**
 	 * Draws recorded highscores on screen.
 	 *
