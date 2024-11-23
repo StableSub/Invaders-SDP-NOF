@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import database.*;
 import engine.utility.*;
 import engine.manager.*;
+import entity.Achievement;
 import entity.Ship;
 import entity.Wallet;
 import ui.*;
@@ -54,6 +55,7 @@ public final class Core {
 	private static long startTime, endTime;
 
 	private static int DifficultySetting;// <- setting EASY(0), NORMAL(1), HARD(2);
+
 	private static DatabaseManager db;  // UserDatabase 객체 추가
 
 	/**
@@ -72,8 +74,7 @@ public final class Core {
 
 		db = new DatabaseManager(); // UserDatabase 객체 생성
 		db.createTable(); // 데이터베이스 users 테이블 생성 (최초 1회 실행 필요)
-		new LoginFrame(db); // 로그인 창 생성 및 표시
-
+		LoginFrame login = new LoginFrame(db);// 로그인 창 생성 및 표시
 
 		while (WelcomeFrame.getStart()) {
 			try {
@@ -82,7 +83,6 @@ public final class Core {
 				e.printStackTrace();
 			}
 		}
-
 
 		try {
 			LOGGER.setUseParentHandlers(false);
@@ -114,9 +114,10 @@ public final class Core {
 
 		int returnCode = 1;
 		do {
-			MAX_LIVES = wallet.getLives_lv()+2;
+			MAX_LIVES = 1;
 			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
-			achievementManager = new AchievementManager();
+			Achievement achievement = db.loadData(login.getID());
+			achievementManager = new AchievementManager(achievement);
 
 			GameSettings gameSetting = new GameSettings(4, 4, 60, 2500);
 

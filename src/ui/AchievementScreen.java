@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.List;
 
-import engine.manager.AchievementManager;
+import database.AchievementManager;
 import engine.core.Core;
 import engine.utility.Score;
 import engine.utility.Sound;
@@ -67,7 +67,7 @@ public class AchievementScreen extends Screen {
 			logger.warning("Couldn't load current perfect stage");
 		}
 		try {
-			this.maxCombo = Core.getFileManager().loadAchievement().getHighmaxCombo();
+			this.maxCombo = Core.getFileManager().loadAchievement().getHighMaxCombo();
 		} catch (NumberFormatException | IOException e) {
 			logger.warning("Couldn't load Current accuracy achievement");
 		}

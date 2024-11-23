@@ -7,9 +7,12 @@ import javax.swing.*; // GUI 요소 가져오기
 import java.awt.*; // Color, Font 등 가져오기
 import java.awt.event.ActionEvent; // 이벤트 처리
 import java.awt.event.ActionListener; // 이벤트 리스너
+import java.sql.SQLException;
 
 public class LoginFrame extends JFrame {
-    private JTextField textID; // ID 입력 필드
+
+    private String userID;
+    private JTextField textID; // ID// 입력 필드
     private JPasswordField textPassword; // 비밀번호 입력 필드
     private DatabaseManager db; // UserDatabase 객체 (데이터베이스 작업 담당)
 
@@ -108,16 +111,15 @@ public class LoginFrame extends JFrame {
         // 로그인 버튼 동작 정의
         loginButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e){
                 String id = textID.getText(); // 입력된 ID 가져오기
                 String password = new String(textPassword.getPassword()); // 입력된 비밀번호 가져오기
 
                 if (db.loginUser(id, password)) { // UserDatabase에서 로그인 성공 여부 확인
                     JOptionPane.showMessageDialog(null, "Login successful!"); // 로그인 성공 메시지 출력
-                    String user_name = id;
-
-                    new WelcomeFrame(user_name);
-                    db.createUsersTable(user_name);
+                    userID = id;
+                    new WelcomeFrame(userID);
+                    db.createUsersTable(userID);
                     dispose(); // 로그인 창 닫기
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid ID or Password", "Error", JOptionPane.ERROR_MESSAGE); // 로그인 실패 메시지 출력
@@ -148,9 +150,10 @@ public class LoginFrame extends JFrame {
                 new ResetPassword(db); // 비밀번호 재설정 창 생성 및 표시
             }
         });
-
-
-
         setVisible(true); // 로그인 창 표시
+    }
+
+    public String getID() {
+        return userID;
     }
 }

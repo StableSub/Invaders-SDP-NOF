@@ -22,8 +22,8 @@ import java.util.Properties;
 import engine.utility.Score;
 import engine.core.Core;
 import engine.manager.DrawManager.SpriteType;
-import entity.Wallet;
 import entity.Achievement;
+import entity.Wallet;
 
 /**
  * Manages files used in the application.
@@ -253,7 +253,7 @@ public final class FileManager {
 			int perfectStage = Integer.parseInt(properties.getProperty("perfect_stage", "0"));
 			boolean flawlessFailure = properties.getProperty("flawless_failure", "0").equals("true");
 
-			achievement = new Achievement(totalPlay, totalScore, maxCombo, perfectStage, flawlessFailure);
+			achievement = new Achievement(null, totalPlay, totalScore, perfectStage, 0.0, maxCombo, flawlessFailure);
 
 		} catch (FileNotFoundException e) {
 			// loads default if there's no user scores.
@@ -436,7 +436,7 @@ public final class FileManager {
 			bufferedWriter.newLine();
 			bufferedWriter.write("total_score=" + achievement.getTotalScore());
 			bufferedWriter.newLine();
-			bufferedWriter.write("high_max_combo=" + achievement.getHighmaxCombo());
+			bufferedWriter.write("high_max_combo=" + achievement.getHighMaxCombo());
 			bufferedWriter.newLine();
 			bufferedWriter.write("perfect_stage=" + achievement.getPerfectStage());
 			bufferedWriter.newLine();

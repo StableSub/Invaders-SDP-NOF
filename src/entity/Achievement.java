@@ -1,28 +1,37 @@
 package entity;
 
+import java.sql.Connection;
+
 public class Achievement {
 
+    private String id;
     private int totalPlayTime;
     private int totalScore;
-    private int maxCombo;
     private int currentPerfectStage;
+    private double accuracy;
+    private int maxCombo;
     private boolean flawlessFailure;
-    private boolean playTimeAch;
 
-    public Achievement(int totalPlayTime, int totalScore, int maxCombo, int currentPerfectStage,
-                       boolean flawlessFailure) {
-        this.totalPlayTime = totalPlayTime;
+    public Achievement(String id, int totalScore, int totalPlayTime, int currentPerfectStage, double accuracy,
+                       int maxCombo, boolean flawlessFailure) {
+        this.id = id;
         this.totalScore = totalScore;
-        this.maxCombo = maxCombo;
+        this.totalPlayTime = totalPlayTime;
         this.currentPerfectStage = currentPerfectStage;
+        this.accuracy = accuracy;
+        this.maxCombo = maxCombo;
         this.flawlessFailure = flawlessFailure;
     }
 
     // Functions to get the status of each achievement.
-    public int getTotalPlayTime() { return totalPlayTime; }
+    public String getID() {
+        return id;
+    }
     public int getTotalScore() { return totalScore; }
-    public int getHighmaxCombo() { return maxCombo; }
+    public int getTotalPlayTime() { return totalPlayTime; }
     public int getPerfectStage() { return currentPerfectStage; }
+    public double getAccuracy() { return accuracy; }
+    public int getHighMaxCombo() { return maxCombo; }
     public boolean getFlawlessFailure() { return flawlessFailure; }
 
     // Functions to store the status of each achievement.
@@ -34,7 +43,7 @@ public class Achievement {
         this.totalScore += totalScore;
     }
 
-    public void setHighMaxcombo(int maxCombo) {
+    public void setHighMaxCombo(int maxCombo) {
         this.maxCombo = maxCombo;
     }
 

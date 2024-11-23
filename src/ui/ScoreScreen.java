@@ -7,7 +7,7 @@ import java.util.List;
 
 import engine.core.Core;
 import engine.core.GameState;
-import engine.manager.AchievementManager;
+import database.AchievementManager;
 import engine.manager.SoundManager;
 import engine.utility.Score;
 import engine.utility.Sound;

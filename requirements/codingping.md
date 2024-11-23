@@ -49,7 +49,7 @@ Our team's goal is to develop the UI of the game's main menu and other screens s
   - 획득한 코인 표시
 
 ### ACHIEVEMENT
-- Show achievement history
+- Show record history
   - 업적 기록 표시
 
 ### SETTINGS
@@ -74,7 +74,7 @@ Our team's goal is to develop the UI of the game's main menu and other screens s
   - 현재 Coin 획득 정보 필요
 - Coins earned at end of game information required
   - 게임 종료시 획득 Coin 정보 필요
-- Requires player achievement information
+- Requires player record information
   - 플레이어 업적 정보 필요
 - Need sound information from sound settings
   - 사운드 설정에서 사운드 정보 필요
