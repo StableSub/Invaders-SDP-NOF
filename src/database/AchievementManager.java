@@ -18,6 +18,7 @@ public class AchievementManager {
 
     private Achievement achievement;
 
+    private int highScore;
 
     // Variables related to Perfect Achievement
     private static int currentPerfectLevel;
@@ -40,6 +41,7 @@ public class AchievementManager {
     // Variables needed for each achievement are loaded through a file.
     public AchievementManager(Achievement achievement) throws IOException {
         this.achievement = achievement;
+        this.highScore = achievement.getHighScore();
         this.currentPerfectLevel = achievement.getPerfectStage();
         this.highMaxCombo = achievement.getHighMaxCombo();
         this.checkFlawlessFailure = achievement.getFlawlessFailure();
@@ -48,6 +50,13 @@ public class AchievementManager {
     public int getAchievementReward() {
         return coinReward;
     }
+
+    public void updateHighScore(int score) {
+        if (score > highScore) {
+            achievement.setHighScore(score);
+        }
+    }
+
 
     public void updateTotalPlayTime(int playTime) {
         if (achievement.getTotalPlayTime() < 600 && achievement.getTotalPlayTime() + playTime >= 600) {
@@ -123,17 +132,18 @@ public class AchievementManager {
     }
 
     public void updateAllAchievements() {
-        String sql = "UPDATE user_ach SET TotalScore = ?, TotalPlaytime = ?, " +
+        String sql = "UPDATE user_ach SET HighScore = ?, TotalScore = ?, TotalPlaytime = ?, " +
                 "PerfectStage = ?, Accuracy = ?, MaxCombo = ? WHERE id = ?";
         try (Connection conn = db.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // 매개변수 설정
-            pstmt.setInt(1, achievement.getTotalScore());
-            pstmt.setInt(2, achievement.getTotalPlayTime());
-            pstmt.setInt(3, achievement.getPerfectStage());
-            pstmt.setDouble(4, achievement.getAccuracy());
-            pstmt.setInt(5, achievement.getHighMaxCombo());
-            pstmt.setString(6, achievement.getID());
+            pstmt.setInt(1, achievement.getHighScore());
+            pstmt.setInt(2, achievement.getTotalScore());
+            pstmt.setInt(3, achievement.getTotalPlayTime());
+            pstmt.setInt(4, achievement.getPerfectStage());
+            pstmt.setDouble(5, achievement.getAccuracy());
+            pstmt.setInt(6, achievement.getHighMaxCombo());
+            pstmt.setString(7, achievement.getID());
             // SQL 실행
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -153,6 +163,7 @@ public class AchievementManager {
     }
 
     public void updatePlayed(double accuracy, int score) throws IOException {
+        updateHighScore(score);
         updateTotalScore(score);
         updateFlawlessFailure(accuracy);
     }

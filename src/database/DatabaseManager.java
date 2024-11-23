@@ -198,7 +198,7 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
                     boolean flawlessFailure = rs.getBoolean("FlawlessFailure");
 
                     // UserDataLoader 객체 생성 및 반환 준비
-                    userData = new Achievement(userID, totalScore, totalPlayTime, perfectStage, accuracy, maxCombo, flawlessFailure);
+                    userData = new Achievement(userID, highScore, totalScore, totalPlayTime, perfectStage, accuracy, maxCombo, flawlessFailure);
                     LOGGER.log(Level.SEVERE, "Data loaded successfully for user ID: " + userID);
                 } else {
                     LOGGER.log(Level.SEVERE,"No data found for user ID: " + userID);
@@ -211,7 +211,7 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
 
         // 데이터가 없으면 기본값으로 초기화된 객체 반환
         if (userData == null) {
-            userData = new Achievement(null, 0, 0, 0, 0.0, 0, false);
+            userData = new Achievement(null, 0, 0, 0, 0, 0.0, 0, false);
             LOGGER.log(Level.SEVERE,"User data not found for user ID: " + userID);
         }
         return userData;

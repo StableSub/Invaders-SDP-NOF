@@ -107,18 +107,14 @@ public final class Core {
 		int width = frame.getWidth();
 		int height = frame.getHeight();
 
-		GameState gameState;
-
-		AchievementManager achievementManager;
-		Achievement achievement = db.loadData(login.getID());
 		Wallet wallet = Wallet.getWallet();
 
 		int returnCode = 1;
 		do {
 			MAX_LIVES = 1;
-			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
-			achievement = db.loadData(login.getID());
-			achievementManager = new AchievementManager(achievement);
+			GameState gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
+			Achievement achievement = db.loadData(login.getID());
+			AchievementManager achievementManager = new AchievementManager(achievement);
 
 			GameSettings gameSetting = new GameSettings(4, 4, 60, 2500);
 

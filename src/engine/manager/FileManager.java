@@ -220,56 +220,56 @@ public final class FileManager {
 		return highScores;
 	}
 
-	public Achievement loadAchievement() throws IOException {
-		Achievement achievement = null;
-		InputStream inputStream = null;
-		BufferedReader bufferedReader = null;
-		try {
-			String jarPath = FileManager.class.getProtectionDomain()
-					.getCodeSource().getLocation().getPath();
-			jarPath = URLDecoder.decode(jarPath, "UTF-8");
-
-			String achievementPath = new File(jarPath).getParent();
-			achievementPath += File.separator;
-			achievementPath += "achievement";
-
-			File achievementFile = new File(achievementPath);
-			if (!achievementFile.exists())
-				achievementFile.createNewFile();
-
-			inputStream = new FileInputStream(achievementFile);
-			bufferedReader = new BufferedReader(new InputStreamReader(
-					inputStream, Charset.forName("UTF-8")));
-
-			// Load properties from the file
-			Properties properties = new Properties();
-			properties.load(bufferedReader);
-
-			logger.info("Loading user total score.");
-
-			int totalPlay = Integer.parseInt(properties.getProperty("total_play", "0"));
-			int totalScore = Integer.parseInt(properties.getProperty("total_score", "0"));
-			int maxCombo = Integer.parseInt(properties.getProperty("high_max_combo", "0"));
-			int perfectStage = Integer.parseInt(properties.getProperty("perfect_stage", "0"));
-			boolean flawlessFailure = properties.getProperty("flawless_failure", "0").equals("true");
-
-			achievement = new Achievement(null, totalPlay, totalScore, perfectStage, 0.0, maxCombo, flawlessFailure);
-
-		} catch (FileNotFoundException e) {
-			// loads default if there's no user scores.
-			logger.info("File not found.");
-		} catch (NumberFormatException e) {
-			logger.warning("Invalid format for total score. Defaulting to 0.");
-		} finally {
-			if (bufferedReader != null) {
-				bufferedReader.close();
-			}
-			if (inputStream != null) {
-				inputStream.close();
-			}
-		}
-		return achievement;
-	}
+//	public Achievement loadAchievement() throws IOException {
+//		Achievement achievement = null;
+//		InputStream inputStream = null;
+//		BufferedReader bufferedReader = null;
+//		try {
+//			String jarPath = FileManager.class.getProtectionDomain()
+//					.getCodeSource().getLocation().getPath();
+//			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+//
+//			String achievementPath = new File(jarPath).getParent();
+//			achievementPath += File.separator;
+//			achievementPath += "achievement";
+//
+//			File achievementFile = new File(achievementPath);
+//			if (!achievementFile.exists())
+//				achievementFile.createNewFile();
+//
+//			inputStream = new FileInputStream(achievementFile);
+//			bufferedReader = new BufferedReader(new InputStreamReader(
+//					inputStream, Charset.forName("UTF-8")));
+//
+//			// Load properties from the file
+//			Properties properties = new Properties();
+//			properties.load(bufferedReader);
+//
+//			logger.info("Loading user total score.");
+//
+//			int totalPlay = Integer.parseInt(properties.getProperty("total_play", "0"));
+//			int totalScore = Integer.parseInt(properties.getProperty("total_score", "0"));
+//			int maxCombo = Integer.parseInt(properties.getProperty("high_max_combo", "0"));
+//			int perfectStage = Integer.parseInt(properties.getProperty("perfect_stage", "0"));
+//			boolean flawlessFailure = properties.getProperty("flawless_failure", "0").equals("true");
+//
+//			achievement = new Achievement(null, totalPlay, totalScore, perfectStage, 0.0, maxCombo, flawlessFailure);
+//
+//		} catch (FileNotFoundException e) {
+//			// loads default if there's no user scores.
+//			logger.info("File not found.");
+//		} catch (NumberFormatException e) {
+//			logger.warning("Invalid format for total score. Defaulting to 0.");
+//		} finally {
+//			if (bufferedReader != null) {
+//				bufferedReader.close();
+//			}
+//			if (inputStream != null) {
+//				inputStream.close();
+//			}
+//		}
+//		return achievement;
+//	}
 
 
 	public List<String> loadCreditList() throws IOException {  // 사용자의 크레딧 파일을 로드
@@ -408,45 +408,45 @@ public final class FileManager {
 		return new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
 	}
 
-	public void saveAchievement(final Achievement achievement)
-			throws IOException {
-		OutputStream outputStream = null;
-		BufferedWriter bufferedWriter = null;
-
-		try {
-			String jarPath = FileManager.class.getProtectionDomain()
-					.getCodeSource().getLocation().getPath();
-			jarPath = URLDecoder.decode(jarPath, "UTF-8"); // 현재 파일 실행 경로. Current file execution path
-
-			String achievementPath = new File(jarPath).getParent(); // 상위 파일 경로. Parent file path
-			achievementPath += File.separator; // 파일 경로에 '/' 또는 '\' 추가(환경마다 다름). Add '/' or '\' to the file path (depends on the environment)
-			achievementPath += "achievement";
-
-			File achievementFile = new File(achievementPath);
-
-			if (!achievementFile.exists())
-				achievementFile.createNewFile(); //파일이 없으면 새로 만듦. If the file does not exist, create a new one.
-
-			outputStream = new FileOutputStream(achievementFile); //덮어쓰기. Overwrite
-			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
-					outputStream, Charset.forName("UTF-8")));
-
-			logger.info("Saving achievement.");
-			bufferedWriter.write("total_play=" + achievement.getTotalPlayTime());
-			bufferedWriter.newLine();
-			bufferedWriter.write("total_score=" + achievement.getTotalScore());
-			bufferedWriter.newLine();
-			bufferedWriter.write("high_max_combo=" + achievement.getHighMaxCombo());
-			bufferedWriter.newLine();
-			bufferedWriter.write("perfect_stage=" + achievement.getPerfectStage());
-			bufferedWriter.newLine();
-			bufferedWriter.write("flawless_failure=" + achievement.getFlawlessFailure());
-			bufferedWriter.newLine();
-
-		} finally {
-			if (bufferedWriter != null)
-				bufferedWriter.close();
-		}
-	}
+//	public void saveAchievement(final Achievement achievement)
+//			throws IOException {
+//		OutputStream outputStream = null;
+//		BufferedWriter bufferedWriter = null;
+//
+//		try {
+//			String jarPath = FileManager.class.getProtectionDomain()
+//					.getCodeSource().getLocation().getPath();
+//			jarPath = URLDecoder.decode(jarPath, "UTF-8"); // 현재 파일 실행 경로. Current file execution path
+//
+//			String achievementPath = new File(jarPath).getParent(); // 상위 파일 경로. Parent file path
+//			achievementPath += File.separator; // 파일 경로에 '/' 또는 '\' 추가(환경마다 다름). Add '/' or '\' to the file path (depends on the environment)
+//			achievementPath += "achievement";
+//
+//			File achievementFile = new File(achievementPath);
+//
+//			if (!achievementFile.exists())
+//				achievementFile.createNewFile(); //파일이 없으면 새로 만듦. If the file does not exist, create a new one.
+//
+//			outputStream = new FileOutputStream(achievementFile); //덮어쓰기. Overwrite
+//			bufferedWriter = new BufferedWriter(new OutputStreamWriter(
+//					outputStream, Charset.forName("UTF-8")));
+//
+//			logger.info("Saving achievement.");
+//			bufferedWriter.write("total_play=" + achievement.getTotalPlayTime());
+//			bufferedWriter.newLine();
+//			bufferedWriter.write("total_score=" + achievement.getTotalScore());
+//			bufferedWriter.newLine();
+//			bufferedWriter.write("high_max_combo=" + achievement.getHighMaxCombo());
+//			bufferedWriter.newLine();
+//			bufferedWriter.write("perfect_stage=" + achievement.getPerfectStage());
+//			bufferedWriter.newLine();
+//			bufferedWriter.write("flawless_failure=" + achievement.getFlawlessFailure());
+//			bufferedWriter.newLine();
+//
+//		} finally {
+//			if (bufferedWriter != null)
+//				bufferedWriter.close();
+//		}
+//	}
 
 }
