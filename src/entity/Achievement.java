@@ -24,7 +24,9 @@ public class Achievement {
         this.maxCombo = maxCombo;
         this.flawlessFailure = flawlessFailure;
     }
-
+    public Achievement(String id){
+        this.id = id;
+    }
     // Functions to get the status of each achievement.
     public String getID() { return id; }
     public int getHighScore() { return highScore; }

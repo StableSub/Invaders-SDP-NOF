@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+import database.DatabaseManager;
 import database.AchievementManager;
 import engine.core.Core;
 import engine.utility.Score;
@@ -43,7 +43,8 @@ public class AchievementScreen extends Screen {
 	 */
 	public AchievementScreen(final int width, final int height, final int fps, final Achievement achievement) {
 		super(width, height, fps);
-
+		DatabaseManager db = new DatabaseManager();
+		highScores = db.getTop3HighScores();
 		totalScore = achievement.getTotalScore();
 		totalPlayTime = achievement.getTotalPlayTime();
 		currentPerfectStage = achievement.getPerfectStage();
@@ -87,7 +88,7 @@ public class AchievementScreen extends Screen {
 		drawManager.drawAchievementMenu(this, this.totalScore, this.totalPlayTime,
 				this.maxCombo, this.currentPerfectStage, this.currentPerfectStage+1,
 				this.checkFlawlessFailure);
-		drawManager.drawHighScores(this, this.highScores);
+		drawManager.drawHighScores(this);
 		drawManager.completeDrawing(this);
 	}
 }

@@ -5,7 +5,7 @@ import engine.core.Core;
 import engine.manager.InputManager;
 import engine.manager.SoundManager;
 import engine.utility.Sound;
-
+import entity.Achievement;
 import java.awt.event.KeyEvent;
 
 /**
@@ -51,7 +51,6 @@ public class GameSettingScreen extends Screen {
 	 */
 	public GameSettingScreen(String id, final int width, final int height, final int fps) {
 		super(width, height, fps);
-
 		// row 0: multiplayer
 		this.name = id;
 

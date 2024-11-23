@@ -174,7 +174,7 @@ public final class FileManager {
 	 * @throws IOException
 	 *             In case of loading problems.
 	 */
-	public List<Score> loadHighScores() throws IOException {
+/*	public List<Score> loadHighScores() throws IOException {
 
 		List<Score> highScores = new ArrayList<Score>();
 		InputStream inputStream = null;
@@ -218,7 +218,7 @@ public final class FileManager {
 
 		Collections.sort(highScores);
 		return highScores;
-	}
+	}*/
 
 //	public Achievement loadAchievement() throws IOException {
 //		Achievement achievement = null;
@@ -301,14 +301,14 @@ public final class FileManager {
 	}
 
 
-	/**
+/*	/**
 	 * Saves user high scores to disk.
 	 *
 	 * @param highScores
 	 *            High scores to save.
 	 * @throws IOException
 	 *             In case of loading problems.
-	 */
+	 *//*
 	public void saveHighScores(final List<Score> highScores)
 			throws IOException {
 		OutputStream outputStream = null;
@@ -345,7 +345,7 @@ public final class FileManager {
 			if (bufferedWriter != null)
 				bufferedWriter.close();
 		}
-	}
+	}*/
 
 	public void saveWallet(final Wallet newWallet)
 			throws IOException {

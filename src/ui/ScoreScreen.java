@@ -89,11 +89,7 @@ public class ScoreScreen extends Screen {
 
 		soundManager.loopSound(Sound.BGM_GAMEOVER);
 
-		try {
-			this.highScores = Core.getFileManager().loadHighScores();
-		} catch (IOException e) {
-			logger.warning("Couldn't load high scores!");
-		}
+
 	}
 
 	/**
@@ -121,7 +117,6 @@ public class ScoreScreen extends Screen {
 				this.isRunning = false;
 				soundManager.stopSound(Sound.BGM_GAMEOVER);
 				soundManager.playSound(Sound.MENU_BACK);
-				saveScore();
 			}
 
 		}
@@ -132,44 +127,7 @@ public class ScoreScreen extends Screen {
 	 * Saves the score as a high score.
 	 * 중복 방지를 위한 로직 추가.
 	 */
-	private void saveScore() {
-		if (highScores.size() > MAX_HIGH_SCORE_NUM) {
-			int index = 0;
-			for (Score loadScore : highScores) {
-				if (name.equals(loadScore.getName())) {
-					if (score > loadScore.getScore()) {
-						highScores.remove(index);
-						highScores.add(new Score(name, score));
-						break;
-					}
-				}
-				index += 1;
-			}
-		} else {
-			boolean checkDuplicate = false;
-			int index = 0;
-			for (Score loadScore : highScores) {
-				if (name.equals(loadScore.getName())) {
-					checkDuplicate = true;
-					if (score > loadScore.getScore()) {
-						highScores.remove(index);
-						highScores.add(new Score(name, score));
-						break;
-					}
-				}
-				index += 1;
-			}
-			if (!checkDuplicate) {
-				highScores.add(new Score(name, score));
-			}
-		}
-		Collections.sort(highScores);
-		try {
-			Core.getFileManager().saveHighScores(highScores);
-		} catch (IOException e) {
-			logger.warning("Couldn't load high scores!");
-		}
-	}
+
 
 	/**
 	 * Draws the elements associated with the screen.
