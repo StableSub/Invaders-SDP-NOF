@@ -209,7 +209,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 			for (EnemyShip enemyShip : column)
 				if (enemyShip != null)
 					drawManager.drawEntity(enemyShip, enemyShip.getPositionX(),
-							enemyShip.getPositionY(), playerNumber);
+							enemyShip.getPositionY());
 	}
 
 	/**
@@ -526,7 +526,6 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 
 		return enemyShipsList.iterator();
 	}
-
 	/**
 	 * Checks if there are any ships remaining.
 	 * 
@@ -535,7 +534,6 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	public final boolean isEmpty() {
 		return this.shipCount <= 0;
 	}
-
 
 	public int getPoint(){return point; }
 

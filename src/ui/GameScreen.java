@@ -638,69 +638,67 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 * Draws the elements associated with the screen to thread buffer.
 	 */
 	private void drawThread() {
-		drawManager.initThreadDrawing(this, playerNumber);
-		drawManager.drawGameTitle(this, playerNumber);
+		drawManager.drawGameTitle(this);
 
-		drawManager.drawLaunchTrajectory( this,this.ship.getPositionX(), playerNumber);
+		drawManager.drawLaunchTrajectory( this,this.ship.getPositionX());
 
 		drawManager.drawEntity(this.ship, this.ship.getPositionX(),
-				this.ship.getPositionY(), playerNumber);
+				this.ship.getPositionY());
 
 		//draw Spider Web
 		for (int i = 0; i < web.size(); i++) {
 			drawManager.drawEntity(this.web.get(i), this.web.get(i).getPositionX(),
-					this.web.get(i).getPositionY(), playerNumber);
+					this.web.get(i).getPositionY());
 		}
 		//draw Blocks
 		for (Block block : block)
 			drawManager.drawEntity(block, block.getPositionX(),
-					block.getPositionY(), playerNumber);
+					block.getPositionY());
 
 		if (this.enemyShipSpecial != null)
 			drawManager.drawEntity(this.enemyShipSpecial,
 					this.enemyShipSpecial.getPositionX(),
-					this.enemyShipSpecial.getPositionY(), playerNumber);
+					this.enemyShipSpecial.getPositionY());
 
 		enemyShipFormation.draw(playerNumber);
 
 		for (ItemBox itemBox : this.itemBoxes)
-			drawManager.drawEntity(itemBox, itemBox.getPositionX(), itemBox.getPositionY(), playerNumber);
+			drawManager.drawEntity(itemBox, itemBox.getPositionX(), itemBox.getPositionY());
 
 		for (Barrier barrier : this.barriers)
-			drawManager.drawEntity(barrier, barrier.getPositionX(), barrier.getPositionY(), playerNumber);
+			drawManager.drawEntity(barrier, barrier.getPositionX(), barrier.getPositionY());
 
 		for (Bullet bullet : this.bullets)
 			drawManager.drawEntity(bullet, bullet.getPositionX(),
-					bullet.getPositionY(), playerNumber);
+					bullet.getPositionY());
 
 		// Interface.
-		drawManager.drawScore(this, this.score, playerNumber);
-		drawManager.drawElapsedTime(this, this.elapsedTime, playerNumber);
-		drawManager.drawAlertMessage(this, this.alertMessage, playerNumber);
-		drawManager.drawLives(this, this.lives, this.shipType, playerNumber);
-		drawManager.drawLevel(this, this.level, playerNumber);
-		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1, playerNumber);
-		drawManager.drawReloadTimer(this,this.ship,ship.getRemainingReloadTime(), playerNumber);
-		drawManager.drawCombo(this,this.combo, playerNumber);
+		drawManager.drawScore(this, this.score);
+		drawManager.drawElapsedTime(this, this.elapsedTime);
+		drawManager.drawAlertMessage(this, this.alertMessage);
+		drawManager.drawLives(this, this.lives, this.shipType);
+		drawManager.drawLevel(this, this.level);
+		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1);
+		drawManager.drawReloadTimer(this,this.ship,ship.getRemainingReloadTime());
+		drawManager.drawCombo(this,this.combo);
 
 		// Show GameOver if one player ends first
 		if (this.levelFinished && this.screenFinishedCooldown.checkFinished() && this.lives <= 0) {
-			drawManager.drawInGameOver(this, playerNumber);
 			drawManager.drawHorizontalLine(this, this.height / 2 - this.height
-					/ 12, playerNumber);
+					/ 12);
 			drawManager.drawHorizontalLine(this, this.height / 2 + this.height
-					/ 12, playerNumber);
+					/ 12);
 		}
 
 		// Countdown to game start.
 		if (!this.inputDelay.checkFinished()) {
 			int countdown = (int) ((INPUT_DELAY - (System.currentTimeMillis() - this.gameStartTime)) / 1000);
 			drawManager.drawCountDown(this, this.level, countdown,
-					this.bonusLife, playerNumber);
+					this.bonusLife);
 			drawManager.drawHorizontalLine(this, this.height / 2 - this.height
-					/ 12, playerNumber);
+					/ 12);
 			drawManager.drawHorizontalLine(this, this.height / 2 + this.height
-					/ 12, playerNumber);
+					/ 12);
 
 			//Intermediate aggregation
 			if (this.level > 1){
@@ -711,18 +709,18 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					this.maxCombo = 0;
 				} else {
 					// Don't show it just before the game starts, i.e. when the countdown is zero.
-					drawManager.interAggre(this, this.level - 1, this.maxCombo, this.elapsedTime, this.lapTime, this.score, this.tempScore, playerNumber);
+					drawManager.interAggre(this, this.level - 1, this.maxCombo, this.elapsedTime, this.lapTime, this.score, this.tempScore);
 				}
 			}
 		}
 
 		//add drawRecord method for drawing
-		drawManager.drawRecord(highScores,this, playerNumber);
+		drawManager.drawRecord(highScores,this);
 
 		// Blocker drawing part
 		if (!blockers.isEmpty()) {
 			for (Blocker blocker : blockers) {
-				drawManager.drawRotatedEntity(blocker, blocker.getPositionX(), blocker.getPositionY(), blocker.getAngle(), playerNumber);
+				drawManager.drawRotatedEntity(blocker, blocker.getPositionX(), blocker.getPositionY(), blocker.getAngle());
 			}
 		}
 

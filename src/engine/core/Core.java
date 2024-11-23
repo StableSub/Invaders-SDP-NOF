@@ -167,7 +167,7 @@ public final class Core {
 						+ gameState.getLivesRemaining() + " lives remaining, "
 						+ gameState.getBulletsShot() + " bullets shot and "
 						+ gameState.getShipsDestroyed() + " ships destroyed.");
-				currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager);
+				currentScreen = new ScoreScreen(login.getID(), width, height, FPS, gameState, wallet, achievementManager);
 
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing score screen.");
@@ -202,7 +202,7 @@ public final class Core {
 
 			case 6:
 				//Game Setting
-				currentScreen = new GameSettingScreen(width, height, FPS);
+				currentScreen = new GameSettingScreen(login.getID(), width, height, FPS);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " game setting screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);

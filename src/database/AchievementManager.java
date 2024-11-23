@@ -57,7 +57,6 @@ public class AchievementManager {
         }
     }
 
-
     public void updateTotalPlayTime(int playTime) {
         if (achievement.getTotalPlayTime() < 600 && achievement.getTotalPlayTime() + playTime >= 600) {
             coinReward += PLAY_TIME_COIN;
@@ -133,7 +132,7 @@ public class AchievementManager {
 
     public void updateAllAchievements() {
         String sql = "UPDATE user_ach SET HighScore = ?, TotalScore = ?, TotalPlaytime = ?, " +
-                "PerfectStage = ?, Accuracy = ?, MaxCombo = ? WHERE id = ?";
+                "PerfectStage = ?, Accuracy = ?, MaxCombo = ?, FlawlessFailure = ? WHERE id = ?";
         try (Connection conn = db.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // 매개변수 설정
@@ -143,7 +142,8 @@ public class AchievementManager {
             pstmt.setInt(4, achievement.getPerfectStage());
             pstmt.setDouble(5, achievement.getAccuracy());
             pstmt.setInt(6, achievement.getHighMaxCombo());
-            pstmt.setString(7, achievement.getID());
+            pstmt.setBoolean(7, checkFlawlessFailure);
+            pstmt.setString(8, achievement.getID());
             // SQL 실행
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -156,13 +156,13 @@ public class AchievementManager {
         }
     }
 
-    public void updatePlaying(int maxCombo ,int playtime, int max_lives, int LivesRemaining, int level) throws IOException{
+    public void updatePlaying(int maxCombo ,int playtime, int max_lives, int LivesRemaining, int level) {
         updateTotalPlayTime(playtime);
         updatePerfect(max_lives,LivesRemaining,level);
         updateMaxCombo(maxCombo);
     }
 
-    public void updatePlayed(double accuracy, int score) throws IOException {
+    public void updatePlayed(double accuracy, int score) {
         updateHighScore(score);
         updateTotalScore(score);
         updateFlawlessFailure(accuracy);

@@ -2,6 +2,7 @@ package ui;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import database.AchievementManager;
@@ -42,6 +43,7 @@ public class AchievementScreen extends Screen {
 	 */
 	public AchievementScreen(final int width, final int height, final int fps, final Achievement achievement) {
 		super(width, height, fps);
+
 		totalScore = achievement.getTotalScore();
 		totalPlayTime = achievement.getTotalPlayTime();
 		currentPerfectStage = achievement.getPerfectStage();
