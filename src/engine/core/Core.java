@@ -110,13 +110,14 @@ public final class Core {
 		GameState gameState;
 
 		AchievementManager achievementManager;
+		Achievement achievement = db.loadData(login.getID());
 		Wallet wallet = Wallet.getWallet();
 
 		int returnCode = 1;
 		do {
 			MAX_LIVES = 1;
 			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
-			Achievement achievement = db.loadData(login.getID());
+			achievement = db.loadData(login.getID());
 			achievementManager = new AchievementManager(achievement);
 
 			GameSettings gameSetting = new GameSettings(4, 4, 60, 2500);
@@ -187,7 +188,7 @@ public final class Core {
 
 			case 4:
 				// Achievement
-				currentScreen = new AchievementScreen(width, height, FPS,achievementManager);
+				currentScreen = new AchievementScreen(width, height, FPS, achievement);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " achievement screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
