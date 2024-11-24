@@ -883,7 +883,7 @@ public final class DrawManager {
 	public void drawHighScores(final Screen screen) {
 		// DatabaseManager 객체로부터 상위 3개 점수 리스트를 가져옵니다.
 		DatabaseManager dbManager = new DatabaseManager();
-		List<Score> highScores = dbManager.getTop3HighScores();
+		List<Score> highScores = dbManager.getHighScoreList();
 
 		backBufferGraphics.setColor(Color.WHITE);
 		int i = 0;

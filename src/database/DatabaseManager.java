@@ -2,6 +2,7 @@ package database;
 
 import engine.utility.Score;
 import entity.Achievement;
+import entity.Wallet;
 
 import java.sql.*;
 import java.security.MessageDigest;
@@ -74,10 +75,10 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
         String sqlCreate_wallet = "CREATE TABLE IF NOT EXISTS user_wallet (\n"
                 + "    id TEXT NOT NULL PRIMARY KEY,\n"
                 + "    Coin INT DEFAULT 0,\n"
-                + "    BulletSpeed INT DEFAULT 0,\n"
-                + "    ShotInterval INT DEFAULT 0,\n"
-                + "    AdditionalLife INT DEFAULT 0,\n"
-                + "    CoinGain INT DEFAULT 0\n"
+                + "    BulletSpeed INT DEFAULT 1,\n"
+                + "    ShotInterval INT DEFAULT 1,\n"
+                + "    AdditionalLife INT DEFAULT ,\n"
+                + "    CoinGain INT DEFAULT 1\n"
                 + ");";
 
         try (Connection conn = this.connect();
@@ -181,7 +182,7 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
         }
     }
 
-    public Achievement loadData(String userID) {
+    public Achievement loadAchData(String userID) {
         String sql = "SELECT * FROM user_ach WHERE id = ?";
         Achievement userData = null;
 
@@ -220,7 +221,46 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
         return userData;
     }
 
-    public List<Score> getTop3HighScores() {
+    public Wallet loadWalletData(String userID) {
+        String sql = "SELECT * FROM user_wallet WHERE id = ?";
+        Wallet userData = null;
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, userID); // 쿼리 매개변수 설정
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String id = rs.getString("id");
+                    int coin = rs.getInt("Coin");
+                    int bulletSpeed = rs.getInt("BulletSpeed");
+                    int shotInterval = rs.getInt("ShotInterval");
+                    int additionalLife = rs.getInt("AdditionalLife");
+                    int coinGain = rs.getInt("CoinGain");
+
+                    // UserDataLoader 객체 생성 및 반환 준비
+                    userData = new Wallet(id, coin, bulletSpeed, shotInterval, additionalLife, coinGain);
+                    LOGGER.log(Level.SEVERE, "Data loaded successfully for user ID: " + userID);
+                } else {
+                    LOGGER.log(Level.SEVERE,"No data found for user ID: " + userID);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, e.getMessage());
+        }
+
+        // 데이터가 없으면 기본값으로 초기화된 객체 반환
+        if (userData == null) {
+            userData = new Wallet();
+            LOGGER.log(Level.SEVERE,"User data not found for user ID: " + userID);
+        }
+        return userData;
+    }
+
+
+    public List<Score> getHighScoreList() {
         List<Score> highScores = new ArrayList<>();
         String sql = "SELECT id, highscore FROM user_ach ORDER BY highscore DESC LIMIT 3";
 

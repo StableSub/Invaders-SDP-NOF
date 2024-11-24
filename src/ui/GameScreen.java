@@ -564,7 +564,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		drawManager.completeDrawing(this);
 	}
 
-
 	// Methods that handle the position, angle, sprite, etc. of the blocker (called repeatedly in update.)
 	private void handleBlockerAppearance() {
 
@@ -714,8 +713,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				drawManager.drawRotatedEntity(blocker, blocker.getPositionX(), blocker.getPositionY(), blocker.getAngle());
 			}
 		}
-
-		drawManager.flushBuffer(this, playerNumber);
 	}
 
 	/**
