@@ -1,14 +1,12 @@
 package ui;
 
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 import java.util.List;
-
-import engine.manager.AchievementManager;
-import engine.core.Core;
+import database.DatabaseManager;
 import engine.utility.Score;
 import engine.utility.Sound;
 import engine.manager.SoundManager;
+import entity.Achievement;
 
 /**
  * Implements the achievement screen.
@@ -28,7 +26,6 @@ public class AchievementScreen extends Screen {
 	private int currentPerfectStage;
 	private int maxCombo;
 	private boolean checkFlawlessFailure;
-	private boolean checkBestFriends;
 
 	/**
 	 * Constructor, establishes the properties of the screen.
@@ -40,42 +37,18 @@ public class AchievementScreen extends Screen {
 	 * @param fps
 	 *            Frames per second, frame rate at which the game is run.
 	 */
-	public AchievementScreen(final int width, final int height, final int fps, final AchievementManager achievementManager) {
+	public AchievementScreen(final int width, final int height, final int fps, final Achievement achievement) {
 		super(width, height, fps);
-
+		DatabaseManager db = new DatabaseManager();
+		highScores = db.getHighScoreList();
+		totalScore = achievement.getTotalScore();
+		totalPlayTime = achievement.getTotalPlayTime();
+		currentPerfectStage = achievement.getPerfectStage();
+		maxCombo = achievement.getHighMaxCombo();
+		checkFlawlessFailure = achievement.getFlawlessFailure();
 		this.returnCode = 1;
 
-		try {
-			this.highScores = Core.getFileManager().loadHighScores();
-		} catch (NumberFormatException | IOException e) {
-			logger.warning("Couldn't load high scores!");
-		}
-		try {
-			this.totalScore = Core.getFileManager().loadAchievement().getTotalScore();
-		} catch (NumberFormatException | IOException e) {
-			logger.warning("Couldn't load total scores!");
-		}
 
-		try {
-			this.totalPlayTime = Core.getFileManager().loadAchievement().getTotalPlayTime();
-		} catch (NumberFormatException | IOException e) {
-			logger.warning("Couldn't load total play time!");
-		}
-		try {
-			this.currentPerfectStage = Core.getFileManager().loadAchievement().getPerfectStage();
-		} catch (NumberFormatException | IOException e) {
-			logger.warning("Couldn't load current perfect stage");
-		}
-		try {
-			this.maxCombo = Core.getFileManager().loadAchievement().getHighmaxCombo();
-		} catch (NumberFormatException | IOException e) {
-			logger.warning("Couldn't load Current accuracy achievement");
-		}
-		try {
-			this.checkFlawlessFailure = Core.getFileManager().loadAchievement().getFlawlessFailure();
-		} catch (NumberFormatException | IOException e) {
-			logger.warning("Couldn't load flawless failure achievement");
-		}
 	}
 
 	/**
@@ -111,7 +84,7 @@ public class AchievementScreen extends Screen {
 		drawManager.drawAchievementMenu(this, this.totalScore, this.totalPlayTime,
 				this.maxCombo, this.currentPerfectStage, this.currentPerfectStage+1,
 				this.checkFlawlessFailure);
-		drawManager.drawHighScores(this, this.highScores);
+		drawManager.drawHighScores(this);
 		drawManager.completeDrawing(this);
 	}
 }

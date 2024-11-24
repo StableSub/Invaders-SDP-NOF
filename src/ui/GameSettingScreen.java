@@ -5,7 +5,7 @@ import engine.core.Core;
 import engine.manager.InputManager;
 import engine.manager.SoundManager;
 import engine.utility.Sound;
-
+import entity.Achievement;
 import java.awt.event.KeyEvent;
 
 /**
@@ -49,11 +49,10 @@ public class GameSettingScreen extends Screen {
 	 * @param fps
 	 *            Frames per second, frame rate at which the game is run.
 	 */
-	public GameSettingScreen(final int width, final int height, final int fps) {
+	public GameSettingScreen(String id, final int width, final int height, final int fps) {
 		super(width, height, fps);
-
 		// row 0: multiplayer
-		this.name = "NOF";
+		this.name = id;
 
 		// row 1: difficulty level
 		this.difficultyLevel = 1; 	// 0: easy, 1: normal, 2: hard
@@ -158,21 +157,16 @@ public class GameSettingScreen extends Screen {
 			}
 		}
 	}
+
 	public static GameSettingScreen getInstance() {
 		if (instance == null) {
-			instance = new GameSettingScreen(0,0,0);
+			instance = new GameSettingScreen("", 0,0,0);
 		}
 		return instance;
 	}
 
-	/**
-	 * Get player's name by number
-	 *
-	 * @param playerNumber
-	 * 			Player's number
-	 * @return Player's name
-	 */
-	public static String getName(int playerNumber) { return name;}
+
+	public static String getName() { return name;}
 
 	/**
 	 * Draws the elements associated with the screen.

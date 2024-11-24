@@ -19,9 +19,15 @@ public class Score implements Comparable<Score> {
 	 * @param score
 	 *            Player score.
 	 */
-	public Score(final String name, final int score) {
-		this.name = name;
+	private String userId;
+
+	public Score(String userId, int score) {
+		this.userId = userId;
 		this.score = score;
+	}
+
+	public String getUserId() {
+		return userId;
 	}
 
 	/**

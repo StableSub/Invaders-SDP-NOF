@@ -1,17 +1,23 @@
-package engine.manager;
+package database;
 
+import engine.manager.FileManager;
 import entity.Achievement;
 
 import java.io.IOException;
+import java.sql.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AchievementManager {
 
     /** Created AchievementManager class to easily manage achievement-related aspects */
 
-    private static final Logger logger = Logger.getLogger(AchievementManager.class.getName());
+    private DatabaseManager db;
+    private static final Logger LOGGER = Logger.getLogger(AchievementManager.class.getName());
 
     private Achievement achievement;
+
+    private int highScore;
 
     // Variables related to Perfect Achievement
     private static int currentPerfectLevel;
@@ -35,16 +41,23 @@ public class AchievementManager {
     private boolean checkPlayTimeAch;
 
     // Variables needed for each achievement are loaded through a file.
-    public AchievementManager() throws IOException {
-        achievement = FileManager.getInstance().loadAchievement();
+    public AchievementManager(Achievement achievement) throws IOException {
+        this.achievement = achievement;
+        this.highScore = achievement.getHighScore();
         this.currentPerfectLevel = achievement.getPerfectStage();
-        this.highMaxCombo = achievement.getHighmaxCombo();
+        this.highMaxCombo = achievement.getHighMaxCombo();
         this.checkFlawlessFailure = achievement.getFlawlessFailure();
         this.highAccuracy = achievement.getHighAccuracy();
     }
 
     public int getAchievementReward() {
         return coinReward;
+    }
+
+    public void updateHighScore(int score) {
+        if (score > highScore) {
+            achievement.setHighScore(score);
+        }
     }
 
     public void updateTotalPlayTime(int playTime) {
@@ -78,7 +91,7 @@ public class AchievementManager {
         int rewardIndex = highMaxCombo / 5 - 1 <= 9 ? 0 : highMaxCombo / 5 - 1;
         highMaxCombo = maxCombo;
         if (highMaxCombo < maxComboGoal) {
-            achievement.setHighMaxcombo(highMaxCombo);
+            achievement.setHighMaxCombo(highMaxCombo);
             return;
         }
         // When an accuracy achievement is reached, all lower achievements are achieved together.
@@ -98,7 +111,7 @@ public class AchievementManager {
             coinReward += COMBO_COIN_REWARD[0];
         }
         // Save the updated achievement.
-        achievement.setHighMaxcombo(highMaxCombo);
+        achievement.setHighMaxCombo(highMaxCombo);
     }
 
     /**
@@ -164,6 +177,30 @@ public class AchievementManager {
         }
     }
 
+    public void updateAllAchievements() {
+        String sql = "UPDATE user_ach SET HighScore = ?, TotalScore = ?, TotalPlaytime = ?, " +
+                "PerfectStage = ?, Accuracy = ?, MaxCombo = ?, FlawlessFailure = ? WHERE id = ?";
+        try (Connection conn = db.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            // 매개변수 설정
+            pstmt.setInt(1, achievement.getHighScore());
+            pstmt.setInt(2, achievement.getTotalScore());
+            pstmt.setInt(3, achievement.getTotalPlayTime());
+            pstmt.setInt(4, achievement.getPerfectStage());
+            pstmt.setDouble(5, achievement.getAccuracy());
+            pstmt.setInt(6, achievement.getHighMaxCombo());
+            pstmt.setBoolean(7, checkFlawlessFailure);
+            pstmt.setString(8, achievement.getID());
+            // SQL 실행
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                LOGGER.log(Level.SEVERE, "Achievement updated successfully!");
+            } else {
+                LOGGER.log(Level.SEVERE, "No records updated. Check the ID.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     /**
      * Saves all achievements.
      */
@@ -172,12 +209,15 @@ public class AchievementManager {
     }
 
     public void updatePlaying(int maxCombo, int playtime, int max_lives, int LivesRemaining, int level) throws IOException {
+    public void updatePlaying(int maxCombo ,int playtime, int max_lives, int LivesRemaining, int level) {
         updateTotalPlayTime(playtime);
         updatePerfect(max_lives, LivesRemaining, level);
         updateMaxCombo(maxCombo);
     }
 
     public void updatePlayed(double accuracy, int score) throws IOException {
+    public void updatePlayed(double accuracy, int score) {
+        updateHighScore(score);
         updateTotalScore(score);
         updateFlawlessFailure(accuracy);
         updateAccuracy(accuracy);

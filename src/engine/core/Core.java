@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import database.*;
 import engine.utility.*;
 import engine.manager.*;
+import entity.Achievement;
 import entity.Ship;
 import entity.Wallet;
 import ui.*;
@@ -53,6 +54,7 @@ public final class Core {
 	private static long startTime, endTime;
 
 	private static int DifficultySetting;// <- setting EASY(0), NORMAL(1), HARD(2);
+
 	private static DatabaseManager db;  // UserDatabase 객체 추가
 
 	/**
@@ -71,8 +73,7 @@ public final class Core {
 
 		db = new DatabaseManager(); // UserDatabase 객체 생성
 		db.createTable(); // 데이터베이스 users 테이블 생성 (최초 1회 실행 필요)
-		new LoginFrame(db); // 로그인 창 생성 및 표시
-
+		LoginFrame login = new LoginFrame(db);// 로그인 창 생성 및 표시
 
 		while (WelcomeFrame.getStart()) {
 			try {
@@ -81,7 +82,6 @@ public final class Core {
 				e.printStackTrace();
 			}
 		}
-
 
 		try {
 			LOGGER.setUseParentHandlers(false);
@@ -105,17 +105,13 @@ public final class Core {
 		DrawManager.getInstance().setFrame(frame);
 		int width = frame.getWidth();
 		int height = frame.getHeight();
-
-		GameState gameState;
-
-		AchievementManager achievementManager;
-		Wallet wallet = Wallet.getWallet();
-
+		Wallet wallet = db.loadWalletData(login.getID());
 		int returnCode = 1;
 		do {
-			MAX_LIVES = wallet.getLives_lv()+2;
-			gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
-			achievementManager = new AchievementManager();
+			MAX_LIVES = 1;
+			GameState gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
+			Achievement achievement = db.loadAchData(login.getID());
+			AchievementManager achievementManager = new AchievementManager(achievement);
 
 			GameSettings gameSetting = new GameSettings(4, 4, 60, 2500);
 
@@ -168,7 +164,7 @@ public final class Core {
 						+ gameState.getLivesRemaining() + " lives remaining, "
 						+ gameState.getBulletsShot() + " bullets shot and "
 						+ gameState.getShipsDestroyed() + " ships destroyed.");
-				currentScreen = new ScoreScreen(GameSettingScreen.getName(0), width, height, FPS, gameState, wallet, achievementManager);
+				currentScreen = new ScoreScreen(login.getID(), width, height, FPS, gameState, wallet, achievementManager);
 
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing score screen.");
@@ -185,7 +181,7 @@ public final class Core {
 
 			case 4:
 				// Achievement
-				currentScreen = new AchievementScreen(width, height, FPS,achievementManager);
+				currentScreen = new AchievementScreen(width, height, FPS, achievement);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " achievement screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
@@ -203,7 +199,7 @@ public final class Core {
 
 			case 6:
 				//Game Setting
-				currentScreen = new GameSettingScreen(width, height, FPS);
+				currentScreen = new GameSettingScreen(login.getID(), width, height, FPS);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 						+ " game setting screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
