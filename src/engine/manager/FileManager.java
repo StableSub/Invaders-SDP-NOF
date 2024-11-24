@@ -140,24 +140,6 @@ public final class FileManager {
 		return font;
 	}
 
-	/**
-	 * Returns the application default scores if there is no user high scores
-	 * file.
-	 *
-	 * @return Default high scores.
-	 * @throws IOException
-	 *             In case of loading problems.
-	 */
-
-	/**
-	 * Loads high scores from file, and returns a sorted list of pairs score -
-	 * value.
-	 *
-	 * @return Sorted list of scores - players.
-	 * @throws IOException In case of loading problems.
-	 */
-
-
 	public List<String> loadCreditList() throws IOException {  // 사용자의 크레딧 파일을 로드
 
 		List<String> creditname = new ArrayList<String>();
