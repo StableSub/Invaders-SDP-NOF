@@ -77,7 +77,7 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
                 + "    Coin INT DEFAULT 0,\n"
                 + "    BulletSpeed INT DEFAULT 1,\n"
                 + "    ShotInterval INT DEFAULT 1,\n"
-                + "    AdditionalLife INT DEFAULT ,\n"
+                + "    AdditionalLife INT DEFAULT 1,\n"
                 + "    CoinGain INT DEFAULT 1\n"
                 + ");";
 

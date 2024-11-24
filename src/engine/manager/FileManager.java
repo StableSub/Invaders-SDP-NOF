@@ -17,12 +17,10 @@ import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.Properties;
 
 import engine.utility.Score;
 import engine.core.Core;
 import engine.manager.DrawManager.SpriteType;
-import entity.Achievement;
 import entity.Wallet;
 
 /**
@@ -68,7 +66,8 @@ public final class FileManager {
 	 *             In case of loading problems.
 	 */
 	public void loadSprite(final Map<SpriteType, boolean[][]> spriteMap) throws IOException {
-        try (InputStream inputStream = DrawManager.class.getClassLoader().getResourceAsStream("graphics");
+        try (//InputStream inputStream = DrawManager.class.getClassLoader().getResourceAsStream("graphics");
+			 InputStream inputStream = new FileInputStream("res/graphics");
 			 BufferedReader reader = inputStream != null ? new BufferedReader(new InputStreamReader(inputStream)) : null) {
 
 			if (reader == null)
@@ -111,20 +110,34 @@ public final class FileManager {
 	 * @throws FontFormatException
 	 *             In case of incorrect font format.
 	 */
-	public Font loadFont(final float size) throws IOException,
-			FontFormatException {
+	public Font loadFont(final float size) throws IOException, FontFormatException {
 		InputStream inputStream = null;
-		Font font;
+		Font font = null;
 
 		try {
-			// Font loading.
-			inputStream = FileManager.class.getClassLoader()
-					.getResourceAsStream("space_invaders.ttf");
-			font = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(
-					size);
+			// Load font from resource
+			inputStream = new FileInputStream("res/space_invaders.ttf");
+			if (inputStream == null) {
+				throw new FileNotFoundException("Font file not found in classpath.");
+			}
+
+			font = Font.createFont(Font.TRUETYPE_FONT, inputStream).deriveFont(size);
+		} catch (FontFormatException e) {
+			System.err.println("Invalid font format: " + e.getMessage());
+			throw e;
+		} catch (IOException e) {
+			System.err.println("Error loading font file: " + e.getMessage());
+			throw e;
 		} finally {
-			if (inputStream != null)
+			if (inputStream != null) {
 				inputStream.close();
+			}
+		}
+
+		// Default font fallback
+		if (font == null) {
+			System.err.println("Font loading failed. Using default font.");
+			font = new Font("SansSerif", Font.PLAIN, (int) size);
 		}
 
 		return font;
