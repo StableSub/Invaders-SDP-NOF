@@ -158,7 +158,7 @@ public class AchievementManager {
 
     public void updateAllAchievements() {
         String sql = "UPDATE user_ach SET HighScore = ?, TotalScore = ?, TotalPlaytime = ?, " +
-                "PerfectStage = ?, highAccuracy = ?, MaxCombo = ?, FlawlessFailure = ? WHERE id = ?";
+                "PerfectStage = ?, HighAccuracy = ?, MaxCombo = ?, FlawlessFailure = ? WHERE id = ?";
         try (Connection conn = db.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, achievement.getHighScore());

@@ -1079,7 +1079,7 @@ public final class DrawManager {
 
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementSmallEventString(screen, "You record high accuracy",
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()+8);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5-5+fontBigMetrics.getHeight()+8);
 
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementBigString(screen, "You are insane!",
@@ -1113,7 +1113,7 @@ public final class DrawManager {
 						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 8 - 6 + fontBigMetrics.getHeight() * 8);
 
 				backBufferGraphics.setColor(Color.WHITE);
-				String accuracyAchievement = String.format("     %.2f", highAccuracy) + " =>" + String.format("         %2f", nextAccuracy == 0 ? 50 : nextAccuracy == 1 ? 70 : nextAccuracy == 2 ? 90 : 100);
+				String accuracyAchievement = String.format("     %.2f", highAccuracy) + " =>" + String.format("         %d", nextAccuracy == 0 ? 50 : nextAccuracy == 1 ? 70 : nextAccuracy == 2 ? 90 : 100);
 				// 목표를 1개라도 달성 시 그 다음 목표 설정, 소수점 설정하기
 				drawRightSideAchievementBigString(screen, accuracyAchievement,
 						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 11 - 6);
