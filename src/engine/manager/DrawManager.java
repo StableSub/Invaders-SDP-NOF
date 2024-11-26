@@ -1075,15 +1075,15 @@ public final class DrawManager {
 		if (highAccuracy >= 100) {
 			backBufferGraphics.setColor(Color.gray);
 			drawRightSideAchievementCoinBigString(screen, HIGH_ACCURACY_REWARD[3],
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*2);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7+fontBigMetrics.getHeight()*2);
 
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementSmallEventString(screen, "You record high accuracy",
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5-5+fontBigMetrics.getHeight()+8);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7+fontBigMetrics.getHeight()+8);
 
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementBigString(screen, "You are insane!",
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*2);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7+fontBigMetrics.getHeight()*2);
 		} else {
 			backBufferGraphics.setColor(Color.orange);
 
@@ -1103,17 +1103,17 @@ public final class DrawManager {
 				// 얘를 기반으로 위치 조정 (코인) 인덱스 오류 잘 찾기.
 
 				backBufferGraphics.setColor(Color.WHITE);
-				String accuracyAchievement = String.format("     %.2f", highAccuracy) + " =>" + " 50.00";
+				String accuracyAchievement = String.format("     %.2f", highAccuracy) + " =>" + " 50";
 				// 명중률 달성 하나도 안 했을때 다음 목표 정하기
 				drawRightSideAchievementBigString(screen, accuracyAchievement,
 						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 11 - 6);
 			} else {
 				backBufferGraphics.setColor(Color.orange);
 				drawRightSideAchievementCoinBigString(screen, HIGH_ACCURACY_REWARD[nextAccuracy],
-						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 8 - 6 + fontBigMetrics.getHeight() * 8);
+						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 2 + 4 + fontBigMetrics.getHeight() * 5);
 
 				backBufferGraphics.setColor(Color.WHITE);
-				String accuracyAchievement = String.format("     %.2f", highAccuracy) + " =>" + String.format("         %d", nextAccuracy == 0 ? 50 : nextAccuracy == 1 ? 70 : nextAccuracy == 2 ? 90 : 100);
+				String accuracyAchievement = String.format("     %.2f", highAccuracy) + " =>" + String.format("   %d", nextAccuracy == 0 ? 50 : nextAccuracy == 1 ? 70 : nextAccuracy == 2 ? 90 : 100);
 				// 목표를 1개라도 달성 시 그 다음 목표 설정, 소수점 설정하기
 				drawRightSideAchievementBigString(screen, accuracyAchievement,
 						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 11 - 6);
