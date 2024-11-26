@@ -779,19 +779,19 @@ public final class DrawManager {
 	 *            Lives remaining when finished.
 	 * @param shipsDestroyed
 	 *            Total ships destroyed.
-	 * @param accuracy
+	 * @param highAccuracy
 	 *            Total accuracy.
 	 * @param isNewRecord
 	 *            If the score is a new high score.
 	 */
 	public void drawResults(final Screen screen, final int score,
 							final int livesRemaining, final int shipsDestroyed,
-							final double accuracy, final boolean isNewRecord, final int coinsEarned) {
+							final double highAccuracy, final boolean isNewRecord, final int coinsEarned) {
 		String scoreString = String.format("score %04d", score);
 		String livesRemainingString = "lives remaining " + livesRemaining;
 		String shipsDestroyedString = "enemies destroyed " + shipsDestroyed;
 		String accuracyString = String
-				.format("accuracy %.2f%%", accuracy);
+				.format("accuracy %.2f%%", highAccuracy);
 		String coinsEarnedString = "EARNED COIN " + coinsEarned;
 
 		int height = isNewRecord ? 4 : 2;

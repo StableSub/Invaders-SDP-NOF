@@ -199,7 +199,7 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
                     int perfectStage = rs.getInt("PerfectStage");
                     int maxCombo = rs.getInt("MaxCombo");
                     boolean flawlessFailure = rs.getBoolean("FlawlessFailure");
-                    double highAccuracy = rs.getDouble("Accuracy");
+                    double highAccuracy = rs.getDouble("HighAccuracy");
 
                     // UserDataLoader 객체 생성 및 반환 준비
                     userData = new Achievement(userID, highScore, totalScore, totalPlayTime, perfectStage, maxCombo, flawlessFailure, highAccuracy);
