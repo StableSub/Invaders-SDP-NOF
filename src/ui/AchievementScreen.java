@@ -25,6 +25,7 @@ public class AchievementScreen extends Screen {
 	private int totalPlayTime;
 	private int currentPerfectStage;
 	private int maxCombo;
+	private double highAccuracy;
 	private boolean checkFlawlessFailure;
 
 	/**
@@ -44,6 +45,7 @@ public class AchievementScreen extends Screen {
 		totalScore = achievement.getTotalScore();
 		totalPlayTime = achievement.getTotalPlayTime();
 		currentPerfectStage = achievement.getPerfectStage();
+		highAccuracy = achievement.getHighAccuracy();
 		maxCombo = achievement.getHighMaxCombo();
 		checkFlawlessFailure = achievement.getFlawlessFailure();
 		this.returnCode = 1;
@@ -82,7 +84,7 @@ public class AchievementScreen extends Screen {
 	private void draw() {
 		drawManager.initDrawing(this);
 		drawManager.drawAchievementMenu(this, this.totalScore, this.totalPlayTime,
-				this.maxCombo, this.currentPerfectStage, this.currentPerfectStage+1,
+				this.maxCombo, this.highAccuracy, this.currentPerfectStage, this.currentPerfectStage+1,
 				this.checkFlawlessFailure);
 		drawManager.drawHighScores(this);
 		drawManager.completeDrawing(this);

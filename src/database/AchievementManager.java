@@ -15,7 +15,6 @@ public class AchievementManager {
     private DatabaseManager db;
     private static final Logger LOGGER = Logger.getLogger(AchievementManager.class.getName());
 
-
     private Achievement achievement;
 
     private int highScore;
@@ -25,7 +24,10 @@ public class AchievementManager {
     private final int MAX_PERFECT_STAGE = 7;
 
     // Variables related to Accuracy Achievement
-    private int highMaxCombo; // List of accuracy achievements
+    private int highMaxCombo;
+    private double highAccuracy;
+    private final int[] ACCURACY_GOALS = {50, 70, 90, 100};
+    private final int[] ACCURACY_REWARDS = {100, 200, 300, 500};
 
     // Variables related to Flawless Failure Achievement
     private boolean checkFlawlessFailure;
@@ -44,6 +46,7 @@ public class AchievementManager {
         this.highScore = achievement.getHighScore();
         this.currentPerfectLevel = achievement.getPerfectStage();
         this.highMaxCombo = achievement.getHighMaxCombo();
+        this.highAccuracy = achievement.getHighAccuracy();
         this.checkFlawlessFailure = achievement.getFlawlessFailure();
     }
 
@@ -69,7 +72,7 @@ public class AchievementManager {
     }
 
     /**
-     * Function to update the accuracy achievement.
+     * Updates the maximum combo achievement.
      */
     public void updateMaxCombo(int maxCombo) {
         if (highMaxCombo >= maxCombo) {
@@ -91,7 +94,6 @@ public class AchievementManager {
             achievement.setHighMaxCombo(highMaxCombo);
             return;
         }
-        // When an accuracy achievement is reached, all lower achievements are achieved together.
         if (highMaxCombo >= 25) {
             for (int i = rewardIndex; i < 4; i++) {
                 coinReward += COMBO_COIN_REWARD[i];
@@ -107,17 +109,41 @@ public class AchievementManager {
         } else if (highMaxCombo >= 10) {
             coinReward += COMBO_COIN_REWARD[0];
         }
-        // Save the updated achievement.
         achievement.setHighMaxCombo(highMaxCombo);
+    }
+
+    /**
+     * Updates the accuracy achievement.
+     */
+    public void updateAccuracy(double accuracy) {
+        // 이미 달성된 목표 초기화
+        for (int i = 0; i < ACCURACY_GOALS.length; i++) {
+            if (highAccuracy >= ACCURACY_GOALS[i]) {
+                achievement.getAchievedAccuracyGoals()[i] = true; // 목표 달성 상태를 true로 설정
+            }
+        }
+
+        // 새로운 명중률이 기존보다 높을 경우 업데이트
+        if (accuracy > highAccuracy) {
+            highAccuracy = accuracy; // 최고 명중률 갱신g
+            achievement.setHighAccuracy(highAccuracy); // 업적 객체에 설정
+
+            // 새로운 목표 달성 확인 및 보상 지급
+            for (int i = 0; i < ACCURACY_GOALS.length; i++) {
+                if (!achievement.getAchievedAccuracyGoals()[i] && accuracy >= ACCURACY_GOALS[i]) {
+                    achievement.getAchievedAccuracyGoals()[i] = true; // 목표 달성 상태 업데이트
+                    coinReward += ACCURACY_REWARDS[i]; // 해당 목표에 대한 보상 지급
+                }
+            }
+        }
     }
     /**
      * Check if the perfect achievement has been reached.
      */
     public void updatePerfect(final int MAX_LIVES, int checkLives, int gameLevel) {
         if (checkLives >= MAX_LIVES && currentPerfectLevel < MAX_PERFECT_STAGE && gameLevel > currentPerfectLevel) {
-            // Check if the current perfect stage has not exceeded the total stages.
             currentPerfectLevel += 1;
-            coinReward += PERFECT_COIN_REWARD[currentPerfectLevel-1];
+            coinReward += PERFECT_COIN_REWARD[currentPerfectLevel - 1];
             achievement.setCurrentPerfectStage(currentPerfectLevel);
         }
     }
@@ -132,19 +158,17 @@ public class AchievementManager {
 
     public void updateAllAchievements() {
         String sql = "UPDATE user_ach SET HighScore = ?, TotalScore = ?, TotalPlaytime = ?, " +
-                "PerfectStage = ?, Accuracy = ?, MaxCombo = ?, FlawlessFailure = ? WHERE id = ?";
+                "PerfectStage = ?, HighAccuracy = ?, MaxCombo = ?, FlawlessFailure = ? WHERE id = ?";
         try (Connection conn = db.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            // 매개변수 설정
             pstmt.setInt(1, achievement.getHighScore());
             pstmt.setInt(2, achievement.getTotalScore());
             pstmt.setInt(3, achievement.getTotalPlayTime());
             pstmt.setInt(4, achievement.getPerfectStage());
-            pstmt.setDouble(5, achievement.getAccuracy());
+            pstmt.setDouble(5, achievement.getHighAccuracy());
             pstmt.setInt(6, achievement.getHighMaxCombo());
             pstmt.setBoolean(7, checkFlawlessFailure);
             pstmt.setString(8, achievement.getID());
-            // SQL 실행
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
                 LOGGER.log(Level.SEVERE, "Achievement updated successfully!");
@@ -156,9 +180,9 @@ public class AchievementManager {
         }
     }
 
-    public void updatePlaying(int maxCombo ,int playtime, int max_lives, int LivesRemaining, int level) {
+    public void updatePlaying(int maxCombo, int playtime, int maxLives, int livesRemaining, int level) {
         updateTotalPlayTime(playtime);
-        updatePerfect(max_lives,LivesRemaining,level);
+        updatePerfect(maxLives, livesRemaining, level);
         updateMaxCombo(maxCombo);
     }
 
@@ -166,5 +190,6 @@ public class AchievementManager {
         updateHighScore(score);
         updateTotalScore(score);
         updateFlawlessFailure(accuracy);
+        updateAccuracy(accuracy);
     }
 }

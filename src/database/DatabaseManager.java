@@ -67,7 +67,7 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
                 + "    TotalScore INT DEFAULT 0,\n"
                 + "    TotalPlaytime INT DEFAULT 0,\n"
                 + "    PerfectStage INT DEFAULT 0,\n"
-                + "    Accuracy  NUMERIC(4,2) DEFAULT 0.00,\n"
+                + "    HighAccuracy  NUMERIC(4,2) DEFAULT 0.00,\n"
                 + "    MaxCombo INT DEFAULT 0,\n"
                 + "    FlawlessFailure BOOLEAN DEFAULT FALSE,\n"
                 + "    Ach_2 BOOLEAN DEFAULT FALSE\n"
@@ -197,12 +197,12 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
                     int totalScore = rs.getInt("TotalScore");
                     int totalPlayTime = rs.getInt("TotalPlaytime");
                     int perfectStage = rs.getInt("PerfectStage");
-                    double accuracy = rs.getDouble("Accuracy");
                     int maxCombo = rs.getInt("MaxCombo");
                     boolean flawlessFailure = rs.getBoolean("FlawlessFailure");
+                    double highAccuracy = rs.getDouble("HighAccuracy");
 
                     // UserDataLoader 객체 생성 및 반환 준비
-                    userData = new Achievement(userID, highScore, totalScore, totalPlayTime, perfectStage, accuracy, maxCombo, flawlessFailure);
+                    userData = new Achievement(userID, highScore, totalScore, totalPlayTime, perfectStage, maxCombo, flawlessFailure, highAccuracy);
                     LOGGER.log(Level.SEVERE, "Data loaded successfully for user ID: " + userID);
                 } else {
                     LOGGER.log(Level.SEVERE,"No data found for user ID: " + userID);
@@ -215,7 +215,7 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
 
         // 데이터가 없으면 기본값으로 초기화된 객체 반환
         if (userData == null) {
-            userData = new Achievement(null, 0, 0, 0, 0, 0.0, 0, false);
+            userData = new Achievement(null, 0, 0, 0, 0, 0, false, 0.0);
             LOGGER.log(Level.SEVERE,"User data not found for user ID: " + userID);
         }
         return userData;
