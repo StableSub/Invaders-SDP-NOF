@@ -108,7 +108,7 @@ public final class Core {
 		Wallet wallet = db.loadWalletData(login.getID());
 		int returnCode = 1;
 		do {
-			MAX_LIVES = 1;
+			MAX_LIVES = 3+ wallet.getLives_lv()-1;
 			GameState gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
 			Achievement achievement = db.loadAchData(login.getID());
 			AchievementManager achievementManager = new AchievementManager(achievement);
