@@ -1,7 +1,7 @@
 package ui;
 
 import java.awt.*;
-		import java.awt.event.KeyEvent;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map.Entry;
@@ -64,16 +64,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private Cooldown enemyShipSpecialCooldown;
 	/** Time until bonus ship explosion disappears. */
 	private Cooldown enemyShipSpecialExplosionCooldown;
-
-	private boolean isSpecialEnemySpawned = false; // 특별 함선 생성 여부 추적
-
 	/** Time from finishing the level to screen change. */
 	private Cooldown screenFinishedCooldown;
-	private Cooldown shootingCooldown;
 	/** Set of all bullets fired by on screen ships. */
 	private Set<Bullet> bullets;
-	/** Current score. */
-	private String name;
 
 	private int score;
 	/** tempScore records the score up to the previous level. */
@@ -96,10 +90,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private boolean levelFinished;
 	/** Checks if a bonus life is received. */
 	private boolean bonusLife;
-	/** Player number for two player mode **/
-	private int playerNumber;
-	/** list of highScores for find recode. */
-	private List<Score>highScores;
 	/** Elapsed time while playing this game.
 	 * lapTime records the time to the previous level. */
 	private int elapsedTime;
@@ -109,7 +99,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/** Alert Message when a special enemy appears. */
 	private String alertMessage;
 	/** checks if it's executed. */
-	private boolean isExecuted = false;
+  	private boolean isExecuted = false;
 	/** timer.. */
 	private Timer timer;
 	private TimerTask timerTask;
@@ -123,10 +113,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private Wallet wallet;
 	/* Blocker appearance cooldown */
 	private Cooldown blockerCooldown;
-	/* Blocker visible time */
-	private Cooldown blockerVisibleCooldown;
-	/* Is Blocker visible */
-	private boolean blockerVisible;
 	private Random random;
 	private List<Blocker> blockers = new ArrayList<>();
 	/** Singleton instance of SoundManager */
@@ -145,12 +131,13 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private GameState gameState;
 
 	private int hitBullets;
-
+	private boolean isSpecialEnemySpawned = false; // 특별 함선 생성 여부 추적
 	private boolean movingRight = true; // 초기 방향은 오른쪽
+
 
 	/**
 	 * Constructor, establishes the properties of the screen.
-	 *
+	 * 
 	 * @param gameState
 	 *            Current game state.
 	 * @param gameSettings
@@ -165,8 +152,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 *            Frames per second, frame rate at which the game is run.
 	 */
 	public GameScreen(final GameState gameState,
-					  final GameSettings gameSettings, final boolean bonusLife,
-					  final int width, final int height, final int fps, final Wallet wallet) {
+			final GameSettings gameSettings, final boolean bonusLife,
+			final int width, final int height, final int fps, final Wallet wallet) {
 		super(width, height, fps);
 
 		this.gameSettings = gameSettings;
@@ -182,59 +169,21 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			this.lives++;
 		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
-		this.playerNumber = -1;
 		this.maxCombo = gameState.getMaxCombo();
 		this.lapTime = gameState.getPrevTime();
 		this.tempScore = gameState.getPrevScore();
 
 		this.hitBullets = gameState.getHitBullets();
 
-
-
 		this.wallet = wallet;
 
-
 		this.random = new Random();
-		this.blockerVisible = false;
 		this.blockerCooldown = Core.getVariableCooldown(10000, 14000);
 		this.blockerCooldown.reset();
-		this.blockerVisibleCooldown = Core.getCooldown(20000);
-
 
 		this.alertMessage = "";
 
 		this.wallet = wallet;
-	}
-
-	/**
-	 * Constructor, establishes the properties of the screen for two player mode.
-	 *
-	 * @param gameState
-	 *            Current game state.
-	 * @param gameSettings
-	 *            Current game settings.
-	 * @param bonusLife
-	 *            Checks if a bonus life is awarded this level.
-	 * @param width
-	 *            Screen width.
-	 * @param height
-	 *            Screen height.
-	 * @param fps
-	 *            Frames per second, frame rate at which the game is run.
-	 * @param playerNumber
-	 *            Player number for two player mode
-	 */
-	public GameScreen(final GameState gameState,
-					  final GameSettings gameSettings, final boolean bonusLife,
-					  final int width, final int height, final int fps, final Wallet wallet,
-					  final int playerNumber) {
-		this(gameState, gameSettings, bonusLife, width, height, fps, wallet);
-		this.playerNumber = playerNumber;
-		this.balance = switch (playerNumber) {
-			case 0: yield -1.0f; // 1P
-			case 1: yield 1.0f;  // 2P
-			default: yield 0.0f; // default
-		};
 	}
 
 	/**
@@ -245,10 +194,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 		enemyShipFormation = new EnemyShipFormation(this.gameSettings, this.gameState);
 		enemyShipFormation.attach(this);
-		// Appears each 10-30 seconds.
-		this.ship = ShipFactory.create(this.shipType, this.width / 2, this.height - 30);
+        // Appears each 10-30 seconds.
+        this.ship = ShipFactory.create(this.shipType, this.width / 2, this.height - 30);
 		logger.info("Player ship created " + this.shipType + " at " + this.ship.getPositionX() + ", " + this.ship.getPositionY());
-		ship.applyItem(wallet);
+        ship.applyItem(wallet);
 		//Create random Spider Web.
 		int web_count = 1 + level / 3;
 		web = new ArrayList<>();
@@ -289,14 +238,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		this.enemyShipSpecialCooldown.reset();
 		this.enemyShipSpecialExplosionCooldown = Core
 				.getCooldown(BONUS_SHIP_EXPLOSION);
-
-		this.isSpecialEnemySpawned = false; // 초기화 시 특별 함선이 생성되지 않았음을 표시
-
-
 		this.screenFinishedCooldown = Core.getCooldown(SCREEN_CHANGE_INTERVAL);
 		this.bullets = new HashSet<>();
 		this.barriers = new HashSet<>();
-		this.itemBoxes = new HashSet<>();
+        this.itemBoxes = new HashSet<>();
 		this.itemManager = new ItemManager(this.ship, this.enemyShipFormation, this.barriers, this.height, this.width, this.balance);
 
 		// Special input delay / countdown.
@@ -314,15 +259,15 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			case 4: soundManager.loopSound(Sound.BGM_LV4); break;
 			case 5: soundManager.loopSound(Sound.BGM_LV5); break;
 			case 6: soundManager.loopSound(Sound.BGM_LV6); break;
-			case 7:
+            case 7:
 				// From level 7 and above, it continues to play at BGM_LV7.
-			default: soundManager.loopSound(Sound.BGM_LV7); break;
+            default: soundManager.loopSound(Sound.BGM_LV7); break;
 		}
 	}
 
 	/**
 	 * Starts the action.
-	 *
+	 * 
 	 * @return Next screen code.
 	 */
 	public final int run() {
@@ -344,7 +289,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			boolean playerAttacking = inputManager.isKeyDown(KeyEvent.VK_SPACE);
 
 			if (playerAttacking) {
-				float direction = (playerNumber == 0) ? -1.0f : 0.0f;
+				float direction = 0.0f;
 				if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), direction)) {
 					this.bulletsShot += this.itemManager.getShotNum();
 				}
@@ -362,40 +307,18 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				this.ship.setColor(Color.GREEN);
 
 			if (!this.ship.isDestroyed()) {
-				boolean moveRight;
-				boolean moveLeft;
-				switch (playerNumber) {
-					case 0:
-						moveRight = inputManager.isKeyDown(KeyEvent.VK_D);
-						moveLeft = inputManager.isKeyDown(KeyEvent.VK_A);
-						break;
-					case 1:
-						moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT);
-						moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT);
-						break;
-					default:
-						moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT)
-								|| inputManager.isKeyDown(KeyEvent.VK_D);
-						moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT)
-								|| inputManager.isKeyDown(KeyEvent.VK_A);
-				}
-
+				boolean moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT);
+				boolean moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT);
 				boolean isRightBorder = this.ship.getPositionX()
 						+ this.ship.getWidth() + this.ship.getSpeed() > this.width - 1;
 				boolean isLeftBorder = this.ship.getPositionX()
 						- this.ship.getSpeed() < 1;
 
 				if (moveRight && !isRightBorder) {
-					if (playerNumber == -1)
-						this.ship.moveRight();
-					else
-						this.ship.moveRight(balance);
+					this.ship.moveRight();
 				}
 				if (moveLeft && !isLeftBorder) {
-					if (playerNumber == -1)
-						this.ship.moveLeft();
-					else
-						this.ship.moveLeft(balance);
+					this.ship.moveLeft();
 				}
 				for(int i = 0; i < web.size(); i++) {
 					//escape Spider Web
@@ -456,11 +379,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				}
 
 			}
-			if (this.enemyShipSpecial != null
-					&& this.enemyShipSpecial.getPositionX() > this.width) {
-				this.enemyShipSpecial = null;
-				this.logger.info("The special ship has escaped");
-			}
+
 
 			this.ship.update();
 
@@ -477,10 +396,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 		manageCollisions();
 		cleanBullets();
-		if (playerNumber >= 0)
-			drawThread();
-		else
-			draw();
+		draw();
 
 		if ((this.enemyShipFormation.isEmpty() || this.lives <= 0)
 				&& !this.levelFinished) {
@@ -498,6 +414,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			this.isRunning = false;
 		}
 	}
+
 
 	/**
 	 * Draws the elements associated with the screen.
@@ -543,7 +460,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		drawManager.drawScore(this, this.score);
 		drawManager.drawElapsedTime(this, this.elapsedTime);
 		drawManager.drawAlertMessage(this, this.alertMessage);
-		drawManager.drawLives( this.lives, this.shipType);
+		drawManager.drawLives(this.lives, this.shipType);
 		drawManager.drawLevel(this, this.level);
 		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1);
 		drawManager.drawReloadTimer(this.ship,ship.getRemainingReloadTime());
@@ -559,17 +476,22 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 			//Intermediate aggregation
 			if (this.level > 1){
-				if (countdown == 0) {
+                if (countdown == 0) {
 					//Reset mac combo and edit temporary values
-					this.lapTime = this.elapsedTime;
-					this.tempScore = this.score;
-					this.maxCombo = 0;
-				} else {
+                    this.lapTime = this.elapsedTime;
+                    this.tempScore = this.score;
+                    this.maxCombo = 0;
+                } else {
 					// Don't show it just before the game starts, i.e. when the countdown is zero.
-					drawManager.interAggre(this, this.level - 1, this.maxCombo, this.elapsedTime, this.lapTime, this.score, this.tempScore);
-				}
+                    drawManager.interAggre(this, this.level - 1, this.maxCombo, this.elapsedTime, this.lapTime, this.score, this.tempScore);
+                }
 			}
 		}
+
+
+		//add drawRecord method for drawing
+		//drawManager.drawRecord(highScores,this);
+
 
 		// Blocker drawing part
 		if (!blockers.isEmpty()) {
@@ -639,95 +561,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 		// Remove from the blocker list that goes off screen
 		blockers.removeAll(toRemove);
-	}
-
-	/**
-	 * Draws the elements associated with the screen to thread buffer.
-	 */
-	private void drawThread() {
-		drawManager.drawGameTitle(this);
-
-		drawManager.drawLaunchTrajectory( this,this.ship.getPositionX());
-
-		drawManager.drawEntity(this.ship, this.ship.getPositionX(),
-				this.ship.getPositionY());
-
-		//draw Spider Web
-		for (int i = 0; i < web.size(); i++) {
-			drawManager.drawEntity(this.web.get(i), this.web.get(i).getPositionX(),
-					this.web.get(i).getPositionY());
-		}
-		//draw Blocks
-		for (Block block : block)
-			drawManager.drawEntity(block, block.getPositionX(),
-					block.getPositionY());
-
-		if (this.enemyShipSpecial != null)
-			drawManager.drawEntity(this.enemyShipSpecial,
-					this.enemyShipSpecial.getPositionX(),
-					this.enemyShipSpecial.getPositionY());
-
-		enemyShipFormation.draw(playerNumber);
-
-		for (ItemBox itemBox : this.itemBoxes)
-			drawManager.drawEntity(itemBox, itemBox.getPositionX(), itemBox.getPositionY());
-
-		for (Barrier barrier : this.barriers)
-			drawManager.drawEntity(barrier, barrier.getPositionX(), barrier.getPositionY());
-
-		for (Bullet bullet : this.bullets)
-			drawManager.drawEntity(bullet, bullet.getPositionX(),
-					bullet.getPositionY());
-
-		// Interface.
-		drawManager.drawScore(this, this.score);
-		drawManager.drawElapsedTime(this, this.elapsedTime);
-		drawManager.drawAlertMessage(this, this.alertMessage);
-		drawManager.drawLives( this.lives, this.shipType);
-		drawManager.drawLevel(this, this.level);
-		drawManager.drawHorizontalLine(this, SEPARATION_LINE_HEIGHT - 1);
-		drawManager.drawReloadTimer(this.ship,ship.getRemainingReloadTime());
-		drawManager.drawCombo(this,this.combo);
-
-		// Show GameOver if one player ends first
-		if (this.levelFinished && this.screenFinishedCooldown.checkFinished() && this.lives <= 0) {
-			drawManager.drawHorizontalLine(this, this.height / 2 - this.height
-					/ 12);
-			drawManager.drawHorizontalLine(this, this.height / 2 + this.height
-					/ 12);
-		}
-
-		// Countdown to game start.
-		if (!this.inputDelay.checkFinished()) {
-			int countdown = (int) ((INPUT_DELAY - (System.currentTimeMillis() - this.gameStartTime)) / 1000);
-			drawManager.drawCountDown(this, this.level, countdown,
-					this.bonusLife);
-			drawManager.drawHorizontalLine(this, this.height / 2 - this.height
-					/ 12);
-			drawManager.drawHorizontalLine(this, this.height / 2 + this.height
-					/ 12);
-
-			//Intermediate aggregation
-			if (this.level > 1){
-				if (countdown == 0) {
-					//Reset mac combo and edit temporary values
-					this.lapTime = this.elapsedTime;
-					this.tempScore = this.score;
-					this.maxCombo = 0;
-				} else {
-					// Don't show it just before the game starts, i.e. when the countdown is zero.
-					drawManager.interAggre(this, this.level - 1, this.maxCombo, this.elapsedTime, this.lapTime, this.score, this.tempScore);
-				}
-			}
-		}
-
-
-		// Blocker drawing part
-		if (!blockers.isEmpty()) {
-			for (Blocker blocker : blockers) {
-				drawManager.drawRotatedEntity(blocker, blocker.getPositionX(), blocker.getPositionY(), blocker.getAngle());
-			}
-		}
 	}
 
 	/**
@@ -863,7 +696,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				for (Block block : this.block) {
 					if (checkCollision(bullet, block)) {
 						recyclable.add(bullet);
-						soundManager.playSound(Sound.BULLET_BLOCKING, balance);
+                        soundManager.playSound(Sound.BULLET_BLOCKING, balance);
 						break;
 					}
 				}
@@ -890,7 +723,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 	/**
 	 * Checks if two entities are colliding.
-	 *
+	 * 
 	 * @param a
 	 *            First entity, the bullet.
 	 * @param b
@@ -915,7 +748,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 	/**
 	 * Returns a GameState object representing the status of the game.
-	 *
+	 * 
 	 * @return Current game state.
 	 */
 	public final GameState getGameState() {
