@@ -184,36 +184,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	}
 
 	/**
-	 * Constructor, establishes the properties of the screen for two player mode.
-	 *
-	 * @param gameState
-	 *            Current game state.
-	 * @param gameSettings
-	 *            Current game settings.
-	 * @param bonusLife
-	 *            Checks if a bonus life is awarded this level.
-	 * @param width
-	 *            Screen width.
-	 * @param height
-	 *            Screen height.
-	 * @param fps
-	 *            Frames per second, frame rate at which the game is run.
-	 * @param playerNumber
-	 *            Player number for two player mode
-	 */
-	public GameScreen(final GameState gameState,
-					  final GameSettings gameSettings, final boolean bonusLife,
-					  final int width, final int height, final int fps, final Wallet wallet,
-					  final int playerNumber) {
-		this(gameState, gameSettings, bonusLife, width, height, fps, wallet);
-		this.balance = switch (playerNumber) {
-			case 0: yield -1.0f; // 1P
-			case 1: yield 1.0f;  // 2P
-			default: yield 0.0f; // default
-		};
-	}
-
-	/**
 	 * Initializes basic screen properties, and adds necessary elements.
 	 */
 	public final void initialize() {
@@ -771,7 +741,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 */
 	public final GameState getGameState() {
 		return new GameState(this.level, this.score, this.shipType, this.lives,
-				this.bulletsShot, this.shipsDestroyed, this.elapsedTime, this.alertMessage, 0, this.lapTime, this.tempScore, this.hitBullets);
+				this.bulletsShot, this.shipsDestroyed, this.elapsedTime, this.alertMessage, this.maxCombo, this.lapTime, this.tempScore, this.hitBullets);
 	}
 
 
