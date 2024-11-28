@@ -131,8 +131,11 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private GameState gameState;
 
 	private int hitBullets;
+	private boolean isSpecialEnemySpawned = false; // 특별 함선 생성 여부 추적
+	private boolean movingRight = true; // 초기 방향은 오른쪽
 
-    /**
+
+	/**
 	 * Constructor, establishes the properties of the screen.
 	 * 
 	 * @param gameState
@@ -286,7 +289,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			boolean playerAttacking = inputManager.isKeyDown(KeyEvent.VK_SPACE);
 
 			if (playerAttacking) {
-				float direction = 0f;
+				float direction = 0.0f;
 				if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), direction)) {
 					this.bulletsShot += this.itemManager.getShotNum();
 				}
@@ -313,7 +316,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 				if (moveRight && !isRightBorder) {
 					this.ship.moveRight();
-
 				}
 				if (moveLeft && !isLeftBorder) {
 					this.ship.moveLeft();
@@ -333,15 +335,28 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			}
 
 			if (this.enemyShipSpecial != null) {
-				if (!this.enemyShipSpecial.isDestroyed())
-					this.enemyShipSpecial.move(2, 0);
-				else if (this.enemyShipSpecialExplosionCooldown.checkFinished())
+				if (!this.enemyShipSpecial.isDestroyed()) {
+					// 양옆으로 움직이는 로직 추가
+					if (movingRight) {
+						this.enemyShipSpecial.move(2, 0); // 오른쪽으로 이동
+						if (this.enemyShipSpecial.getPositionX() + this.enemyShipSpecial.getWidth() >= this.width) {
+							movingRight = false; // 오른쪽 끝에 도달하면 방향 변경
+						}
+					} else {
+						this.enemyShipSpecial.move(-2, 0); // 왼쪽으로 이동
+						if (this.enemyShipSpecial.getPositionX() <= 0) {
+							movingRight = true; // 왼쪽 끝에 도달하면 방향 변경
+						}
+					}
+				} else if (this.enemyShipSpecialExplosionCooldown.checkFinished()) {
 					this.enemyShipSpecial = null;
-
+				}
 			}
+
 			if (this.enemyShipSpecial == null
-					&& this.enemyShipSpecialCooldown.checkFinished()) {
+					&& this.enemyShipSpecialCooldown.checkFinished()&& !this.isSpecialEnemySpawned) {
 				this.enemyShipSpecial = new EnemyShip();
+				this.isSpecialEnemySpawned = true; // 생성된 이후에는 다시 생성되지 않도록 설정
 				this.alertMessage = "";
 				this.enemyShipSpecialCooldown.reset();
 				soundManager.playSound(Sound.UFO_APPEAR, balance);
@@ -364,11 +379,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				}
 
 			}
-			if (this.enemyShipSpecial != null
-					&& this.enemyShipSpecial.getPositionX() > this.width) {
-				this.enemyShipSpecial = null;
-				this.logger.info("The special ship has escaped");
-			}
+
 
 			this.ship.update();
 
@@ -403,6 +414,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			this.isRunning = false;
 		}
 	}
+
 
 	/**
 	 * Draws the elements associated with the screen.
