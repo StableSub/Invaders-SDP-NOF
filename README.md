@@ -1,7 +1,15 @@
+# Notice) Settings Before Running the Game
+### Settings Before Running Invaders
+
+> 1. Right-click the "libs" package in invaders.
+> 2. Add as Library... and press the ok button to add the sqlite of the libs package as a library.
+> 3. Run the game.
+
 # Space Invaders
 
 > Course: Software Development Practices (CES2024) - Tuesday Class (24-2-24349)
 This course project focuses on creating a prototype based on the video game [Space Invaders](https://en.wikipedia.org/wiki/Space_Invaders). The aim is to apply and validate best practices in software engineering. The original code repository can be found at [RobertoIA/Invaders](https://github.com/RobertoIA/Invaders).
+
 
 ## Team Registration and Project Requirements
 

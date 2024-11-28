@@ -1,9 +1,9 @@
 package entity;
 import java.awt.Color;
 
-import engine.DrawManager.SpriteType;
-import engine.Sound;
-import engine.SoundManager;
+import engine.manager.DrawManager.SpriteType;
+import engine.utility.Sound;
+import engine.manager.SoundManager;
 
 public class Barrier extends Entity{
 

@@ -3,9 +3,15 @@ package entity;
 import java.util.*;
 import java.util.logging.Logger;
 
-import engine.*;
-import engine.DrawManager.SpriteType;
-import screen.Screen;
+import engine.core.Core;
+import engine.core.GameSettings;
+import engine.core.GameState;
+import engine.manager.DrawManager;
+import engine.manager.DrawManager.SpriteType;
+import engine.manager.SoundManager;
+import engine.utility.Cooldown;
+import engine.utility.Sound;
+import ui.Screen;
 
 /**
  * Groups enemy ships into a formation that moves together.
@@ -203,7 +209,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 			for (EnemyShip enemyShip : column)
 				if (enemyShip != null)
 					drawManager.drawEntity(enemyShip, enemyShip.getPositionX(),
-							enemyShip.getPositionY(), playerNumber);
+							enemyShip.getPositionY());
 	}
 
 	/**
@@ -520,7 +526,6 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 
 		return enemyShipsList.iterator();
 	}
-
 	/**
 	 * Checks if there are any ships remaining.
 	 * 
@@ -529,7 +534,6 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	public final boolean isEmpty() {
 		return this.shipCount <= 0;
 	}
-
 
 	public int getPoint(){return point; }
 

@@ -1,15 +1,21 @@
 package entity;
 
-import engine.Core;
+import database.DatabaseManager;
+import engine.core.Core;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Wallet {
     private static Logger logger = Core.getLogger();
     private int coin;
 
+    private String id;
     //bullet speed level
     private int bullet_lv;
 
@@ -32,8 +38,9 @@ public class Wallet {
         writeWallet();
     }
 
-    public Wallet(int coin, int bullet_lv, int shot_lv, int lives_lv, int coin_lv)
+    public Wallet(String id, int coin, int bullet_lv, int shot_lv, int lives_lv, int coin_lv)
     {
+        this.id = id;
         this.coin = coin;
         this.bullet_lv = bullet_lv;
         this.shot_lv = shot_lv;
@@ -122,65 +129,27 @@ public class Wallet {
         return true;
     }
 
-    //현재 지갑상태를 파일에 저장. 저장방식: coin, bullet_lv, shot_lv, lives_lv, coin_lv 순으로 한줄씩 저장
-    //Save the current wallet state to a file. Save format: coin, bullet_lv, shot_lv, lives_lv, coin_lv, each in one line
-    private void writeWallet()
-    {
-        try {
-            Core.getFileManager().saveWallet(this);
-        } catch (IOException e) {
-//            throw new RuntimeException(e);
-            logger.warning("Couldn't load wallet!");
+    private void writeWallet() {
+        String sql = "UPDATE user_wallet SET Coin = ?, BulletSpeed = ?, ShotInterval = ?, " +
+                "AdditionalLife = ?, CoinGain = ? WHERE id = ?";
+        try (Connection conn = new DatabaseManager().connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            // 매개변수 설정
+            pstmt.setInt(1, coin);
+            pstmt.setInt(2, bullet_lv);
+            pstmt.setInt(3, shot_lv);
+            pstmt.setInt(4, lives_lv);
+            pstmt.setDouble(5, coin_lv);
+            pstmt.setString(6, id);
+            // SQL 실행
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                logger.log(Level.SEVERE, "Wallet updated successfully!");
+            } else {
+                logger.log(Level.SEVERE, "No records updated. Check the ID.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
-
-    // 파일에 적힌 정보로 지갑 생성. 만약 파일이 손상되어 읽을 수 없다면 초기값(0)으로 생성하기
-    //Create a wallet using the information written in the file. If the file is damaged or unreadable, create it with initial values (0)
-    public static Wallet getWallet() {
-        BufferedReader bufferedReader = null;
-
-        try {
-            //FileManager를 통해 파일에서 지갑 데이터를 불러옴
-            //Load wallet data from the file via FileManager
-            bufferedReader = Core.getFileManager().loadWallet();
-
-            if (bufferedReader == null) {
-                logger.info("Wallet file does not exist, initializing with default values.");
-
-                return new Wallet();
-            }
-
-            //파일에서 각 줄을 읽어와서 값 설정
-            //Read each line from the file and set the values
-            int coin = Integer.parseInt(bufferedReader.readLine());
-            int levelSeq [] = new int[4]; //bullet_lv, shot_lv, lives_lv, coin_lv
-            for (int i = 0; i < 4; i++) {
-                int level = Integer.parseInt(bufferedReader.readLine());
-                if(level > 4 || level <= 0){
-                    logger.info("Weird level. Initializing with default values.");
-                    return new Wallet();
-                }
-                levelSeq[i] = level;
-            }
-
-            return new Wallet(coin, levelSeq[0], levelSeq[1], levelSeq[2], levelSeq[3]);
-
-        } catch (IOException | NumberFormatException e) {
-            //파일을 읽지 못하거나 손상된 경우 기본값으로 반환
-            //If there is an error reading the file or if it's corrupted, return with default values
-            logger.info("Error loading wallet data. Initializing with default values.");
-            return new Wallet();
-        } finally {
-            //파일 리소스 해제
-            //Release file resources
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
 }

@@ -33,7 +33,7 @@ The main purpose of our group is to develop “records and achievements”.
   
 
 - Achievement Rewards
-  - Provide tiered currency benefits for each category, from the initial achievement to the final achievement.
+  - Provide tiered currency benefits for each category, from the initial record to the final record.
 
 
 
@@ -61,7 +61,7 @@ The main purpose of our group is to develop “records and achievements”.
 ## Dependencies on Other Teams
 
 - Collaboration with the "Main Menu" team is required to fulfill the changes.
-- Collaboration with the "currency_system" team is needed for the rewards related to achievement completion.
+- Collaboration with the "currency_system" team is needed for the rewards related to record completion.
 
 
 
