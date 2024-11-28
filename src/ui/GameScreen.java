@@ -476,11 +476,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			}
 		}
 
-
-		//add drawRecord method for drawing
-		//drawManager.drawRecord(highScores,this);
-
-
 		// Blocker drawing part
 		if (!blockers.isEmpty()) {
 			for (Blocker blocker : blockers) {
