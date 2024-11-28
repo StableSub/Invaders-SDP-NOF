@@ -27,9 +27,4 @@ public class Barrier extends Entity{
         return this.health <= 0;
     }
 
-    public int getHealth() {
-        return this.health;
-    }
-
-
 }

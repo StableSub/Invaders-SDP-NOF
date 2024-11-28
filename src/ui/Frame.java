@@ -78,5 +78,4 @@ public class Frame extends JFrame {
 		return this.height;
 	}
 
-	public void moveToMiddle() {setLocationRelativeTo(null);}
 }

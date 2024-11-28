@@ -133,17 +133,6 @@ public abstract class Ship extends Entity {
 	}
 
 	/**
-	 * Shoots a bullet upwards.
-	 * 
-	 * @param bullets
-	 *            List of bullets on screen, to add the new bullet.
-	 * @return Checks if the bullet was shot correctly.
-	 */
-	public final boolean shoot(final Set<Bullet> bullets, int shotNum) {
-		return shoot(bullets, shotNum, 0.0f);
-	}
-
-	/**
 	 * bullet sound (2-players)
 	 * @param bullets
 	 *          List of bullets on screen, to add the new bullet.

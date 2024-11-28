@@ -25,8 +25,6 @@ public class GameState {
 	private int elapsedTime;
 	/** Special enemy appearances alert message */
 	private String alertMessage;
-    /** Number of consecutive hits */
-	private int combo;
 	/** Intermediate aggregation variables
 	 * max combo, elapsed time and total score
 	 * you get from previous level */
@@ -35,8 +33,6 @@ public class GameState {
 	private int prevScore;
 
 	private int hitBullets;
-
-	private boolean start;
 
 	/**
 	 * Constructor.
@@ -57,13 +53,11 @@ public class GameState {
 	 * 			  Elapsed time.
 	 * @param alertMessage
 	 *  		  Display alert message before a bonus enemy created.
-	 * @param combo
-	 *            Ships destroyed consequtive.
 	 */
 	public GameState(final int level, final int score,
 			final Ship.ShipType shipType,
 			final int livesRemaining, final int bulletsShot,
-			final int shipsDestroyed, final int elapsedTime, final String alertMessage, final int combo,
+			final int shipsDestroyed, final int elapsedTime, final String alertMessage,
 					 final int maxCombo, final int prevTime, final int prevScore, final int hitBullets) {
 				
 		this.level = level;
@@ -74,7 +68,6 @@ public class GameState {
 		this.shipsDestroyed = shipsDestroyed;
 		this.elapsedTime = elapsedTime;
 		this.alertMessage = alertMessage;
-		this.combo = combo;
 		this.maxCombo = maxCombo;
 		this.prevTime = prevTime;
 		this.prevScore = prevScore;
@@ -89,7 +82,6 @@ public class GameState {
 		this.bulletsShot = gameState.bulletsShot;
 		this.shipsDestroyed = gameState.shipsDestroyed;
 		this.elapsedTime = gameState.elapsedTime;
-		this.combo = 0;
 		this.maxCombo = gameState.maxCombo;
 		this.prevTime = gameState.prevTime;
 		this.prevScore = gameState.prevScore;
@@ -105,7 +97,6 @@ public class GameState {
 		this.bulletsShot = gameState.bulletsShot;
 		this.shipsDestroyed = gameState.shipsDestroyed;
 		this.elapsedTime = gameState.elapsedTime;
-		this.combo = 0;
 		this.maxCombo = gameState.maxCombo;
 		this.prevTime = gameState.prevTime;
 		this.prevScore = gameState.prevScore;

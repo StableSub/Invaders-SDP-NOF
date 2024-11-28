@@ -46,7 +46,4 @@ public class Achievement {
     public void setCurrentPerfectStage(int currentPerfectStage) { this.currentPerfectStage = currentPerfectStage; }
     public void setFlawlessFailure(boolean flawlessFailure) { this.flawlessFailure = flawlessFailure; }
     public void setHighAccuracy(double highAccuracy) { this.highAccuracy = highAccuracy; }
-    public void setAchievedAccuracyGoals(boolean[] achievedAccuracyGoals) {
-        this.achievedAccuracyGoals = achievedAccuracyGoals;
-    } // Setter for accuracy goals
 }

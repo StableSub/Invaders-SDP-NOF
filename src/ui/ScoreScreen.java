@@ -21,8 +21,6 @@ import entity.Wallet;
  */
 public class ScoreScreen extends Screen {
 
-	/** Maximum number of high scores. */
-	private static final int MAX_HIGH_SCORE_NUM = 3;
 	/** Singleton instance of SoundManager */
 	private final SoundManager soundManager = SoundManager.getInstance();
 
@@ -31,19 +29,12 @@ public class ScoreScreen extends Screen {
 	private int score;
 	/** Player lives left. */
 	private int livesRemaining;
-	/** Total bullets shot by the player. */
-	private int bulletsShot;
 	/** Total ships destroyed by the player. */
 	private int shipsDestroyed;
-	/** List of past high scores. */
-	private List<Score> highScores;
 	/** Checks if current score is a new high score. */
 	private double accuracy;
-	private boolean isNewRecord;
 	/** Number of coins earned in the game */
 	private int coinsEarned;
-	/** Player's name */
-	private String name;
 
 	// Set ratios for each coin_lv - placed in an array in the order of lv1, lv2, lv3, lv4, and will be used accordingly,
 	// e.g., lv1; score 100 * 0.1
@@ -61,15 +52,12 @@ public class ScoreScreen extends Screen {
 	 * @param gameState
 	 *            Current game state.
 	 */
-	public ScoreScreen(final String name, final int width, final int height, final int fps,
+	public ScoreScreen(final int width, final int height, final int fps,
 					   final GameState gameState, final Wallet wallet, final AchievementManager achievementManager) {
 		super(width, height, fps);
 
-		this.name = name;
-
 		this.score = gameState.getScore();
 		this.livesRemaining = gameState.getLivesRemaining();
-		this.bulletsShot = gameState.getBulletsShot();
 		this.shipsDestroyed = gameState.getShipsDestroyed();
 
 		// Get the user's coin_lv
@@ -124,21 +112,14 @@ public class ScoreScreen extends Screen {
 	}
 
 	/**
-	 * Saves the score as a high score.
-	 * 중복 방지를 위한 로직 추가.
-	 */
-
-
-	/**
 	 * Draws the elements associated with the screen.
 	 */
 	private void draw() {
 		drawManager.initDrawing(this);
 
-		drawManager.drawGameOver(this, this.inputDelay.checkFinished(),
-				this.isNewRecord);
+		drawManager.drawGameOver(this, this.inputDelay.checkFinished());
 		drawManager.drawResults(this, this.score, this.livesRemaining,
-				this.shipsDestroyed, this.accuracy, this.isNewRecord, this.coinsEarned);
+				this.shipsDestroyed, this.accuracy, this.coinsEarned);
 
 		drawManager.completeDrawing(this);
 	}

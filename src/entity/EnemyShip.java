@@ -98,7 +98,7 @@ public class EnemyShip extends Entity {
 	/**
 	 * Giving color for each enemy ship
 	 */
-		public static Color getDefaultColor(SpriteType spriteType) {
+	public static Color getDefaultColor(SpriteType spriteType) {
 			switch (spriteType) {
 				case EnemyShipA1:
 				case EnemyShipA2:

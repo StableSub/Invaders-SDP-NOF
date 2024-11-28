@@ -23,7 +23,6 @@ public class GameSettingScreen extends Screen {
 	 * draw를 용이하게 하기 위해 NAME_LIMIT을 4로 제한 */
 	private static final int NAME_LIMIT = 4;
 
-
 	/** Player name for record input. */
 	private static String name;
 	/** Difficulty level. */
@@ -164,7 +163,6 @@ public class GameSettingScreen extends Screen {
 		}
 		return instance;
 	}
-
 
 	public static String getName() { return name;}
 
