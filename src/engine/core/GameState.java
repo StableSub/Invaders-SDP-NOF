@@ -73,22 +73,6 @@ public class GameState {
 		this.prevScore = prevScore;
 		this.hitBullets = hitBullets;
 	}
-
-	public GameState(GameState gameState) {
-		this.level = gameState.level;
-		this.score = gameState.score;
-		this.shipType = gameState.shipType;
-		this.livesRemaining = gameState.livesRemaining;
-		this.bulletsShot = gameState.bulletsShot;
-		this.shipsDestroyed = gameState.shipsDestroyed;
-		this.elapsedTime = gameState.elapsedTime;
-		this.maxCombo = gameState.maxCombo;
-		this.prevTime = gameState.prevTime;
-		this.prevScore = gameState.prevScore;
-		this.hitBullets = gameState.hitBullets;
-	}
-
-
 	public GameState(GameState gameState, int nextLevel) {
 		this.level = nextLevel;
 		this.score = gameState.score;
