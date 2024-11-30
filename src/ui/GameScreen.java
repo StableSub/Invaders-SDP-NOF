@@ -70,7 +70,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/** Set of all bullets fired by on screen ships. */
 	private Set<Bullet> bullets;
 
-	private Set<Bullet> bossBullets;
+	private Set<curvedBullet> bossBullets;
 
 	private int score;
 	/** tempScore records the score up to the previous level. */
@@ -581,7 +581,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 */
 	private void cleanBullets() {
 		Set<Bullet> recyclable = new HashSet<Bullet>();
-		Set<Bullet> recyclableBoss = new HashSet<Bullet>();
+		Set<curvedBullet> recyclableBoss = new HashSet<curvedBullet>();
 		for (Bullet bullet : this.bullets) {
 			bullet.update();
 			if (bullet.getPositionY() < SEPARATION_LINE_HEIGHT
@@ -589,15 +589,15 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				recyclable.add(bullet);
 		}
 		this.bullets.removeAll(recyclable);
-		BulletPool.recycle(recyclable);
-		for (Bullet bullet : this.bossBullets) {
-			bullet.bossUpdate();
+		BulletPool.recycleNomal(recyclable);
+		for (curvedBullet bullet : this.bossBullets) {
+			bullet.update();
 			if (bullet.getPositionY() < SEPARATION_LINE_HEIGHT
 					|| bullet.getPositionY() > this.height)
 				recyclableBoss.add(bullet);
 		}
 		this.bossBullets.removeAll(recyclableBoss);
-		BulletPool.recycle(recyclableBoss);
+		BulletPool.recycleCurved(recyclableBoss);
 	}
 
 	/**
@@ -765,7 +765,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		block.removeAll(removableBlocks);
 		this.bullets.removeAll(recyclable);
 		this.bossBullets.removeAll(recyclable);
-		BulletPool.recycle(recyclable);
+		BulletPool.recycleNomal(recyclable);
 
 	}
 

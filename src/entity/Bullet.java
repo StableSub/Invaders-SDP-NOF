@@ -19,12 +19,6 @@ public class Bullet extends Entity {
 	 */
 	private int speed;
 
-	private double angle;
-
-	private double frequency;
-
-	/** Amplitude for sinusoidal movement. */
-	private int amplitude;
 	/**
 	 * Constructor, establishes the bullet's properties.
 	 *
@@ -38,9 +32,6 @@ public class Bullet extends Entity {
 	 */
 	public Bullet(final int positionX, final int positionY, final int speed) {
 		super(positionX, positionY, 3 * 2, 5 * 2, Color.WHITE);
-		this.angle = 0; // 초기 각도
-		this.frequency = 0.1; // 주기 설정
-		this.amplitude = 20; // 진폭 설정
 		this.speed = speed;
 		setSprite();
 	}
@@ -58,25 +49,8 @@ public class Bullet extends Entity {
 	/**
 	 * Updates the bullet's position.
 	 */
-	public final void update() {
+	public void update() {
 		this.positionY += this.speed;
-	}
-
-	public final void bossUpdate() {
-		this.positionY += this.speed; // Y축 이동
-
-		// X축 이동: 현재 각도에 따른 사인 값을 적용
-		this.positionX += (int) (amplitude * Math.sin(angle));
-		this.angle += frequency; // 각도 증가로 주기적 이동
-
-		// X축이 화면 경계를 벗어날 경우 처리
-		if (this.positionX < 0) {
-			this.positionX = 0; // 경계 안으로 복구
-			this.angle += Math.PI; // 방향 반전
-		} else if (this.positionX > 650) {
-			this.positionX = 650; // 경계 안으로 복구
-			this.angle += Math.PI; // 방향 반전
-		}
 	}
 
 	/**

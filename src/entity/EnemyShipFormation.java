@@ -386,12 +386,12 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 			// Each selected enemy fires a bullet
 			for (EnemyShip shooter : selectedShooters) {
 				// One shot at the base
-				bullets.add(BulletPool.getBullet(shooter.getPositionX()
+				bullets.add(BulletPool.getNomalBullet(shooter.getPositionX()
 						+ shooter.width / 2 + 10, shooter.getPositionY(), BULLET_SPEED));
 
 				// Additional launches based on levels (more launches based on each level)
 				for (int i = 1; i < numberOfBullets; i++) {
-					bullets.add(BulletPool.getBullet(shooter.getPositionX()
+					bullets.add(BulletPool.getNomalBullet(shooter.getPositionX()
 							+ shooter.width / 2 + (10 * (i + 1)), shooter.getPositionY(), BULLET_SPEED));
 				}
 				soundManager.playSound(Sound.ALIEN_LASER, balance);
@@ -399,13 +399,13 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 		}
 	}
 
-	public final void shootBoss(EnemyShip enemyShipSpecial, final Set<Bullet> bullets, float balance) {
+	public final void shootBoss(EnemyShip enemyShipSpecial, final Set<curvedBullet> bullets, float balance) {
 		// Fire when the cool down is over
 		if (this.bossShootingCooldown.checkFinished()) {
 			this.bossShootingCooldown.reset();
 
 			// One shot at the base
-			bullets.add(BulletPool.getBullet(enemyShipSpecial.getPositionX()
+			bullets.add(BulletPool.getCurvedBullet(enemyShipSpecial.getPositionX()
 					+ enemyShipSpecial.width / 2 + 10, enemyShipSpecial.getPositionY(), BULLET_SPEED+3));
 			soundManager.playSound(Sound.ALIEN_LASER, balance);
 		}
