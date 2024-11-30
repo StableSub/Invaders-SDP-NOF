@@ -1946,7 +1946,8 @@ public final class DrawManager {
 	 * @param max_alertcooldown
 	 * 				cooldown for max level alert
 	 */
-	public void drawShop(final Screen screen, final int option, final Wallet wallet, final Cooldown money_alertcooldown, final Cooldown max_alertcooldown) {
+	public void drawShop(final Screen screen, final int option, final Wallet wallet,
+						 final Cooldown money_alertcooldown, final Cooldown max_alertcooldown) {
 
 		String shopString = "Shop";
 		int shopStringY = Math.round(screen.getHeight() * 0.15f);
@@ -1954,10 +1955,11 @@ public final class DrawManager {
 
 		String coinString = ":  " + wallet.getCoin();
 		String exitString = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
+		String GamblingString = "PRESS \"ENTER\" TO GO TO GAMBLING SPACE";
 		String[] costs = new String[] {"2000", "4000", "8000", "MAX LEVEL"};
 
-		String[] itemString = new String[]{"BULLET SPEED", "SHOT INTERVAL", "ADDITIONAL LIFE","COIN GAIN"};
-		int[] walletLevel = new int[]{wallet.getBullet_lv(), wallet.getShot_lv(), wallet.getLives_lv(), wallet.getCoin_lv()};
+		String[] itemString = new String[]{"BULLET SPEED", "SHOT INTERVAL", "ADDITIONAL LIFE","COIN GAIN", "GAMBLING"};
+		int[] walletLevel = new int[]{wallet.getBullet_lv(), wallet.getShot_lv(), wallet.getLives_lv(), wallet.getCoin_lv(), 0};
 
 		BufferedImage[] itemImages = new BufferedImage[]{img_bulletspeed,img_shotinterval,img_additionallife,img_coingain};
 
@@ -1997,6 +1999,16 @@ public final class DrawManager {
 			}
 		}
 
+		backBufferGraphics.setColor(Color.GRAY);
+		backBufferGraphics.fillRect(screen.getWidth() - 120, screen.getHeight() / 80 * 5, 100, 40);
+		FontMetrics metrics = backBufferGraphics.getFontMetrics();
+		int textWidth = metrics.stringWidth("GAMBLING");
+		int textHeight = metrics.getHeight();
+		int textX = screen.getWidth() - 120 + (100 - textWidth) / 2; // X position
+		int textY = screen.getHeight() / 80 * 5 + (40 - textHeight) / 2 + metrics.getAscent(); // Y position
+		backBufferGraphics.setColor(Color.YELLOW);
+		backBufferGraphics.drawString("GAMBLING", textX, textY);
+
 		backBufferGraphics.setColor(Color.WHITE);
 		backBufferGraphics.drawImage(itemImages[option-1],imgstartx,imgstarty + (imgdis*(option-1)),50,40,null);
 		backBufferGraphics.drawImage(img_coin,coinstartx,coinstarty + (coindis*(option-1)),coinSize,coinSize,null);
@@ -2004,6 +2016,7 @@ public final class DrawManager {
 
 		backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen,exitString,screen.getHeight()/80*80);
+		drawCenteredRegularString(screen,GamblingString,screen.getHeight()/90*90);
 
 		if (!money_alertcooldown.checkFinished())
 		{
@@ -2020,5 +2033,34 @@ public final class DrawManager {
 			drawCenteredBigString(screen, "Already max level", screen.getHeight()/2);
 
 		}
+	}
+
+	public void drawGambling(Screen screen, int drawButtonX, int drawButtonY, int releaseButtonX, int releaseButtonY, int buttonWidth, int buttonHeight) {
+
+		String exitString = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
+		backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen,exitString,screen.getHeight()/80*80);
+
+		FontMetrics metrics = backBufferGraphics.getFontMetrics();
+		int drawTextWidth = metrics.stringWidth("DRAW");
+		int drawTextHeight = metrics.getHeight();
+		int drawTextX = drawButtonX + (buttonWidth - drawTextWidth) / 2; // X 중앙 정렬
+		int drawTextY = drawButtonY + (buttonHeight - drawTextHeight) / 2 + metrics.getAscent(); // Y 중앙 정렬
+
+		backBufferGraphics.setColor(Color.GRAY);
+		backBufferGraphics.fillRect(drawButtonX, drawButtonY, buttonWidth, buttonHeight);
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawString("DRAW", drawTextX, drawTextY);
+
+		int releaseTextWidth = metrics.stringWidth("RELEASE");
+		int releaseTextHeight = metrics.getHeight();
+		int releaseTextX = releaseButtonX + (buttonWidth - releaseTextWidth) / 2; // X 중앙 정렬
+		int releaseTextY = releaseButtonY + (buttonHeight - releaseTextHeight) / 2 + metrics.getAscent(); // Y 중앙 정렬
+
+		backBufferGraphics.setColor(Color.GRAY);
+		backBufferGraphics.fillRect(releaseButtonX, releaseButtonY, buttonWidth, buttonHeight);
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawString("RELEASE", releaseTextX, releaseTextY);
+
 	}
 }

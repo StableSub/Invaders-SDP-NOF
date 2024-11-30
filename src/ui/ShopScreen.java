@@ -1,14 +1,21 @@
 package ui;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
+import engine.manager.DrawManager;
 import engine.utility.Cooldown;
 import engine.core.Core;
 import engine.utility.Sound;
 import engine.manager.SoundManager;
 import entity.Wallet;
+import gambling.GamblingScreen;
+
+
+
 
 public class ShopScreen extends Screen {
+
 
     /** Milliseconds between changes in user selection. */
     private static final int SELECTION_TIME = 200;
@@ -37,6 +44,12 @@ public class ShopScreen extends Screen {
     private int lv2cost = 4000;
     private int lv3cost = 8000;
 
+    private final int gambleButtonX = this.width - 120; // 버튼 X 좌표
+    private final int gambleButtonY = this.height / 80 * 5; // 버튼 Y 좌표
+    private final int gambleButtonWidth = 100; // 버튼 너비
+    private final int gambleButtonHeight = 40; // 버튼 높이
+    private GamblingScreen nextScreen;
+
     /**
      * Constructor, establishes the properties of the screen.
      *
@@ -62,6 +75,8 @@ public class ShopScreen extends Screen {
 
         soundManager.stopSound(Sound.BGM_MAIN);
         soundManager.loopSound(Sound.BGM_SHOP);
+
+        this.drawManager = DrawManager.getInstance();  // DrawManager 초기화 확인
     }
 
     /**
@@ -81,7 +96,17 @@ public class ShopScreen extends Screen {
     protected final void update() {
         super.update();
 
+        drawManager.drawShop(this,selected_item,wallet,money_alertCooldown,max_alertCooldown);
         draw();
+
+        // ENTER 키를 눌렀을 때 갬블링 화면으로 이동
+        if (inputManager.isKeyDown(KeyEvent.VK_ENTER)) {
+            this.isRunning = false; // ShopScreen 종료
+            GamblingScreen gamblingScreen = new GamblingScreen(this.width, this.height, this.fps, this.wallet);
+            gamblingScreen.run(); // 다음 화면 실행
+            return;
+        }
+
         if (this.selectionCooldown.checkFinished()
                 && this.inputDelay.checkFinished()
                 && this.money_alertCooldown.checkFinished()
@@ -161,10 +186,7 @@ public class ShopScreen extends Screen {
 
     private void draw() {
         drawManager.initDrawing(this);
-
-
         drawManager.drawShop(this,selected_item,wallet,money_alertCooldown,max_alertCooldown);
-
         drawManager.completeDrawing(this);
     }
 
