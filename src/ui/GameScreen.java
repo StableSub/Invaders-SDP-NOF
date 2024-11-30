@@ -56,6 +56,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private int level;
 	/** Formation of enemy ships. */
 	private EnemyShipFormation enemyShipFormation;
+	private EnemyShipFormation specialEnemyShipFormation;
 	/** Player's ship. */
 	private Ship ship;
 	/** Bonus enemy ship that appears sometimes. */
@@ -68,6 +69,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private Cooldown screenFinishedCooldown;
 	/** Set of all bullets fired by on screen ships. */
 	private Set<Bullet> bullets;
+
+	private Set<Bullet> bossBullets;
 
 	private int score;
 	/** tempScore records the score up to the previous level. */
@@ -194,6 +197,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 		enemyShipFormation = new EnemyShipFormation(this.gameSettings, this.gameState);
 		enemyShipFormation.attach(this);
+		specialEnemyShipFormation = new EnemyShipFormation(this.gameSettings, this.gameState);
+		specialEnemyShipFormation.attach(this);
         // Appears each 10-30 seconds.
         this.ship = ShipFactory.create(this.shipType, this.width / 2, this.height - 30);
 		logger.info("Player ship created " + this.shipType + " at " + this.ship.getPositionX() + ", " + this.ship.getPositionY());
@@ -240,6 +245,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				.getCooldown(BONUS_SHIP_EXPLOSION);
 		this.screenFinishedCooldown = Core.getCooldown(SCREEN_CHANGE_INTERVAL);
 		this.bullets = new HashSet<>();
+		this.bossBullets = new HashSet<>();
 		this.barriers = new HashSet<>();
         this.itemBoxes = new HashSet<>();
 		this.itemManager = new ItemManager(this.ship, this.enemyShipFormation, this.barriers, this.height, this.width, this.balance);
@@ -335,6 +341,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			}
 
 			if (this.enemyShipSpecial != null) {
+				specialEnemyShipFormation.update();
 				if (!this.enemyShipSpecial.isDestroyed()) {
 					// 양옆으로 움직이는 로직 추가
 					if (movingRight) {
@@ -348,6 +355,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 							movingRight = true; // 왼쪽 끝에 도달하면 방향 변경
 						}
 					}
+					this.specialEnemyShipFormation.shootBoss(this.enemyShipSpecial, this.bossBullets, balance);
 				} else if (this.enemyShipSpecialExplosionCooldown.checkFinished()) {
 					this.enemyShipSpecial = null;
 				}
@@ -398,7 +406,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		cleanBullets();
 		draw();
 
-		if ((this.enemyShipFormation.isEmpty() || this.lives <= 0)
+		if (((this.enemyShipFormation.isEmpty() &&
+				(this.enemyShipSpecial != null && this.enemyShipSpecial.isDestroyed())
+				|| this.lives <= 0))
 				&& !this.levelFinished) {
 			this.levelFinished = true;
 
@@ -452,6 +462,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			drawManager.drawEntity(barrier, barrier.getPositionX(), barrier.getPositionY());
 
 		for (Bullet bullet : this.bullets)
+			drawManager.drawEntity(bullet, bullet.getPositionX(),
+					bullet.getPositionY());
+		for (Bullet bullet : this.bossBullets)
 			drawManager.drawEntity(bullet, bullet.getPositionX(),
 					bullet.getPositionY());
 
@@ -568,6 +581,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 */
 	private void cleanBullets() {
 		Set<Bullet> recyclable = new HashSet<Bullet>();
+		Set<Bullet> recyclableBoss = new HashSet<Bullet>();
 		for (Bullet bullet : this.bullets) {
 			bullet.update();
 			if (bullet.getPositionY() < SEPARATION_LINE_HEIGHT
@@ -576,6 +590,14 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		}
 		this.bullets.removeAll(recyclable);
 		BulletPool.recycle(recyclable);
+		for (Bullet bullet : this.bossBullets) {
+			bullet.bossUpdate();
+			if (bullet.getPositionY() < SEPARATION_LINE_HEIGHT
+					|| bullet.getPositionY() > this.height)
+				recyclableBoss.add(bullet);
+		}
+		this.bossBullets.removeAll(recyclableBoss);
+		BulletPool.recycle(recyclableBoss);
 	}
 
 	/**
@@ -715,10 +737,36 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			}
 		}
 
+		for (Bullet bullet : this.bossBullets) {
+			if (checkCollision(bullet, this.ship) && !this.levelFinished && !itemManager.isGhostActive()) {
+				recyclable.add(bullet);
+				if (!this.ship.isDestroyed()) {
+					this.ship.destroy(balance);
+					lvdamage();
+					this.logger.info("Hit on player ship, " + this.lives + " lives remaining.");
+				}
+			}
+			if (this.barriers != null) {
+				Iterator<Barrier> barrierIterator = this.barriers.iterator();
+				while (barrierIterator.hasNext()) {
+					Barrier barrier = barrierIterator.next();
+					if (checkCollision(bullet, barrier)) {
+						recyclable.add(bullet);
+						barrier.reduceHealth(balance);
+						if (barrier.isDestroyed()) {
+							barrierIterator.remove();
+						}
+					}
+				}
+			}
+		}
+
 		// remove crashed obstacle
 		block.removeAll(removableBlocks);
 		this.bullets.removeAll(recyclable);
+		this.bossBullets.removeAll(recyclable);
 		BulletPool.recycle(recyclable);
+
 	}
 
 	/**
