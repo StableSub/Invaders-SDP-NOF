@@ -465,7 +465,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		for (Bullet bullet : this.bullets)
 			drawManager.drawEntity(bullet, bullet.getPositionX(),
 					bullet.getPositionY());
-		for (Bullet bullet : this.bossBullets)
+		for (curvedBullet bullet : this.bossBullets)
 			drawManager.drawEntity(bullet, bullet.getPositionX(),
 					bullet.getPositionY());
 
@@ -606,7 +606,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 */
 	private void manageCollisions() {
 		Set<Bullet> recyclable = new HashSet<Bullet>();
-
+		Set<curvedBullet> recyclableBoss = new HashSet<curvedBullet>();
 		if (isExecuted == false){
 			isExecuted = true;
 			timer = new Timer();
@@ -738,9 +738,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			}
 		}
 
-		for (Bullet bullet : this.bossBullets) {
+		for (curvedBullet bullet : this.bossBullets) {
 			if (checkCollision(bullet, this.ship) && !this.levelFinished && !itemManager.isGhostActive()) {
-				recyclable.add(bullet);
+				recyclableBoss.add(bullet);
 				if (!this.ship.isDestroyed()) {
 					this.ship.destroy(balance);
 					lvdamage();
@@ -752,7 +752,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				while (barrierIterator.hasNext()) {
 					Barrier barrier = barrierIterator.next();
 					if (checkCollision(bullet, barrier)) {
-						recyclable.add(bullet);
+						recyclableBoss.add(bullet);
 						barrier.reduceHealth(balance);
 						if (barrier.isDestroyed()) {
 							barrierIterator.remove();
@@ -765,9 +765,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		// remove crashed obstacle
 		block.removeAll(removableBlocks);
 		this.bullets.removeAll(recyclable);
-		this.bossBullets.removeAll(recyclable);
+		this.bossBullets.removeAll(recyclableBoss);
 		BulletPool.recycleNomal(recyclable);
-
+		BulletPool.recycleCurved(recyclableBoss);
 	}
 
 	/**
