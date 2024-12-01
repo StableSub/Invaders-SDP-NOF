@@ -65,6 +65,8 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	private List<List<EnemyShip>> enemyShips;
 	/** Minimum time between shots. */
 	private Cooldown shootingCooldown;
+
+	private Cooldown bossShootingCooldown;
 	/** Number of ships in the formation - horizontally. */
 	private int nShipsWide;
 	/** Number of ships in the formation - vertically. */
@@ -97,14 +99,13 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	private int shipHeight;
 	/** List of ships that are able to shoot. */
 	private List<EnemyShip> shooters;
-	/** Number of not destroyed ships. */
+
 	private int shipCount;
 
 	private int point = 0;
 
 	private int distroyedship = 0;
 
-	private GameState gameState;
 
 	/** Directions the formation can move. */
 	private enum Direction {
@@ -138,7 +139,6 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 		this.positionX = INIT_POS_X;
 		this.positionY = INIT_POS_Y;
 		this.shooters = new ArrayList<EnemyShip>();
-		this.gameState = gameState;
 		SpriteType spriteType;
 
 		this.logger.info("Initializing " + nShipsWide + "x" + nShipsHigh
@@ -202,17 +202,6 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	}
 
 	/**
-	 * Draws every individual component of the formation for two player mode.
-	 */
-	public final void draw(final int playerNumber) {
-		for (List<EnemyShip> column : this.enemyShips)
-			for (EnemyShip enemyShip : column)
-				if (enemyShip != null)
-					drawManager.drawEntity(enemyShip, enemyShip.getPositionX(),
-							enemyShip.getPositionY());
-	}
-
-	/**
 	 * Updates the position of the ships.
 	 */
 	public final void update() {
@@ -222,12 +211,16 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 			this.shootingCooldown.reset();
 		}
 
+		if(this.bossShootingCooldown == null) {
+			this.bossShootingCooldown = new Cooldown(800,
+					200);
+			this.bossShootingCooldown.reset();
+		}
+
 		adjustFormationBounds();
 
 		int movementX = 0;
 		int movementY = 0;
-		double remainingProportion = (double) this.shipCount
-				/ (this.nShipsHigh * this.nShipsWide);
 		this.movementSpeed = this.baseSpeed;
 		this.movementSpeed += MINIMUM_SPEED;
 
@@ -393,16 +386,28 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 			// Each selected enemy fires a bullet
 			for (EnemyShip shooter : selectedShooters) {
 				// One shot at the base
-				bullets.add(BulletPool.getBullet(shooter.getPositionX()
+				bullets.add(BulletPool.getNomalBullet(shooter.getPositionX()
 						+ shooter.width / 2 + 10, shooter.getPositionY(), BULLET_SPEED));
 
 				// Additional launches based on levels (more launches based on each level)
 				for (int i = 1; i < numberOfBullets; i++) {
-					bullets.add(BulletPool.getBullet(shooter.getPositionX()
+					bullets.add(BulletPool.getNomalBullet(shooter.getPositionX()
 							+ shooter.width / 2 + (10 * (i + 1)), shooter.getPositionY(), BULLET_SPEED));
 				}
 				soundManager.playSound(Sound.ALIEN_LASER, balance);
 			}
+		}
+	}
+
+	public final void shootBoss(EnemyShip enemyShipSpecial, final Set<curvedBullet> bullets, float balance) {
+		// Fire when the cool down is over
+		if (this.bossShootingCooldown.checkFinished()) {
+			this.bossShootingCooldown.reset();
+
+			// One shot at the base
+			bullets.add(BulletPool.getCurvedBullet(enemyShipSpecial.getPositionX()
+					+ enemyShipSpecial.width / 2 + 10, enemyShipSpecial.getPositionY(), BULLET_SPEED+3));
+			soundManager.playSound(Sound.ALIEN_LASER, balance);
 		}
 	}
 
