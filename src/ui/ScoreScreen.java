@@ -125,6 +125,6 @@ public class ScoreScreen extends Screen {
 		drawManager.drawResults(this, this.score, this.livesRemaining,
 				this.shipsDestroyed, this.accuracy, this.coinsEarned);
 
-		drawManager.completeDrawing(this);
+		drawManager.completeDrawing();
 	}
 }

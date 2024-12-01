@@ -135,6 +135,6 @@ public class TitleScreen extends Screen {
 		drawManager.drawTitle(this);
 		drawManager.drawMenu(this, this.returnCode, wallet.getCoin());
 
-		drawManager.completeDrawing(this);
+		drawManager.completeDrawing();
 	}
 }

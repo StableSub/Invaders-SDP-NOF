@@ -18,9 +18,9 @@ public class Barrier extends Entity{
         this.health = 1;
     }
 
-    public void reduceHealth(final float balance) {
+    public void reduceHealth() {
         this.health--;
-        soundManager.playSound(Sound.ITEM_BARRIER_OFF, balance);
+        soundManager.playSound(Sound.ITEM_BARRIER_OFF);
     }
 
     public boolean isDestroyed() {

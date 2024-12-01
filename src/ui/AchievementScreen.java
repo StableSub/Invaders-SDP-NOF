@@ -87,6 +87,6 @@ public class AchievementScreen extends Screen {
 				this.maxCombo, this.highAccuracy, this.currentPerfectStage, this.currentPerfectStage+1,
 				this.checkFlawlessFailure);
 		drawManager.drawHighScores(this, this.highScores);
-		drawManager.completeDrawing(this);
+		drawManager.completeDrawing();
 	}
 }

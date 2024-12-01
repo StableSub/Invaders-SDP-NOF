@@ -150,6 +150,6 @@ public class SettingScreen extends Screen {
             drawManager.drawShipBoxes(this.getWidth() / 2 - 30*NumberOfShips, this.getHeight() - 150, isShipChoiceSelected, j, j==this.currentShip);
         }
 
-        drawManager.completeDrawing(this);
+        drawManager.completeDrawing();
     }
 }

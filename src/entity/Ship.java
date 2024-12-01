@@ -115,7 +115,7 @@ public abstract class Ship extends Entity {
 			this.positionX += this.getSpeed();
 		}
 		if (soundCooldown.checkFinished()) {
-			soundManager.playSound(Sound.PLAYER_MOVE, balance);
+			soundManager.playSound(Sound.PLAYER_MOVE);
 			soundCooldown.reset();
 		}
 	}
@@ -127,7 +127,7 @@ public abstract class Ship extends Entity {
 			this.positionX -= this.getSpeed();
 		}
 		if (soundCooldown.checkFinished()) {
-			soundManager.playSound(Sound.PLAYER_MOVE, balance);
+			soundManager.playSound(Sound.PLAYER_MOVE);
 			soundCooldown.reset();
 		}
 	}
@@ -152,18 +152,18 @@ public abstract class Ship extends Entity {
 			switch (shotNum) {
 				case 1:
 					bullets.add(BulletPool.getNomalBullet(positionX + this.width / 2, positionY, this.getBulletSpeed()));
-					soundManager.playSound(Sound.PLAYER_LASER, balance);
+					soundManager.playSound(Sound.PLAYER_LASER);
 					break;
 				case 2:
 					bullets.add(BulletPool.getNomalBullet(positionX + this.width, positionY, this.getBulletSpeed()));
 					bullets.add(BulletPool.getNomalBullet(positionX, positionY, this.getBulletSpeed()));
-					soundManager.playSound(Sound.ITEM_2SHOT, balance);
+					soundManager.playSound(Sound.ITEM_2SHOT);
 					break;
 				case 3:
 					bullets.add(BulletPool.getNomalBullet(positionX + this.width, positionY, this.getBulletSpeed()));
 					bullets.add(BulletPool.getNomalBullet(positionX, positionY, this.getBulletSpeed()));
 					bullets.add(BulletPool.getNomalBullet(positionX + this.width / 2, positionY, this.getBulletSpeed()));
-					soundManager.playSound(Sound.ITEM_3SHOT, balance);
+					soundManager.playSound(Sound.ITEM_3SHOT);
 					break;
 			}
 
@@ -186,9 +186,9 @@ public abstract class Ship extends Entity {
 	/**
 	 * Switches the ship to its destroyed state.
 	 */
-	public final void destroy(float balance) {
+	public final void destroy() {
 		this.destructionCooldown.reset();
-		soundManager.playSound(Sound.PLAYER_HIT, balance);
+		soundManager.playSound(Sound.PLAYER_HIT);
 	}
 
 	/**

@@ -223,60 +223,6 @@ public class SoundManager {
     }
 
     /**
-     * Play the sound file.
-     *
-     * @param sound Key value of sound
-     * @param balance Balance value (-1.0 for left, 1.0 for right, 0.0 for center)
-     */
-    public void playSound(Sound sound, float balance) {
-        if (soundEnabled) {
-            List<Clip> clipPool = soundPools.get(sound);
-            if (clipPool != null) {
-                Clip availableClip = clipPool.stream()
-                        .filter(clip -> !clip.isRunning())
-                        .findFirst()
-                        .orElse(null);
-
-                if (availableClip != null) {
-                    availableClip.setFramePosition(0);
-                    try {
-                        if (POSITIONAL_SOUNDS.contains(sound)) {
-                            setVolumeBalance(availableClip, balance, sound);
-                        }
-                        availableClip.start();
-                        logger.info("Started playing sound: " + sound + " with balance: " + balance);
-                    } catch (Exception e) {
-                        logger.warning("Error playing sound: " + sound + ". Error: " + e.getMessage());
-                        e.printStackTrace();
-                    }
-                } else {
-                    logger.warning("No available clips in pool for sound: " + sound);
-                }
-            } else {
-                logger.warning("Sound not found: " + sound);
-            }
-        }
-    }
-
-    private void setVolumeBalance(Clip clip, float balance, Sound sound) {
-        try {
-            if (clip.isControlSupported(FloatControl.Type.BALANCE)) {
-                FloatControl balanceControl = (FloatControl) clip.getControl(FloatControl.Type.BALANCE);
-                balanceControl.setValue(balance);
-                logger.info("Set BALANCE: " + balance + " for sound: " + sound);
-            } else if (clip.isControlSupported(FloatControl.Type.PAN)) {
-                FloatControl panControl = (FloatControl) clip.getControl(FloatControl.Type.PAN);
-                panControl.setValue(balance);
-                logger.info("Set PAN: " + balance + " for sound: " + sound);
-            } else {
-                logger.info("No supported balance control. Playing in center for sound: " + sound);
-            }
-        } catch (Exception e) {
-            logger.warning("Failed to set balance for sound: " + sound + ". Error: " + e.getMessage());
-        }
-    }
-
-    /**
      * Stop the sound file.
      *
      * @param sound Key value of sound

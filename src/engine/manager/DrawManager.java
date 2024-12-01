@@ -57,8 +57,6 @@ public final class DrawManager {
 	private static Font fontBig;
 	/** Big sized font properties. */
 	private static FontMetrics fontBigMetrics;
-	/** Vertical line width for two player mode **/
-	private static final int LINE_WIDTH = 1;
 
 	/** Sprite types mapped to their images. */
 	private static Map<SpriteType, boolean[][]> spriteMap;
@@ -247,10 +245,8 @@ public final class DrawManager {
 	/**
 	 * Draws the completed drawing on screen.
 	 *
-	 * @param screen
-	 *            Screen to draw on.
 	 */
-	public void completeDrawing(final Screen screen) {
+	public void completeDrawing() {
 		graphics.drawImage(backBuffer, frame.getInsets().left,
 				frame.getInsets().top, frame);
 	}
@@ -422,7 +418,6 @@ public final class DrawManager {
 	 * @param positionX
 	 *            X coordinate of the line.
 	 */
-
 	public void drawLaunchTrajectory(final Screen screen, final int positionX) {
 		backBufferGraphics.setColor(Color.DARK_GRAY);
 		for (int i = 0; i < screen.getHeight() - 140; i += 20){
@@ -469,7 +464,6 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.DARK_GRAY);
 		drawCenteredBigString(screen, titleString, screen.getHeight() / 2);
 	}
-
 
 	/**
 	 * Draws main menu.
@@ -528,8 +522,6 @@ public final class DrawManager {
 		drawCenteredRegularString(screen, exitString, screen.getHeight()
 				/ 7 * 4 + fontRegularMetrics.getHeight() * 9);
 	}
-
-
 
 	/**
 	 * Draws game results.
@@ -940,8 +932,6 @@ public final class DrawManager {
 			}
 		}
 	}
-
-
 
 	/**
 	 * Draws a centered string on small font.
@@ -1494,4 +1484,20 @@ public final class DrawManager {
 
 		}
 	}
+
+	public void drawRotatedBullet(CurvedBullet bullet, int positionX, int positionY, double angle) {
+		Graphics2D g2d = (Graphics2D) backBufferGraphics;
+		AffineTransform oldTransform = g2d.getTransform();
+
+		// 회전 중심 계산
+		int centerX = positionX + bullet.getWidth() / 2;
+		int centerY = positionY + bullet.getHeight() / 2;
+
+		// 각도 설정 및 회전
+		g2d.rotate(Math.sin(angle), centerX, centerY);
+		drawEntity(bullet, positionX, positionY);
+
+		g2d.setTransform(oldTransform); // 원래 상태 복구
+	}
+
 }

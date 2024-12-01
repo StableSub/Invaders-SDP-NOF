@@ -13,7 +13,7 @@ public final class BulletPool {
 
 	/** Set of already created bullets. */
 	private static Set<Bullet> nomalPool = new HashSet<Bullet>();
-	private static Set<curvedBullet> curvedPool = new HashSet<curvedBullet>();
+	private static Set<CurvedBullet> curvedPool = new HashSet<CurvedBullet>();
 
 	/**
 	 * Returns a bullet from the nomalPool if one is available, a new one if there
@@ -45,8 +45,8 @@ public final class BulletPool {
 		return bullet;
 	}
 
-	public static curvedBullet getCurvedBullet(final int positionX, final int positionY, final int speed) {
-		curvedBullet bullet;
+	public static CurvedBullet getCurvedBullet(final int positionX, final int positionY, final int speed) {
+		CurvedBullet bullet;
 
 		if (!curvedPool.isEmpty()) {
 			bullet = curvedPool.iterator().next();
@@ -56,7 +56,7 @@ public final class BulletPool {
 			bullet.setSpeed(speed);
 			bullet.setSprite();
 		} else {
-			bullet = new curvedBullet(positionX, positionY, speed);
+			bullet = new CurvedBullet(positionX, positionY, speed);
 			bullet.setPositionX(positionX - bullet.getWidth() / 2);
 		}
 		return bullet;
@@ -72,7 +72,7 @@ public final class BulletPool {
 		nomalPool.addAll(bullet);
 	}
 
-	public static void recycleCurved(final Set<curvedBullet> bullet) {
+	public static void recycleCurved(final Set<CurvedBullet> bullet) {
 		curvedPool.addAll(bullet);
 	}
 }

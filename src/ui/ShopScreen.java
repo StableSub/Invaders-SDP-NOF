@@ -165,7 +165,7 @@ public class ShopScreen extends Screen {
 
         drawManager.drawShop(this,selected_item,wallet,money_alertCooldown,max_alertCooldown);
 
-        drawManager.completeDrawing(this);
+        drawManager.completeDrawing();
     }
 
     public boolean upgrade(int level)
