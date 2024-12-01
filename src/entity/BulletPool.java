@@ -73,6 +73,6 @@ public final class BulletPool {
 	}
 
 	public static void recycleCurved(final Set<curvedBullet> bullet) {
-		nomalPool.addAll(bullet);
+		curvedPool.addAll(bullet);
 	}
 }
