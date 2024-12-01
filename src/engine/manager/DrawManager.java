@@ -95,6 +95,8 @@ public final class DrawManager {
 		EnemyShipC2,
 		/** Bonus ship. */
 		EnemyShipSpecial,
+		/** Destroyed enemy special ship. */
+		SpecialExplosion,
 		/** Destroyed enemy ship. */
 		Explosion,
 		/** Barrier. */
@@ -148,7 +150,8 @@ public final class DrawManager {
 			spriteMap.put(SpriteType.EnemyShipB2, new boolean[12][8]);
 			spriteMap.put(SpriteType.EnemyShipC1, new boolean[12][8]);
 			spriteMap.put(SpriteType.EnemyShipC2, new boolean[12][8]);
-			spriteMap.put(SpriteType.EnemyShipSpecial, new boolean[16][7]);
+			spriteMap.put(SpriteType.EnemyShipSpecial, new boolean[62][28]);
+			spriteMap.put(SpriteType.SpecialExplosion, new boolean[60][26]);
 			spriteMap.put(SpriteType.Explosion, new boolean[13][7]);
 			spriteMap.put(SpriteType.Barrier, new boolean[39][11]);
 			spriteMap.put(SpriteType.ItemBox, new boolean[7][7]);

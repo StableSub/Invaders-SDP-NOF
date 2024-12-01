@@ -663,7 +663,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					this.combo++;
 					this.hitBullets++;
 					if (this.combo > this.maxCombo) this.maxCombo = this.combo;
-					this.enemyShipSpecial.destroy(balance);
+					this.enemyShipSpecial.specialDestroy(balance);
 					this.enemyShipSpecialExplosionCooldown.reset();
 					timer.cancel();
 					isExecuted = false;

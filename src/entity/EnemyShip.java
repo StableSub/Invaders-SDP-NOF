@@ -125,11 +125,17 @@ public class EnemyShip extends Entity {
 	 * known starting properties.
 	 */
 	public EnemyShip() {
-		super(-32, 60, 16 * 2, 7 * 2, Color.RED);
+		super(-32, 60, 62 * 2, 28 * 2, new Color(31, 64, 78)); // 짙은 청록색
 
 		this.spriteType = SpriteType.EnemyShipSpecial;
 		this.isDestroyed = false;
 		this.pointValue = BONUS_TYPE_POINTS;
+	}
+
+	public final void specialDestroy(final float balance) {
+		this.isDestroyed = true;
+		this.spriteType = SpriteType.SpecialExplosion;
+		soundManager.playSound(Sound.ALIEN_HIT, balance);
 	}
 
 	/**
