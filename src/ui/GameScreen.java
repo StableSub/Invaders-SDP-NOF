@@ -136,7 +136,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private int hitBullets;
 	private boolean isSpecialEnemySpawned = false; // 특별 함선 생성 여부 추적
 	private boolean movingRight = true; // 초기 방향은 오른쪽
-
+	private boolean bossDestroyed = false;
 
 	/**
 	 * Constructor, establishes the properties of the screen.
@@ -358,6 +358,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					this.specialEnemyShipFormation.shootBoss(this.enemyShipSpecial, this.bossBullets, balance);
 				} else if (this.enemyShipSpecialExplosionCooldown.checkFinished()) {
 					this.enemyShipSpecial = null;
+					bossDestroyed = true;
 				}
 			}
 
@@ -406,11 +407,11 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		cleanBullets();
 		draw();
 
-		if (((this.enemyShipFormation.isEmpty() &&
-				(this.enemyShipSpecial != null && this.enemyShipSpecial.isDestroyed())
+		if (((this.enemyShipFormation.isEmpty() && bossDestroyed
 				|| this.lives <= 0))
 				&& !this.levelFinished) {
 			this.levelFinished = true;
+			bossDestroyed = false;
 
 			soundManager.stopSound(soundManager.getCurrentBGM());
 			if (this.lives == 0)
