@@ -18,15 +18,19 @@ public class Wallet {
     private String id;
     //bullet speed level
     private int bullet_lv;
+    private int bullet_bl;
 
     //shot frequency level
     private int shot_lv;
+    private int shot_bl;
 
     //additional lives level
     private int lives_lv;
+    private int lives_bl;
 
     //coin gain level
     private int coin_lv;
+    private int coin_bl;
 
     public Wallet()
     {
@@ -35,10 +39,14 @@ public class Wallet {
         this.shot_lv = 1;
         this.lives_lv = 1;
         this.coin_lv = 1;
+        this.bullet_bl = 0;
+        this.shot_bl = 0;
+        this.lives_bl = 0;
+        this.coin_bl = 0;
         writeWallet();
     }
 
-    public Wallet(String id, int coin, int bullet_lv, int shot_lv, int lives_lv, int coin_lv)
+    public Wallet(String id, int coin, int bullet_lv, int shot_lv, int lives_lv, int coin_lv, int bullet_bl, int shot_bl, int lives_bl, int coin_bl)
     {
         this.id = id;
         this.coin = coin;
@@ -46,6 +54,10 @@ public class Wallet {
         this.shot_lv = shot_lv;
         this.lives_lv = lives_lv;
         this.coin_lv = coin_lv;
+        this.bullet_bl = bullet_bl;
+        this.shot_bl = shot_bl;
+        this.lives_bl = lives_bl;
+        this.coin_bl = coin_bl;
     }
 
     public int getCoin()
@@ -72,6 +84,14 @@ public class Wallet {
     {
         return coin_lv;
     }
+
+    public int getBullet_bl() {return bullet_bl;}
+
+    public int getShot_bl() {return shot_bl;}
+
+    public int getLives_bl() {return lives_bl;}
+
+    public int getCoin_bl() {return coin_bl;}
 
     public void setBullet_lv(int bullet_lv)
     {
@@ -100,6 +120,36 @@ public class Wallet {
         writeWallet();
         logger.info("Upgrade Gain Coin " + (coin_lv-1) + "to " + coin_lv);
     }
+
+    public void setBullet_bl(int bullet_bl)
+    {
+        this.bullet_bl = bullet_bl;
+        writeWallet();
+        logger.info("Break Limit of Bullet Speed " + (bullet_bl-1) + "to " + bullet_bl);
+    }
+
+    public void setShot_bl(int shot_bl)
+    {
+        this.shot_bl = shot_bl;
+        writeWallet();
+        logger.info("Break Limit of Shop Frequency  " + (shot_bl-1) + "to " + shot_bl);
+    }
+
+    public void setLives_bl(int lives_bl)
+    {
+        this.lives_bl = lives_bl;
+        writeWallet();
+        logger.info("Break Limit of Additional Lives " + (lives_bl-1) + "to " + lives_bl);
+    }
+
+    public void setCoin_bl(int coin_bl)
+    {
+        this.coin_bl = coin_bl;
+        writeWallet();
+        logger.info("Break Limit of Gain Coin " + (coin_bl-1) + "to " + coin_bl);
+    }
+
+
 
     public boolean deposit(int amount)
     {
@@ -131,7 +181,7 @@ public class Wallet {
 
     private void writeWallet() {
         String sql = "UPDATE user_wallet SET Coin = ?, BulletSpeed = ?, ShotInterval = ?, " +
-                "AdditionalLife = ?, CoinGain = ? WHERE id = ?";
+                "AdditionalLife = ?, CoinGain = ?, BulletSpeedBL = ?, ShotInterval = ?, AdditionalLifeBL = ?, CoinGainBL = ? WHERE id = ?";
         try (Connection conn = new DatabaseManager().connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // 매개변수 설정
@@ -140,7 +190,11 @@ public class Wallet {
             pstmt.setInt(3, shot_lv);
             pstmt.setInt(4, lives_lv);
             pstmt.setDouble(5, coin_lv);
-            pstmt.setString(6, id);
+            pstmt.setInt(6, bullet_bl);
+            pstmt.setInt(7, shot_bl);
+            pstmt.setInt(8, lives_bl);
+            pstmt.setDouble(9, coin_bl);
+            pstmt.setString(10, id);
             // SQL 실행
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
