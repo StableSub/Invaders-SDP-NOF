@@ -399,14 +399,28 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 		}
 	}
 
-	public final void shootBoss(EnemyShip enemyShipSpecial, final Set<CurvedBullet> bullets) {
+	public final void shootCurved(EnemyShip enemyShipSpecial, final Set<CurvedBullet> bullets) {
 		// Fire when the cool down is over
 		if (this.bossShootingCooldown.checkFinished()) {
 			this.bossShootingCooldown.reset();
 
-			// One shot at the base
-			bullets.add(BulletPool.getCurvedBullet(enemyShipSpecial.getPositionX()
-					+ enemyShipSpecial.width / 2 + 10, enemyShipSpecial.getPositionY(), BULLET_SPEED+3));
+			// Add a curved bullet
+			bullets.add(BulletPool.getCurvedBullet(
+					enemyShipSpecial.getPositionX() + enemyShipSpecial.width / 2 + 10,
+					enemyShipSpecial.getPositionY(),
+					BULLET_SPEED + 3));
+			soundManager.playSound(Sound.ALIEN_LASER);
+		}
+	}
+
+	public final void shootExplosion(EnemyShip enemyShipSpecial, final Set<ExplosionBullet> bullets) {
+		// Fire when the cool down is over
+		if (this.bossShootingCooldown.checkFinished()) {
+			this.bossShootingCooldown.reset();
+
+			bullets.add(BulletPool.getExplosionBullet(
+					enemyShipSpecial.getPositionX() + enemyShipSpecial.width / 2 + 10,
+					enemyShipSpecial.getPositionY(), 4));
 			soundManager.playSound(Sound.ALIEN_LASER);
 		}
 	}

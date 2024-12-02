@@ -136,14 +136,12 @@ public abstract class Ship extends Entity {
 	 * bullet sound (2-players)
 	 * @param bullets
 	 *          List of bullets on screen, to add the new bullet.
-	 * @param balance
-	 * 			1p -1.0, 2p 1.0, both 0.0
 	 * @param shotNum
 	 * 			Upgraded shot.
 	 *
 	 * @return Checks if the bullet was shot correctly.
 	 */
-	public final boolean shoot(final Set<Bullet> bullets, int shotNum, float balance) {
+	public final boolean shoot(final Set<Bullet> bullets, int shotNum) {
 		if (this.shootingCooldown.checkFinished()) {
 
 			this.shootingCooldown.reset();

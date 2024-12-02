@@ -2,16 +2,10 @@ package ui;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
-import java.util.ArrayList;
+import java.util.Map.Entry;
 import java.util.concurrent.Callable;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 import engine.core.Core;
@@ -65,7 +59,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/** Set of all bullets fired by on screen ships. */
 	private Set<Bullet> bullets;
 
-	private Set<CurvedBullet> bossBullets;
+	private Set<CurvedBullet> curvedBullets;
+	private Set<ExplosionBullet> explosionBullets;
 
 	private int score;
 	/** tempScore records the score up to the previous level. */
@@ -239,7 +234,8 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				.getCooldown(BONUS_SHIP_EXPLOSION);
 		this.screenFinishedCooldown = Core.getCooldown(SCREEN_CHANGE_INTERVAL);
 		this.bullets = new HashSet<>();
-		this.bossBullets = new HashSet<>();
+		this.curvedBullets = new HashSet<>();
+		this.explosionBullets = new HashSet<>();
 		this.barriers = new HashSet<>();
         this.itemBoxes = new HashSet<>();
 		this.itemManager = new ItemManager(this.ship, this.enemyShipFormation, this.barriers, this.height, this.width);
@@ -285,12 +281,13 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 */
 	protected final void update() {
 		super.update();
+		Random random = new Random();
+		int choice = random.nextInt(2); // 0이면 shootExplosion, 1이면 shootCurved
 		if (this.inputDelay.checkFinished() && !this.levelFinished) {
 			boolean playerAttacking = inputManager.isKeyDown(KeyEvent.VK_SPACE);
 
 			if (playerAttacking) {
-				float direction = 0.0f;
-				if (this.ship.shoot(this.bullets, this.itemManager.getShotNum(), direction)) {
+				if (this.ship.shoot(this.bullets, this.itemManager.getShotNum())) {
 					this.bulletsShot += this.itemManager.getShotNum();
 				}
 			}
@@ -349,7 +346,11 @@ public class GameScreen extends Screen implements Callable<GameState> {
 							movingRight = true; // 왼쪽 끝에 도달하면 방향 변경
 						}
 					}
-					this.specialEnemyShipFormation.shootBoss(this.enemyShipSpecial, this.bossBullets);
+					if (choice == 0) {
+						this.specialEnemyShipFormation.shootExplosion(this.enemyShipSpecial, this.explosionBullets);
+					} else {
+						this.specialEnemyShipFormation.shootCurved(this.enemyShipSpecial, this.curvedBullets);
+					}
 				} else if (this.enemyShipSpecialExplosionCooldown.checkFinished()) {
 					this.enemyShipSpecial = null;
 					bossDestroyed = true;
@@ -459,8 +460,16 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		for (Bullet bullet : this.bullets)
 			drawManager.drawEntity(bullet, bullet.getPositionX(),
 					bullet.getPositionY());
-		for (CurvedBullet bullet : this.bossBullets)
+		for (CurvedBullet bullet : this.curvedBullets)
 			drawManager.drawRotatedBullet(bullet, bullet.getPositionX(), bullet.getPositionY(), bullet.getAngle());
+		for (ExplosionBullet bullet : this.explosionBullets) {
+			if (bullet.getPositionY() < bullet.getExplode()) {
+				drawManager.drawEntity(bullet, bullet.getPositionX(), bullet.getPositionY());
+			}
+			for (Bullet child : bullet.getChildBullets()) {
+				drawManager.drawEntity(child, child.getPositionX(), child.getPositionY());
+			}
+		}
 
 
 		// Interface.
@@ -574,32 +583,43 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 * Cleans bullets that go off screen.
 	 */
 	private void cleanBullets() {
-		Set<Bullet> recyclable = new HashSet<Bullet>();
-		Set<CurvedBullet> recyclableBoss = new HashSet<CurvedBullet>();
+		Set<Bullet> recyclableNomal = new HashSet<Bullet>();
+		Set<CurvedBullet> recyclableCurved = new HashSet<CurvedBullet>();
+		Set<ExplosionBullet> recyclableExplosion = new HashSet<ExplosionBullet>();
 		for (Bullet bullet : this.bullets) {
 			bullet.update();
 			if (bullet.getPositionY() < SEPARATION_LINE_HEIGHT
 					|| bullet.getPositionY() > this.height)
-				recyclable.add(bullet);
+				recyclableNomal.add(bullet);
 		}
-		this.bullets.removeAll(recyclable);
-		BulletPool.recycleNomal(recyclable);
-		for (CurvedBullet bullet : this.bossBullets) {
+		this.bullets.removeAll(recyclableNomal);
+		for (CurvedBullet bullet : this.curvedBullets) {
 			bullet.update();
 			if (bullet.getPositionY() < SEPARATION_LINE_HEIGHT
 					|| bullet.getPositionY() > this.height)
-				recyclableBoss.add(bullet);
+				recyclableCurved.add(bullet);
 		}
-		this.bossBullets.removeAll(recyclableBoss);
-		BulletPool.recycleCurved(recyclableBoss);
+		this.curvedBullets.removeAll(recyclableCurved);
+		BulletPool.recycleCurved(recyclableCurved);
+		for (ExplosionBullet bullet : this.explosionBullets) {
+			bullet.update();
+			for (ExplosionBullet child : bullet.getChildBullets()) {
+				child.update();
+				if (child.getPositionY() < SEPARATION_LINE_HEIGHT
+						|| child.getPositionY() > this.height)
+					recyclableExplosion.add(child);
+			}
+		}
+		this.explosionBullets.removeAll(recyclableExplosion);
+		BulletPool.recycleExplosion(recyclableExplosion);
 	}
 
 	/**
 	 * Manages collisions between bullets and ships.
 	 */
 	private void manageCollisions() {
-		Set<Bullet> recyclable = new HashSet<Bullet>();
-		Set<CurvedBullet> recyclableBoss = new HashSet<CurvedBullet>();
+		Set<Bullet> recyclableNomal = new HashSet<Bullet>();
+		Set<CurvedBullet> recyclableCurved = new HashSet<CurvedBullet>();
 		if (isExecuted == false){
 			isExecuted = true;
 			timer = new Timer();
@@ -626,7 +646,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			// Enemy ship's bullets
 			if (bullet.getSpeed() > 0) {
 				if (checkCollision(bullet, this.ship) && !this.levelFinished && !itemManager.isGhostActive()) {
-					recyclable.add(bullet);
+					recyclableNomal.add(bullet);
 					if (!this.ship.isDestroyed()) {
 						this.ship.destroy();
 						lvdamage();
@@ -639,7 +659,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					while (barrierIterator.hasNext()) {
 						Barrier barrier = barrierIterator.next();
 						if (checkCollision(bullet, barrier)) {
-							recyclable.add(bullet);
+							recyclableNomal.add(bullet);
 							barrier.reduceHealth();
 							if (barrier.isDestroyed()) {
 								barrierIterator.remove();
@@ -663,7 +683,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 						if (this.combo > this.maxCombo) this.maxCombo = this.combo;
 						timer.cancel();
 						isExecuted = false;
-						recyclable.add(bullet);
+						recyclableNomal.add(bullet);
 						if (enemyShip.getHealth() < 0 && itemManager.dropItem()) {
 							this.itemBoxes.add(new ItemBox(enemyShip.getPositionX() + 6, enemyShip.getPositionY() + 1));
 							logger.info("Item box dropped");
@@ -683,7 +703,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					timer.cancel();
 					isExecuted = false;
 
-					recyclable.add(bullet);
+					recyclableNomal.add(bullet);
 				}
 
 				if (this.itemManager.getShotNum() == 1 && bullet.getPositionY() < topEnemyY) {
@@ -697,7 +717,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					if (checkCollision(bullet, itemBox) && !itemBox.isDroppedRightNow()) {
 						this.hitBullets++;
 						itemBoxIterator.remove();
-						recyclable.add(bullet);
+						recyclableNomal.add(bullet);
 						Entry<Integer, Integer> itemResult = this.itemManager.useItem();
 
 						if (itemResult != null) {
@@ -710,7 +730,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				//check the collision between the obstacle and the bullet
 				for (Block block : this.block) {
 					if (checkCollision(bullet, block)) {
-						recyclable.add(bullet);
+						recyclableNomal.add(bullet);
                         soundManager.playSound(Sound.BULLET_BLOCKING);
 						break;
 					}
@@ -730,9 +750,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			}
 		}
 
-		for (CurvedBullet bullet : this.bossBullets) {
+		for (CurvedBullet bullet : this.curvedBullets) {
 			if (checkCollision(bullet, this.ship) && !this.levelFinished && !itemManager.isGhostActive()) {
-				recyclableBoss.add(bullet);
+				recyclableCurved.add(bullet);
 				if (!this.ship.isDestroyed()) {
 					this.ship.destroy();
 					lvdamage();
@@ -744,7 +764,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				while (barrierIterator.hasNext()) {
 					Barrier barrier = barrierIterator.next();
 					if (checkCollision(bullet, barrier)) {
-						recyclableBoss.add(bullet);
+						recyclableCurved.add(bullet);
 						barrier.reduceHealth();
 						if (barrier.isDestroyed()) {
 							barrierIterator.remove();
@@ -754,12 +774,38 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			}
 		}
 
+		for (ExplosionBullet bullet : this.explosionBullets) {
+			for (Bullet child : bullet.getChildBullets()) {
+				if (checkCollision(child, this.ship) && !this.levelFinished && !itemManager.isGhostActive()) {
+					recyclableNomal.add(child);
+					if (!this.ship.isDestroyed()) {
+						this.ship.destroy();
+						lvdamage();
+						this.logger.info("Hit on player ship, " + this.lives + " lives remaining.");
+					}
+				}
+				if (this.barriers != null) {
+					Iterator<Barrier> barrierIterator = this.barriers.iterator();
+					while (barrierIterator.hasNext()) {
+						Barrier barrier = barrierIterator.next();
+						if (checkCollision(child, barrier)) {
+							recyclableNomal.add(child);
+							barrier.reduceHealth();
+							if (barrier.isDestroyed()) {
+								barrierIterator.remove();
+							}
+						}
+					}
+				}
+			}
+		}
+
 		// remove crashed obstacle
 		block.removeAll(removableBlocks);
-		this.bullets.removeAll(recyclable);
-		this.bossBullets.removeAll(recyclableBoss);
-		BulletPool.recycleNomal(recyclable);
-		BulletPool.recycleCurved(recyclableBoss);
+		this.bullets.removeAll(recyclableNomal);
+		this.curvedBullets.removeAll(recyclableCurved);
+		BulletPool.recycleNomal(recyclableNomal);
+		BulletPool.recycleCurved(recyclableCurved);
 	}
 
 	/**

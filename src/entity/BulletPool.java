@@ -15,6 +15,8 @@ public final class BulletPool {
 	private static Set<Bullet> nomalPool = new HashSet<Bullet>();
 	private static Set<CurvedBullet> curvedPool = new HashSet<CurvedBullet>();
 
+	private static Set<ExplosionBullet> explosionPool = new HashSet<ExplosionBullet>();
+
 	/**
 	 * Returns a bullet from the nomalPool if one is available, a new one if there
 	 * isn't.
@@ -62,6 +64,26 @@ public final class BulletPool {
 		return bullet;
 	}
 
+	public static ExplosionBullet getExplosionBullet(final int positionX, final int positionY, final int speed) {
+		ExplosionBullet bullet;
+
+		if (!explosionPool.isEmpty()) {
+			bullet = explosionPool.iterator().next();
+			explosionPool.remove(bullet);
+			bullet.setPositionX(positionX - bullet.getWidth() / 2);
+			bullet.setPositionY(positionY);
+			bullet.setSpeedX(0);
+			bullet.setSpeedY(speed);
+			bullet.setExploed(false);
+			bullet.setSprite();
+		} else {
+			bullet = new ExplosionBullet(positionX, positionY, speed);
+			bullet.setPositionX(positionX - bullet.getWidth() / 2);
+		}
+		System.out.println("Initializing ExplosionBullet with speedX: " + bullet.getSpeedX() + ", speedY: " + bullet.getSpeedY());
+		return bullet;
+	}
+
 	/**
 	 * Adds one or more bullets to the list of available ones.
 	 *
@@ -74,5 +96,9 @@ public final class BulletPool {
 
 	public static void recycleCurved(final Set<CurvedBullet> bullet) {
 		curvedPool.addAll(bullet);
+	}
+
+	public static void recycleExplosion(final Set<ExplosionBullet> bullet) {
+		explosionPool.addAll(bullet);
 	}
 }
