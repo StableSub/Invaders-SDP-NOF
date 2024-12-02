@@ -26,7 +26,9 @@ public class GamblingScreen extends Screen {
         super(width, height, fps);
         this.wallet = wallet;
 
+        soundManager.stopSound(Sound.BGM_SHOP);
         soundManager.loopSound(Sound.BGM_GAMBLING);
+
     }
 
     @Override
@@ -46,6 +48,7 @@ public class GamblingScreen extends Screen {
         // ESC 키로 상점 화면으로 돌아가기
         if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
             soundManager.stopSound(Sound.BGM_GAMBLING); // 갬블링 음악 중지
+            soundManager.loopSound(Sound.BGM_SHOP);    // 상점 음악 재생
             this.isRunning = false;
         }
 
