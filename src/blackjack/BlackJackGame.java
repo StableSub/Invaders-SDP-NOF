@@ -11,6 +11,8 @@ public class BlackJackGame {
     private final CardDeck cardDeck;
     private final Rule rule;
     private boolean isRunning; // 게임 실행 상태
+    private final JFrame frame; // JFrame을 인스턴스 변수로 변경
+    private final JPanel statusPanel; // 상태 패널을 인스턴스 변수로 변경
 
     public BlackJackGame() {
         this.dealer = new Dealer();
@@ -19,7 +21,20 @@ public class BlackJackGame {
         this.rule = new Rule();
         isRunning = true; // 게임 시작 상태
 
+        // 새로운 블랙잭 게임 창 생성
+        frame = new JFrame("BlackJack Game");
+        frame.setSize(800, 600);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+
+        // 상태 패널 초기화
+        statusPanel = new JPanel();
+        statusPanel.setLayout(new GridLayout(2, 1));
+        frame.add(statusPanel, BorderLayout.CENTER);
+
         // 게임 시작
+        setupUI();
+        frame.setVisible(true);
         startGame();
     }
 
@@ -36,8 +51,8 @@ public class BlackJackGame {
         System.out.println("딜러의 첫 번째 카드: " + dealer.openCards().get(0)); // 딜러 첫 번째 카드만 공개
         System.out.println(gamer + "\n");
 
-        // 플레이어 턴은 버튼 클릭으로 진행됨
-        setupUI();
+        // 초기 상태 패널 업데이트
+        updateGameStatus();
     }
 
     private void resetGame() {
@@ -51,11 +66,6 @@ public class BlackJackGame {
     }
 
     private void setupUI() {
-        JFrame frame = new JFrame("BlackJack Game");
-        frame.setSize(800, 600);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(1, 3));
 
@@ -107,16 +117,9 @@ public class BlackJackGame {
         buttonPanel.add(exitButton);
 
         frame.add(buttonPanel, BorderLayout.SOUTH);
-
-        // 카드 상태 출력 패널 추가
-        updateGameStatus(frame);
-
-        frame.setVisible(true);
     }
 
-    private void updateGameStatus(JFrame frame) {
-        JPanel statusPanel = new JPanel();
-        statusPanel.setLayout(new GridLayout(2, 1));
+    private void updateGameStatus() {
         statusPanel.removeAll(); // 기존 상태 제거 후 다시 추가
 
         JLabel gamerStatus = new JLabel("Your Cards: " + gamer.openCards() + " | Your Score: " + gamer.getScore());
@@ -125,9 +128,8 @@ public class BlackJackGame {
         statusPanel.add(gamerStatus);
         statusPanel.add(dealerStatus);
 
-        frame.add(statusPanel, BorderLayout.CENTER);
-        frame.revalidate(); // 프레임 업데이트
-        frame.repaint();    // 프레임 다시 그리기
+        statusPanel.revalidate(); // 패널 업데이트
+        statusPanel.repaint();    // 패널 다시 그리기
     }
 
     private void dealerTurn() {
@@ -152,6 +154,6 @@ public class BlackJackGame {
         String winner = rule.determineWinner(dealer, gamer);
         System.out.println("승자: " + winner);
 
-        JOptionPane.showMessageDialog(null, "게임 종료! 승자: " + winner);
+        JOptionPane.showMessageDialog(frame, "게임 종료! 승자: " + winner);
     }
 }

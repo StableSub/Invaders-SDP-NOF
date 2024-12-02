@@ -7,18 +7,16 @@ import java.awt.event.ActionListener;
 
 public class BlackJackScreen {
     private final JFrame frame;
-    private final Dealer dealer;
     private final Gamer gamer;
+    private final Dealer dealer;
     private final CardDeck cardDeck;
     private final Rule rule;
-    private boolean isRunning; // 게임 실행 상태
 
     public BlackJackScreen() {
-        this.dealer = new Dealer();
         this.gamer = new Gamer("Player 1");
+        this.dealer = new Dealer();
         this.cardDeck = new CardDeck();
         this.rule = new Rule();
-        this.isRunning = true; // 게임 시작 상태
 
         // 새로운 블랙잭 게임 창 생성
         frame = new JFrame("BlackJack Game");
@@ -30,9 +28,6 @@ public class BlackJackScreen {
         setupUI();
 
         frame.setVisible(true);
-
-        // 게임 시작
-        startGame();
     }
 
     private void setupUI() {
@@ -44,17 +39,9 @@ public class BlackJackScreen {
         hitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (isRunning) {
-                    gamer.receiveCard(cardDeck.drawCard());
-                    System.out.println("카드를 한 장 더 받았습니다!");
-                    updateGameStatus();
-
-                    if (gamer.getScore() > 21) {
-                        System.out.println("버스트! 점수가 21을 초과했습니다.");
-                        isRunning = false; // 게임 종료
-                        endGame();
-                    }
-                }
+                gamer.receiveCard(cardDeck.drawCard());
+                System.out.println("카드를 한 장 더 받았습니다!");
+                updateGameStatus();
             }
         });
 
@@ -63,12 +50,8 @@ public class BlackJackScreen {
         standButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (isRunning) {
-                    System.out.println("턴을 종료하셨습니다.");
-                    isRunning = false; // 턴 종료
-                    dealerTurn();
-                    endGame();
-                }
+                dealerTurn();
+                endGame();
             }
         });
 
@@ -77,7 +60,6 @@ public class BlackJackScreen {
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("게임 종료.");
                 frame.dispose(); // 창 닫기
             }
         });
@@ -88,7 +70,7 @@ public class BlackJackScreen {
 
         frame.add(buttonPanel, BorderLayout.SOUTH);
 
-        // 상태 패널 초기화
+        // 카드 상태 출력 패널 추가
         updateGameStatus();
     }
 
@@ -110,24 +92,15 @@ public class BlackJackScreen {
 
     private void dealerTurn() {
         System.out.println("\n딜러의 턴...");
-        while (dealer.shouldHit() && isRunning) {
+        while (dealer.shouldHit()) {
             dealer.receiveCard(cardDeck.drawCard());
             System.out.println("딜러가 카드를 한 장 받았습니다.");
         }
-
-        System.out.println("딜러의 최종 카드: " + dealer.openCards());
-        System.out.println("딜러의 최종 점수: " + dealer.getScore());
     }
 
     private void endGame() {
-        if (!isRunning) return; // 게임 실행 중이 아니면 종료
-
-        System.out.println("\n게임 종료!");
-        System.out.println("당신의 최종 점수: " + gamer.getScore());
-        System.out.println("딜러의 최종 점수: " + dealer.getScore());
-
-        // 승자 결정
         String winner = rule.determineWinner(dealer, gamer);
+        System.out.println("게임 종료!");
         System.out.println("승자: " + winner);
 
         JOptionPane.showMessageDialog(frame, "게임 종료! 승자: " + winner);
