@@ -4,7 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+import engine.manager.*;d
 public class BlackJackScreen {
     private final JFrame frame;
     private final Dealer dealer;
@@ -14,6 +17,7 @@ public class BlackJackScreen {
     private boolean isRunning; // 게임 실행 상태
     private final JPanel statusPanel; // 상태 패널을 인스턴스 변수로 변경
     private final JLabel actionMessageLabel; // 액션 메시지 라벨
+    private final InputManager inputManager = InputManager.getInstance(); // InputManager 인스턴스 추가
 
     public BlackJackScreen() {
         this.dealer = new Dealer();
@@ -41,7 +45,29 @@ public class BlackJackScreen {
         // 초기 인터페이스 설정
         setupUI();
 
+        // 게임 창이 포커스를 잃을 때 키 상태 초기화
+        frame.addWindowFocusListener(new WindowFocusListener() {
+            @Override
+            public void windowGainedFocus(WindowEvent e) {
+                // 포커스를 얻었을 때 처리할 필요 없음
+            }
+
+            @Override
+            public void windowLostFocus(WindowEvent e) {
+                inputManager.resetKeys(); // 모든 키 상태 초기화
+            }
+        });
+
         frame.setVisible(true);
+
+        // 게임 창이 닫힐 때 실행 상태를 false로 설정하고 키 상태 초기화
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                isRunning = false; // 게임 루프 종료
+                inputManager.resetKeys(); // 모든 키 상태 초기화
+            }
+        });
 
         // 게임 시작
         startGame();
