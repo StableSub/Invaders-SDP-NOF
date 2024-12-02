@@ -8,6 +8,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import engine.manager.*;
+import engine.utility.*;
+
 public class BlackJackScreen {
     private final JFrame frame;
     private final Dealer dealer;
@@ -17,7 +19,8 @@ public class BlackJackScreen {
     private boolean isRunning; // 게임 실행 상태
     private final JPanel statusPanel; // 상태 패널을 인스턴스 변수로 변경
     private final JLabel actionMessageLabel; // 액션 메시지 라벨
-    private final InputManager inputManager = InputManager.getInstance(); // InputManager 인스턴스 추가
+    private final InputManager inputManager = InputManager.getInstance(); // InputManager 인스턴스 추가\
+    private final SoundManager soundManager = SoundManager.getInstance();
 
     public BlackJackScreen() {
         this.dealer = new Dealer();
@@ -143,6 +146,8 @@ public class BlackJackScreen {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("게임 종료.");
+                soundManager.stopSound(Sound.BGM_GAMBLING);
+                soundManager.loopSound(Sound.BGM_MAIN);
                 frame.dispose(); // 창 닫기
             }
         });
