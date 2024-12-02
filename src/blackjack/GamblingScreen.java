@@ -1,4 +1,4 @@
-package gambling;
+package blackjack;
 
 import entity.Wallet;
 import ui.Screen;
@@ -26,7 +26,6 @@ public class GamblingScreen extends Screen {
 
     private final SoundManager soundManager = SoundManager.getInstance();
 
-    public GamblingScreen(int width, int height, int fps, Wallet wallet) {
     public GamblingScreen(int width, int height, int fps, Wallet wallet,Gamer gamer) {
         super(width, height, fps);
         this.wallet = wallet;
@@ -34,7 +33,6 @@ public class GamblingScreen extends Screen {
         soundManager.stopSound(Sound.BGM_SHOP);
         soundManager.loopSound(Sound.BGM_GAMBLING);
 
-        this.wallet = wallet;
         this.gamer = gamer;
     }
 
@@ -64,6 +62,11 @@ public class GamblingScreen extends Screen {
             BlackJackGame game = new BlackJackGame();
             game.startGame();
         }
+        if (inputManager.isKeyDown(KeyEvent.VK_Q)) {
+            System.out.println("Starting BlackJackGame...");
+            BlackJackGame game = new BlackJackGame(); // 메인 프레임을 전달하여 BlackJackGame 객체 생성
+            game.startGame();
+        }
         //베팅 금액 상승 누를때마다 100원씩 (현재 금액과 비교해 넘으면 안됨)
         if (inputManager.isKeyDown(KeyEvent.VK_KP_UP)) {
 
@@ -78,7 +81,7 @@ public class GamblingScreen extends Screen {
 
     protected final void draw() {
         drawManager.initDrawing(this); // 드로잉 초기화
-        drawManager.drawGambling(this, drawButtonX, drawButtonY, releaseButtonX, releaseButtonY, buttonWidth, buttonHeight);
+        drawManager.drawGambling(this, drawButtonX, drawButtonY, releaseButtonX, releaseButtonY, buttonWidth, buttonHeight,drawStartButtonX,drawStartButtonY,battingX,battingY);
         drawManager.completeDrawing(this); // 드로잉 완료
     }
 }
