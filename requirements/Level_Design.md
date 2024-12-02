@@ -38,7 +38,7 @@
 
 - Difficulty adjustment factors
 
-  - Enemy speed, number of bullets, damage, bullet firing frequency:
+  - Enemy speedY, number of bullets, damage, bullet firing frequency:
     As the difficulty increases, enemies become faster, fire more bullets, inflict greater damage, and fire less frequently.
 
   - Score conversion by difficulty:
@@ -58,7 +58,7 @@
     Modify the `destroy` method of the `EnemyShipFormation` class so that enemies are not destroyed immediately as the level increases, and increase the damage to enemy projectiles from 1 to 2.
 
   - Ally Speed Limit (Web class):
-    Remove the `final` value of the `speed` property of the `Ship` entity, and create a new `Web` class to design a platform that slows down friendly units when they step on it.
+    Remove the `final` value of the `speedY` property of the `Ship` entity, and create a new `Web` class to design a platform that slows down friendly units when they step on it.
 
   - Endless Stages (Infinite Levels):
     Added a `levelDesign` method in the `GameSettings` class to change the game stages limited to 7 stages to unlimited, and set the difficulty to increase exponentially after stage 5.
@@ -98,7 +98,7 @@
       `EnemyShipFormation` 클래스의 `destroy` 메소드를 수정하여 레벨이 올라갈수록 적군이 즉시 파괴되지 않도록 하며, 적군이 발사하는 투사체의 데미지를 1에서 2로 증가시킵니다.
 
   - 아군 속도 제한 (Web 클래스):
-      `Ship` 엔터티의 `speed` 속성의 `final` 값을 제거하고, 새로운 `Web` 클래스를 생성하여 아군이 밟으면 속도가 느려지는 발판을 설계합니다.
+      `Ship` 엔터티의 `speedY` 속성의 `final` 값을 제거하고, 새로운 `Web` 클래스를 생성하여 아군이 밟으면 속도가 느려지는 발판을 설계합니다.
 
   - 끝없는 단계 (무한 레벨):
       `GameSettings` 클래스 내에 `levelDesign` 메소드를 추가하여, 기존 7단계로 제한된 게임 단계를 무제한으로 변경하고, 5단계 이후부터는 난이도가 기하급수적으로 상승하도록 설정합니다.

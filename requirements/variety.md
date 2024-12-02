@@ -25,9 +25,9 @@ We are a team of 7 members who will be working on the variety requirements for t
 
 ## Detailed Requirements
 
-1. **Design 3 additional playable ships that features different attributes from the original ship. This includes weapons, speed, durability, etc.**
+1. **Design 3 additional playable ships that features different attributes from the original ship. This includes weapons, speedY, durability, etc.**
     - The new ship should have unique characteristics that differentiate it from the original ship.
-    - The ship should have different weapons, speed, durability, and other attributes that affect gameplay.
+    - The ship should have different weapons, speedY, durability, and other attributes that affect gameplay.
     - The ship should be visually distinct from the original ship to avoid confusion.
 
 2. **Design 3 new enemies. These enemies will have unique characteristics such as their size, movement patterns, attacks, and durability.**
@@ -39,7 +39,7 @@ We are a team of 7 members who will be working on the variety requirements for t
    - The player should be able to choose from the available ships before starting the game.
    - The ship selection should be implemented in the main menu or settings menu.
 
-4. **Implement "special enemies." These elite enemies will be similar to their normal versions, but they can have a specific attribute enhanced such as their speed or attack.**
+4. **Implement "special enemies." These elite enemies will be similar to their normal versions, but they can have a specific attribute enhanced such as their speedY or attack.**
     - The special enemies should be visually distinct from the normal enemies to indicate their enhanced attributes.
     - The special enemies should provide a greater challenge to the player compared to the normal enemies.
 

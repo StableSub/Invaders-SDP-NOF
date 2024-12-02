@@ -33,7 +33,7 @@ public class CurvedBullet extends Bullet {
         super(positionX, positionY, speed);
         this.angle = 0; // 초기 각도
         this.frequency = 0.1; // 주기 설정
-        this.amplitude = 10; // 진폭 설정
+        this.amplitude = 5; // 진폭 설정
         this.speed = speed;
         setSprite();
     }

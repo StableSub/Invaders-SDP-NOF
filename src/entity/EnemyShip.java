@@ -124,18 +124,13 @@ public class EnemyShip extends Entity {
 	 * Constructor, establishes the ship's properties for a special ship, with
 	 * known starting properties.
 	 */
-	public EnemyShip() {
+	public EnemyShip(final GameState gameState) {
 		super(-32, 60, 62 * 2, 28 * 2, new Color(31, 64, 78)); // 짙은 청록색
 
 		this.spriteType = SpriteType.EnemyShipSpecial;
 		this.isDestroyed = false;
 		this.pointValue = BONUS_TYPE_POINTS;
-	}
-
-	public final void specialDestroy() {
-		this.isDestroyed = true;
-		this.spriteType = SpriteType.SpecialExplosion;
-		soundManager.playSound(Sound.ALIEN_HIT);
+		this.health = gameState.getLevel()+1;
 	}
 
 	/**
@@ -213,10 +208,14 @@ public class EnemyShip extends Entity {
         soundManager.playSound(Sound.ALIEN_HIT);
 	}
 
-    public final void HealthManageDestroy() { //Determine whether to destroy the enemy ship based on its health
+    public final void HealthManageDestroy(final EnemyShip destroyedShip) { //Determine whether to destroy the enemy ship based on its health
         if(this.health <= 0){
             this.isDestroyed = true;
-            this.spriteType = SpriteType.Explosion;
+			if (destroyedShip.spriteType.equals(spriteType.EnemyShipSpecial)) {
+				this.spriteType = SpriteType.SpecialExplosion;
+			} else {
+				this.spriteType = SpriteType.Explosion;
+			}
         }else{
             this.health--;
         }
