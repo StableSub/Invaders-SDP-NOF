@@ -2,8 +2,11 @@ package gambling;
 
 import entity.Wallet;
 import ui.Screen;
+import engine.utility.Sound;
+import engine.manager.SoundManager;
 
 import java.awt.event.KeyEvent;
+
 
 public class GamblingScreen extends Screen {
 
@@ -17,9 +20,13 @@ public class GamblingScreen extends Screen {
     private final int releaseButtonY = this.height / 3 + 100;
     private final Wallet wallet;
 
+    private final SoundManager soundManager = SoundManager.getInstance();
+
     public GamblingScreen(int width, int height, int fps, Wallet wallet) {
         super(width, height, fps);
-        this.wallet = wallet; 
+        this.wallet = wallet;
+
+        soundManager.loopSound(Sound.BGM_GAMBLING);
     }
 
     @Override
@@ -38,6 +45,7 @@ public class GamblingScreen extends Screen {
 
         // ESC 키로 상점 화면으로 돌아가기
         if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
+            soundManager.stopSound(Sound.BGM_GAMBLING); // 갬블링 음악 중지
             this.isRunning = false;
         }
 

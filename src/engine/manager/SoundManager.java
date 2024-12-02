@@ -90,6 +90,7 @@ public class SoundManager {
             loadSound(Sound.BGM_LV5, "res/sound/BGM/Lv5.wav");
             loadSound(Sound.BGM_LV6, "res/sound/BGM/Lv6.wav");
             loadSound(Sound.BGM_LV7, "res/sound/BGM/Lv7.wav");
+            loadSound(Sound.BGM_GAMBLING, "res/sound/BGM/Gambling.wav");
 
             setVolume(currentVolume);
             logger.info("Finished loading all sounds.");
