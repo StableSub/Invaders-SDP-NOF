@@ -37,11 +37,7 @@ public class CreditScreen extends Screen{
         return this.returnCode;
     }
 
-//    private final ArrayList loadcredit(){
-//
-//
-//
-//    }
+
 
     protected final void update() {
         super.update();
