@@ -354,6 +354,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				} else if (this.enemyShipSpecialExplosionCooldown.checkFinished()) {
 					this.enemyShipSpecial = null;
 					bossDestroyed = true;
+					this.alertMessage = "!!  You destroyed the boss  !!";
 				}
 			}
 
@@ -361,21 +362,23 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					&& this.enemyShipSpecialCooldown.checkFinished()&& !this.isSpecialEnemySpawned) {
 				this.enemyShipSpecial = new EnemyShip(gameState);
 				this.isSpecialEnemySpawned = true; // 생성된 이후에는 다시 생성되지 않도록 설정
-				this.alertMessage = "";
+				this.alertMessage = "Destroy boss to clear !!";
+
+
 				this.enemyShipSpecialCooldown.reset();
 				soundManager.playSound(Sound.UFO_APPEAR);
 				this.logger.info("A special ship appears");
 			}
 			if(this.enemyShipSpecial == null
-					&& this.enemyShipSpecialCooldown.checkAlert()) {
+					&& this.enemyShipSpecialCooldown.checkAlert()&& !bossDestroyed) {
 				switch (this.enemyShipSpecialCooldown.checkAlertAnimation()){
-					case 1: this.alertMessage = "--! ALERT !--";
+					case 1: this.alertMessage = "Boss spawn 3 seconds ago";
 						break;
 
-					case 2: this.alertMessage = "-!! ALERT !!-";
+					case 2: this.alertMessage = "Boss spawn 2 seconds ago";
 						break;
 
-					case 3: this.alertMessage = "!!! ALERT !!!";
+					case 3: this.alertMessage = "Boss spawn 1 seconds ago";
 						break;
 
 					default: this.alertMessage = "";
