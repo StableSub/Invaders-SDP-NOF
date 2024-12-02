@@ -46,12 +46,29 @@ class GameScreenTest {
     @Test
     void playerLivesDecreaseOnHitTest() {
 
-
         //플레이어가 적 총알에 맞는 상황 시뮬레이션
         gameScreen.lvdamage();
 
         //생명이 줄어들었는지 확인
         assertEquals(2, gameScreen.getGameState().getLivesRemaining(), "플레이어의 생명이 제대로 감소하지 않았습니다.");
     }
+
+    @Test
+    void bossDestroyedDirectTest() {
+        EnemyShip boss = new EnemyShip();
+        gameScreen.enemyShipSpecial = boss;
+        gameScreen.enemyShipSpecialExplosionCooldown = new Cooldown(0);
+        gameScreen.enemyShipSpecialExplosionCooldown.reset();
+
+        boss.specialDestroy(); // 보스 파괴
+        assertTrue(boss.isDestroyed(), "보스가 파괴 상태가 아닙니다.");
+
+        if (gameScreen.enemyShipSpecialExplosionCooldown.checkFinished()) {
+            gameScreen.enemyShipSpecial = null; // 보스 제거
+        }
+        assertNull(gameScreen.enemyShipSpecial, "보스가 제거되지 않았습니다.");
+    }
+
+
 
 }
