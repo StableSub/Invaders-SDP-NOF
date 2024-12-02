@@ -43,11 +43,6 @@ public class ShopScreen extends Screen {
     private int lv2cost = 4000;
     private int lv3cost = 8000;
 
-    private final int gambleButtonX = this.width - 120; // 버튼 X 좌표
-    private final int gambleButtonY = this.height / 80 * 5; // 버튼 Y 좌표
-    private final int gambleButtonWidth = 100; // 버튼 너비
-    private final int gambleButtonHeight = 40; // 버튼 높이
-    private GamblingScreen nextScreen;
 
     /**
      * Constructor, establishes the properties of the screen.
