@@ -334,6 +334,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 			if (this.enemyShipSpecial != null) {
 				specialEnemyShipFormation.update();
 				if (!this.enemyShipSpecial.isDestroyed()) {
+					this.alertMessage = "Boss's Health: " + (this.enemyShipSpecial.getHealth()+1);
 					// 양옆으로 움직이는 로직 추가
 					if (movingRight) {
 						this.enemyShipSpecial.move(2, 0); // 오른쪽으로 이동
@@ -362,7 +363,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					&& this.enemyShipSpecialCooldown.checkFinished()&& !this.isSpecialEnemySpawned) {
 				this.enemyShipSpecial = new EnemyShip(gameState);
 				this.isSpecialEnemySpawned = true; // 생성된 이후에는 다시 생성되지 않도록 설정
-				this.alertMessage = "Destroy boss to clear !!";
+				this.alertMessage = "Boss's Health : " + enemyShipSpecial.getHealth();
 
 
 				this.enemyShipSpecialCooldown.reset();

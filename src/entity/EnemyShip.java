@@ -130,7 +130,7 @@ public class EnemyShip extends Entity {
 		this.spriteType = SpriteType.EnemyShipSpecial;
 		this.isDestroyed = false;
 		this.pointValue = BONUS_TYPE_POINTS;
-		this.health = gameState.getLevel()+2;
+		this.health = gameState.getLevel()+1;
 	}
 
 	/**
