@@ -453,6 +453,17 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	}
 
 	public final void HealthManageDestroy(final EnemyShip destroyedShip) {
+		if (destroyedShip.spriteType.equals(SpriteType.EnemyShipSpecial)) {
+			if (destroyedShip.getHealth() <= 0) {
+				this.logger.info("Destroyed Boss Ship");
+				point = destroyedShip.getPointValue();
+			} else {
+				point = 0;
+				distroyedship = 0;
+			}
+			destroyedShip.HealthManageDestroy(destroyedShip);
+			return;
+		}
 		for (List<EnemyShip> column : this.enemyShips)
 			for (int i = 0; i < column.size(); i++)
 				if (column.get(i) != null && column.get(i).equals(destroyedShip)) {
@@ -468,7 +479,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 						point = 0;
 						distroyedship = 0;
 					}
-					column.get(i).HealthManageDestroy();
+					column.get(i).HealthManageDestroy(destroyedShip);
 				}
 
 		// Updates the list of ships that can shoot the player.
@@ -532,7 +543,7 @@ public class EnemyShipFormation implements Iterable<EnemyShip> {
 	/**
 	 * Checks if there are any ships remaining.
 	 * 
-	 * @return True when all ships have been destroyed.
+	 * @return True when all ships have been ded.
 	 */
 	public final boolean isEmpty() {
 		return this.shipCount <= 0;

@@ -38,10 +38,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private static final int INPUT_DELAY = 6000;
 	/** Bonus score for each life remaining at the end of the level. */
 	private static final int LIFE_SCORE = 100;
-	/** Minimum time between bonus ship's appearances. */
-	private static final int BONUS_SHIP_INTERVAL = 20000;
-	/** Maximum variance in the time between bonus ship's appearances. */
-	private static final int BONUS_SHIP_VARIANCE = 10000;
 	/** Time until bonus ship explosion disappears. */
 	private static final int BONUS_SHIP_EXPLOSION = 500;
 	/** Time from finishing the level to screen change. */
@@ -234,10 +230,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		}
 
 
-
-		// Appears each 10-30 seconds.
-		this.enemyShipSpecialCooldown = Core.getVariableCooldown(
-				BONUS_SHIP_INTERVAL, BONUS_SHIP_VARIANCE);
+		int bossInterval = 5000 + (5000 * gameState.getLevel());
+		// Appears each 5 + 5 * (gameLevel) seconds.
+		this.enemyShipSpecialCooldown = Core.getCooldown(
+				bossInterval);
 		this.enemyShipSpecialCooldown.reset();
 		this.enemyShipSpecialExplosionCooldown = Core
 				.getCooldown(BONUS_SHIP_EXPLOSION);
@@ -362,7 +358,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 			if (this.enemyShipSpecial == null
 					&& this.enemyShipSpecialCooldown.checkFinished()&& !this.isSpecialEnemySpawned) {
-				this.enemyShipSpecial = new EnemyShip();
+				this.enemyShipSpecial = new EnemyShip(gameState);
 				this.isSpecialEnemySpawned = true; // 생성된 이후에는 다시 생성되지 않도록 설정
 				this.alertMessage = "";
 				this.enemyShipSpecialCooldown.reset();
@@ -677,12 +673,12 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				if (this.enemyShipSpecial != null
 						&& !this.enemyShipSpecial.isDestroyed()
 						&& checkCollision(bullet, this.enemyShipSpecial)) {
+					this.specialEnemyShipFormation.HealthManageDestroy(enemyShipSpecial);
 					this.score += Score.comboScore(this.enemyShipSpecial.getPointValue(), this.combo);
 					this.shipsDestroyed++;
 					this.combo++;
 					this.hitBullets++;
 					if (this.combo > this.maxCombo) this.maxCombo = this.combo;
-					this.enemyShipSpecial.specialDestroy();
 					this.enemyShipSpecialExplosionCooldown.reset();
 					timer.cancel();
 					isExecuted = false;
