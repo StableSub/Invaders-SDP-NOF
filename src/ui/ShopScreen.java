@@ -1,6 +1,5 @@
 package ui;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 
 import engine.manager.DrawManager;
@@ -9,7 +8,7 @@ import engine.core.Core;
 import engine.utility.Sound;
 import engine.manager.SoundManager;
 import entity.Wallet;
-import gambling.GamblingScreen;
+import blackjack.*;
 
 
 
@@ -35,7 +34,7 @@ public class ShopScreen extends Screen {
 
     /** Player's wallet */
     private Wallet wallet;
-
+    private Gamer gamer;
     /** 1-bullet speed 2-shot frequency 3-additional lives 4-gain coin upgrade */
     private int selected_item;
 
@@ -102,7 +101,7 @@ public class ShopScreen extends Screen {
         // ENTER 키를 눌렀을 때 갬블링 화면으로 이동
         if (inputManager.isKeyDown(KeyEvent.VK_ENTER)) {
             this.isRunning = false; // ShopScreen 종료
-            GamblingScreen gamblingScreen = new GamblingScreen(this.width, this.height, this.fps, this.wallet);
+            GamblingScreen gamblingScreen = new GamblingScreen(this.width, this.height, this.fps, this.wallet,this.gamer);
             gamblingScreen.run(); // 다음 화면 실행
             return;
         }

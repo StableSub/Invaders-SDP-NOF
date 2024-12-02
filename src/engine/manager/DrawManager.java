@@ -2035,14 +2035,20 @@ public final class DrawManager {
 		}
 	}
 
-	public void drawGambling(Screen screen, int drawButtonX, int drawButtonY, int releaseButtonX, int releaseButtonY, int buttonWidth, int buttonHeight) {
+	public void drawGambling(Screen screen, int drawButtonX, int drawButtonY,
+							 int releaseButtonX, int releaseButtonY,
+							 int buttonWidth, int buttonHeight,
+							 int startButtonX, int startButtonY, int battingButtonX, int battingButtonY) {
 
+		// Exit 안내 메시지
 		String exitString = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
 		backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen,exitString,screen.getHeight()/80*80);
+		drawCenteredRegularString(screen, exitString, screen.getHeight() / 80 * 80);
 
 		FontMetrics metrics = backBufferGraphics.getFontMetrics();
-		int drawTextWidth = metrics.stringWidth("DRAW");
+
+		// Draw 버튼
+		int drawTextWidth = metrics.stringWidth("HIT");
 		int drawTextHeight = metrics.getHeight();
 		int drawTextX = drawButtonX + (buttonWidth - drawTextWidth) / 2; // X 중앙 정렬
 		int drawTextY = drawButtonY + (buttonHeight - drawTextHeight) / 2 + metrics.getAscent(); // Y 중앙 정렬
@@ -2050,9 +2056,10 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.GRAY);
 		backBufferGraphics.fillRect(drawButtonX, drawButtonY, buttonWidth, buttonHeight);
 		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("DRAW", drawTextX, drawTextY);
+		backBufferGraphics.drawString("HIT", drawTextX, drawTextY);
 
-		int releaseTextWidth = metrics.stringWidth("RELEASE");
+		// Release 버튼
+		int releaseTextWidth = metrics.stringWidth("STAND");
 		int releaseTextHeight = metrics.getHeight();
 		int releaseTextX = releaseButtonX + (buttonWidth - releaseTextWidth) / 2; // X 중앙 정렬
 		int releaseTextY = releaseButtonY + (buttonHeight - releaseTextHeight) / 2 + metrics.getAscent(); // Y 중앙 정렬
@@ -2060,7 +2067,28 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.GRAY);
 		backBufferGraphics.fillRect(releaseButtonX, releaseButtonY, buttonWidth, buttonHeight);
 		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("RELEASE", releaseTextX, releaseTextY);
+		backBufferGraphics.drawString("STAND", releaseTextX, releaseTextY);
 
+		// Start 버튼 추가
+		int startTextWidth = metrics.stringWidth("START");
+		int startTextHeight = metrics.getHeight();
+		int startTextX = startButtonX + (buttonWidth - startTextWidth) / 2; // X 중앙 정렬
+		int startTextY = startButtonY + (buttonHeight - startTextHeight) / 2 + metrics.getAscent(); // Y 중앙 정렬
+
+		backBufferGraphics.setColor(Color.GRAY);
+		backBufferGraphics.fillRect(startButtonX, startButtonY, buttonWidth, buttonHeight);
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawString("START", startTextX, startTextY);
+
+		// Batting 버튼
+		int battingTextWidth = metrics.stringWidth("BATTING");
+		int battingTextHeight = metrics.getHeight();
+		int battingTextX = battingButtonX + (buttonWidth - battingTextWidth) / 2; // X 중앙 정렬
+		int battingTextY = battingButtonY + (buttonHeight - battingTextHeight) / 2 + metrics.getAscent();
+
+		backBufferGraphics.setColor(Color.GRAY);
+		backBufferGraphics.fillRect(battingButtonX, battingButtonY, buttonWidth, buttonHeight);
+		backBufferGraphics.setColor(Color.WHITE);
+		backBufferGraphics.drawString("BATTING", battingTextX, battingTextY);
 	}
 }
