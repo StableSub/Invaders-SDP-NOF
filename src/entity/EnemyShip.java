@@ -34,7 +34,7 @@ public class EnemyShip extends Entity {
 	/** Cooldown between sprite changes. */
 	private Cooldown animationCooldown;
 	/** Checks if the ship has been hit by a bullet. */
-	private boolean isDestroyed;
+    public boolean isDestroyed;
 	/** Values of the ship, in points, when destroyed. */
 	private int pointValue;
 

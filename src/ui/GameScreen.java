@@ -59,11 +59,11 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/** Player's ship. */
 	private Ship ship;
 	/** Bonus enemy ship that appears sometimes. */
-	private EnemyShip enemyShipSpecial;
+    public EnemyShip enemyShipSpecial;
 	/** Minimum time between bonus ship appearances. */
-	private Cooldown enemyShipSpecialCooldown;
+    public Cooldown enemyShipSpecialCooldown;
 	/** Time until bonus ship explosion disappears. */
-	private Cooldown enemyShipSpecialExplosionCooldown;
+    public Cooldown enemyShipSpecialExplosionCooldown;
 	/** Time from finishing the level to screen change. */
 	private Cooldown screenFinishedCooldown;
 	/** Set of all bullets fired by on screen ships. */
@@ -99,7 +99,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/** Keep previous timestamp. */
 	private Integer prevTime;
 	/** Alert Message when a special enemy appears. */
-	private String alertMessage;
+    public String alertMessage;
 	/** checks if it's executed. */
   	private boolean isExecuted = false;
 	/** timer.. */
@@ -132,9 +132,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private GameState gameState;
 
 	private int hitBullets;
-	private boolean isSpecialEnemySpawned = false; // 특별 함선 생성 여부 추적
+	public boolean isSpecialEnemySpawned = false; // 특별 함선 생성 여부 추적
 	private boolean movingRight = true; // 초기 방향은 오른쪽
-	private boolean bossDestroyed = false;
+	public boolean bossDestroyed = false;
 
 	/**
 	 * Constructor, establishes the properties of the screen.
@@ -356,7 +356,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					this.specialEnemyShipFormation.shootBoss(this.enemyShipSpecial, this.bossBullets);
 				} else if (this.enemyShipSpecialExplosionCooldown.checkFinished()) {
 					this.enemyShipSpecial = null;
-					bossDestroyed = true;
+					this.bossDestroyed = true;
 					this.alertMessage = "!!  You destroyed the boss  !!";
 				}
 			}
