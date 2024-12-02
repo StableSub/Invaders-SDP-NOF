@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-import engine.manager.*;d
+import engine.manager.*;
 public class BlackJackScreen {
     private final JFrame frame;
     private final Dealer dealer;
