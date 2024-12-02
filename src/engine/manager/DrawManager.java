@@ -1956,7 +1956,7 @@ public final class DrawManager {
 		String coinString = ":  " + wallet.getCoin();
 		String exitString = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
 		String[] costs = new String[] {"1000", "2000", "4000", "8000", "16000", "32000", "64000", "128000", "256000", "MAX LEVEL"};
-		String[] breakLimitCosts = new String[] {"5000", "10000", "30000", "120000", "600000"};
+		String[] breakLimitCosts = new String[] {"5000", "10000", "30000", "120000", "600000", "MAX LEVEL"};
 		boolean isBreakLimitMode = ShopScreen.isBreakLimitMode;
 
 		String[] itemString = new String[]{"BULLET SPEED", "SHOT INTERVAL", "ADDITIONAL LIFE","COIN GAIN"};
@@ -1989,34 +1989,26 @@ public final class DrawManager {
 		int coiny = screen.getHeight()/80*20;
 		backBufferGraphics.drawString(coinString,coinx,coiny);
 
+
 		for (int i = 0; i < 4; i++) {
 			backBufferGraphics.setColor(Color.WHITE);
 			drawCenteredRegularString(screen, itemString[i], screen.getHeight() / 80 * (28 + 12 * i));
 
-			int currentMaxLevel;
-			switch (i) {
-				case 0:
-					currentMaxLevel = 5 + wallet.getBullet_bl();
-					break;
-				case 1:
-					currentMaxLevel = 5 + wallet.getShot_bl();
-					break;
-				case 2:
-					currentMaxLevel = 5 + wallet.getLives_bl();
-					break;
-				case 3:
-					currentMaxLevel = 5 + wallet.getCoin_bl();
-					break;
-				default:
-					currentMaxLevel = 5;
+			// Wallet에서 currentMaxLevel 가져오기
+			int currentMaxLevel = wallet.getMaxLevel(i);
+
+			// walletLevel[i]가 currentMaxLevel보다 큰 경우 처리
+			if (walletLevel[i] > currentMaxLevel) {
+				walletLevel[i] = currentMaxLevel; // 강제로 currentMaxLevel로 제한
+				System.out.println("Needs Break Limit: walletLevel[" + i + "] is max");
 			}
 
 			String levelText = walletLevel[i] + " / " + currentMaxLevel;
-			int textX = screen.getWidth() / 2;
 			int textY = screen.getHeight() / 80 * (34 + 12 * i);
 			backBufferGraphics.setColor(Color.GREEN);
 			drawCenteredRegularString(screen, levelText, textY);
 		}
+
 
 		Font smallFont = fontRegular.deriveFont(Font.PLAIN, 12f);
 		backBufferGraphics.setColor(Color.WHITE);
@@ -2027,7 +2019,6 @@ public final class DrawManager {
 		backBufferGraphics.drawString("Break Limit", breaklimitstartx, breaklimitstarty + (breaklimitdis*(option-1)));
 
 		String breakLimitText = breakLimitLevel[option - 1] + "/ 5";
-		int breakthroughTextY = breaklimitstarty + (breaklimitdis * (option - 1)) + 20; // Break Limit 아래에 위치하도록 설정
 		backBufferGraphics.setColor(Color.GREEN);
 		backBufferGraphics.drawString(breakLimitText, breaklimitstartx + 30, breaklimitstarty + 45 + (breaklimitdis*(option-1)));
 
@@ -2052,4 +2043,5 @@ public final class DrawManager {
 
 		}
 	}
+
 }
