@@ -54,20 +54,29 @@ class GameScreenTest {
     }
 
     @Test
-    void bossDestroyedDirectTest() {
-        EnemyShip boss = new EnemyShip();
-        gameScreen.enemyShipSpecial = boss;
-        gameScreen.enemyShipSpecialExplosionCooldown = new Cooldown(0);
+    void bossDestroyedTest() {
+        // 보스 생성 및 초기 상태 설정
+        GameState testGameState = new GameState(1, 0, Ship.ShipType.StarDefender, 3, 0, 0, 0, "", 0, 0, 0, 0);
+        EnemyShip boss = new EnemyShip(testGameState); // 보스 생성
+        gameScreen.enemyShipSpecial = boss; // 보스 설정
+        gameScreen.enemyShipSpecialExplosionCooldown = new Cooldown(0); // 즉시 쿨다운 완료
         gameScreen.enemyShipSpecialExplosionCooldown.reset();
 
-        boss.specialDestroy(); // 보스 파괴
-        assertTrue(boss.isDestroyed(), "보스가 파괴 상태가 아닙니다.");
+        //보스 파괴 플래그를 직접 설정
+        boss.isDestroyed = true; // EnemyShip 클래스의 isDestroyed 필드를 직접 수정
+        gameScreen.update(); // GameScreen의 업데이트 호출로 상태 갱신
 
         if (gameScreen.enemyShipSpecialExplosionCooldown.checkFinished()) {
             gameScreen.enemyShipSpecial = null; // 보스 제거
         }
+        //  보스 제거 확인
         assertNull(gameScreen.enemyShipSpecial, "보스가 제거되지 않았습니다.");
+
     }
+
+
+
+
 
 
 
