@@ -130,15 +130,7 @@ public class EnemyShip extends Entity {
 		this.spriteType = SpriteType.EnemyShipSpecial;
 		this.isDestroyed = false;
 		this.pointValue = BONUS_TYPE_POINTS;
-		for(int i =1; i <= 10; i++){
-			this.health++;
-		}
-	}
-
-	public final void specialDestroy() {
-		this.isDestroyed = true;
-		this.spriteType = SpriteType.SpecialExplosion;
-		soundManager.playSound(Sound.ALIEN_HIT);
+		this.health = gameState.getLevel()+2;
 	}
 
 	/**

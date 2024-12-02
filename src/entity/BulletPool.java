@@ -72,25 +72,25 @@ public final class BulletPool {
 			explosionPool.remove(bullet);
 			bullet.setPositionX(positionX - bullet.getWidth() / 2);
 			bullet.setPositionY(positionY);
-			bullet.setSpeedX(0);
-			bullet.setSpeedY(speed);
-			bullet.setExploed(false);
+			bullet.setSpeedX(0); // X 속도 초기화
+			bullet.setSpeedY(speed); // Y 속도 초기화
+			bullet.setExploed(false); // 폭발 상태 초기화
+			bullet.setChild(false); // 자식 상태 초기화
+			bullet.getChildBullets().clear(); // 자식 총알 초기화
 			bullet.setSprite();
 		} else {
 			bullet = new ExplosionBullet(positionX, positionY, speed);
 			bullet.setPositionX(positionX - bullet.getWidth() / 2);
 		}
-		System.out.println("Initializing ExplosionBullet with speedX: " + bullet.getSpeedX() + ", speedY: " + bullet.getSpeedY());
 		return bullet;
 	}
-
 	/**
 	 * Adds one or more bullets to the list of available ones.
 	 *
 	 * @param bullet
 	 *            Bullets to recycle.
 	 */
-	public static void recycleNomal(final Set<Bullet> bullet) {
+	public static void recycleNormal(final Set<Bullet> bullet) {
 		nomalPool.addAll(bullet);
 	}
 

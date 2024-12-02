@@ -463,10 +463,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		for (CurvedBullet bullet : this.curvedBullets)
 			drawManager.drawRotatedBullet(bullet, bullet.getPositionX(), bullet.getPositionY(), bullet.getAngle());
 		for (ExplosionBullet bullet : this.explosionBullets) {
-			if (bullet.getPositionY() < bullet.getExplode()) {
+			if (!bullet.getExploed()) {
 				drawManager.drawEntity(bullet, bullet.getPositionX(), bullet.getPositionY());
 			}
-			for (Bullet child : bullet.getChildBullets()) {
+			for (ExplosionBullet child : bullet.getChildBullets()) {
 				drawManager.drawEntity(child, child.getPositionX(), child.getPositionY());
 			}
 		}
@@ -503,11 +503,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
                 }
 			}
 		}
-
-
-		//add drawRecord method for drawing
-		//drawManager.drawRecord(highScores,this);
-
 
 		// Blocker drawing part
 		if (!blockers.isEmpty()) {
@@ -583,31 +578,48 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 * Cleans bullets that go off screen.
 	 */
 	private void cleanBullets() {
-		Set<Bullet> recyclableNomal = new HashSet<Bullet>();
-		Set<CurvedBullet> recyclableCurved = new HashSet<CurvedBullet>();
-		Set<ExplosionBullet> recyclableExplosion = new HashSet<ExplosionBullet>();
+		Set<Bullet> recyclableNomal = new HashSet<>();
+		Set<CurvedBullet> recyclableCurved = new HashSet<>();
+		Set<ExplosionBullet> recyclableExplosion = new HashSet<>();
+
+		// 일반 총알 정리
 		for (Bullet bullet : this.bullets) {
 			bullet.update();
-			if (bullet.getPositionY() < SEPARATION_LINE_HEIGHT
-					|| bullet.getPositionY() > this.height)
+			if (bullet.getPositionY() < SEPARATION_LINE_HEIGHT || bullet.getPositionY() > this.height) {
 				recyclableNomal.add(bullet);
+			}
 		}
 		this.bullets.removeAll(recyclableNomal);
+		BulletPool.recycleNormal(recyclableNomal);
+
+		// 곡선 총알 정리
 		for (CurvedBullet bullet : this.curvedBullets) {
 			bullet.update();
-			if (bullet.getPositionY() < SEPARATION_LINE_HEIGHT
-					|| bullet.getPositionY() > this.height)
+			if (bullet.getPositionY() < SEPARATION_LINE_HEIGHT || bullet.getPositionY() > this.height) {
 				recyclableCurved.add(bullet);
+			}
 		}
 		this.curvedBullets.removeAll(recyclableCurved);
 		BulletPool.recycleCurved(recyclableCurved);
+
+		// 폭파 총알 정리
 		for (ExplosionBullet bullet : this.explosionBullets) {
 			bullet.update();
+
+			// 자식 총알 정리
+			Set<ExplosionBullet> childToRecycle = new HashSet<>();
 			for (ExplosionBullet child : bullet.getChildBullets()) {
 				child.update();
-				if (child.getPositionY() < SEPARATION_LINE_HEIGHT
-						|| child.getPositionY() > this.height)
-					recyclableExplosion.add(child);
+				if (child.getPositionY() < SEPARATION_LINE_HEIGHT || child.getPositionY() > this.height) {
+					childToRecycle.add(child);
+				}
+			}
+			bullet.getChildBullets().removeAll(childToRecycle);
+			recyclableExplosion.addAll(childToRecycle);
+
+			// 부모 총알 정리 (폭발 상태이며 자식이 모두 제거된 경우)
+			if (bullet.getExploed() && bullet.getChildBullets().isEmpty()) {
+				recyclableExplosion.add(bullet);
 			}
 		}
 		this.explosionBullets.removeAll(recyclableExplosion);
@@ -620,6 +632,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private void manageCollisions() {
 		Set<Bullet> recyclableNomal = new HashSet<Bullet>();
 		Set<CurvedBullet> recyclableCurved = new HashSet<CurvedBullet>();
+		Set<ExplosionBullet> recyclableExplosion = new HashSet<ExplosionBullet>();
 		if (isExecuted == false){
 			isExecuted = true;
 			timer = new Timer();
@@ -775,9 +788,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		}
 
 		for (ExplosionBullet bullet : this.explosionBullets) {
-			for (Bullet child : bullet.getChildBullets()) {
+			for (ExplosionBullet child : bullet.getChildBullets()) {
 				if (checkCollision(child, this.ship) && !this.levelFinished && !itemManager.isGhostActive()) {
-					recyclableNomal.add(child);
+					recyclableExplosion.add(child);
 					if (!this.ship.isDestroyed()) {
 						this.ship.destroy();
 						lvdamage();
@@ -804,8 +817,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		block.removeAll(removableBlocks);
 		this.bullets.removeAll(recyclableNomal);
 		this.curvedBullets.removeAll(recyclableCurved);
-		BulletPool.recycleNomal(recyclableNomal);
+		this.explosionBullets.removeAll(recyclableExplosion);
+		BulletPool.recycleNormal(recyclableNomal);
 		BulletPool.recycleCurved(recyclableCurved);
+		BulletPool.recycleExplosion(recyclableExplosion);
 	}
 
 	/**
