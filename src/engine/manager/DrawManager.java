@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import blackjack.*;
 
 import database.DatabaseManager;
 import engine.utility.Cooldown;
@@ -2092,5 +2093,34 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.WHITE);
 		backBufferGraphics.drawString("BATTING", battingTextX, battingTextY);
 
+	}
+	public void drawBlackJack(Screen screen, int hitButtonX, int hitButtonY, int standButtonX, int standButtonY, int buttonWidth, int buttonHeight, Gamer gamer, Dealer dealer) {
+		// Draw Hit 버튼
+		graphics.setColor(Color.GRAY);
+		graphics.fillRect(hitButtonX, hitButtonY, buttonWidth, buttonHeight);
+		graphics.setColor(Color.WHITE);
+		drawCenteredString("HIT", hitButtonX + buttonWidth / 2, hitButtonY + buttonHeight / 2);
+
+		// Draw Stand 버튼
+		graphics.setColor(Color.GRAY);
+		graphics.fillRect(standButtonX, standButtonY, buttonWidth, buttonHeight);
+		graphics.setColor(Color.WHITE);
+		drawCenteredString("STAND", standButtonX + buttonWidth / 2, standButtonY + buttonHeight / 2);
+
+		// Draw gamer cards and score
+		graphics.setColor(Color.WHITE);
+		graphics.drawString("Your Cards: " + gamer.openCards(), 50, 100);
+		graphics.drawString("Your Score: " + gamer.getScore(), 50, 120);
+
+		// Draw dealer cards and score
+		graphics.drawString("Dealer's Cards: " + dealer.openCards(), 50, 200);
+		graphics.drawString("Dealer's Score: " + dealer.getScore(), 50, 220);
+	}
+
+	// 중앙에 문자열 그리기
+	private void drawCenteredString(String text, int x, int y) {
+		FontMetrics metrics = graphics.getFontMetrics(graphics.getFont());
+		int adjustedX = x - metrics.stringWidth(text) / 2;
+		graphics.drawString(text, adjustedX, y);
 	}
 }
