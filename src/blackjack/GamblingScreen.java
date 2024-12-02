@@ -1,8 +1,9 @@
-package blackjack;
+package gambling;
 
 import entity.Wallet;
 import ui.Screen;
-
+import engine.utility.Sound;
+import engine.manager.SoundManager;
 
 import java.awt.event.KeyEvent;
 
@@ -23,8 +24,16 @@ public class GamblingScreen extends Screen {
     private final int battingX = this.width / 3;
     private final int battingY = this.height / 3 + 300;
 
+    private final SoundManager soundManager = SoundManager.getInstance();
+
+    public GamblingScreen(int width, int height, int fps, Wallet wallet) {
     public GamblingScreen(int width, int height, int fps, Wallet wallet,Gamer gamer) {
         super(width, height, fps);
+        this.wallet = wallet;
+
+        soundManager.stopSound(Sound.BGM_SHOP);
+        soundManager.loopSound(Sound.BGM_GAMBLING);
+
         this.wallet = wallet;
         this.gamer = gamer;
     }
@@ -45,6 +54,8 @@ public class GamblingScreen extends Screen {
 
         // ESC 키로 상점 화면으로 돌아가기
         if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)) {
+            soundManager.stopSound(Sound.BGM_GAMBLING); // 갬블링 음악 중지
+            soundManager.loopSound(Sound.BGM_SHOP);    // 상점 음악 재생
             this.isRunning = false;
         }
         //엔터 키로 게임 스타트
@@ -67,7 +78,7 @@ public class GamblingScreen extends Screen {
 
     protected final void draw() {
         drawManager.initDrawing(this); // 드로잉 초기화
-        drawManager.drawGambling(this, drawButtonX, drawButtonY, releaseButtonX, releaseButtonY, buttonWidth, buttonHeight,drawStartButtonX,drawStartButtonY,battingX,battingY);
+        drawManager.drawGambling(this, drawButtonX, drawButtonY, releaseButtonX, releaseButtonY, buttonWidth, buttonHeight);
         drawManager.completeDrawing(this); // 드로잉 완료
     }
 }
