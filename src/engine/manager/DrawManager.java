@@ -2041,6 +2041,17 @@ public final class DrawManager {
 							 int buttonWidth, int buttonHeight,
 							 int startButtonX, int startButtonY, int battingButtonX, int battingButtonY) {
 
+
+		// Blackjack
+		String BJString = "BLACKJACK";
+		backBufferGraphics.setColor(Color.yellow);
+		drawCenteredBigString(screen, BJString, screen.getHeight() / 6);
+
+		// Enter 안내 메세지
+		String enterString = "PRESS \"Q\" TO ENTER TO BLACKJACK TABlE";
+		backBufferGraphics.setColor(Color.white);
+		drawCenteredRegularString(screen, enterString, screen.getHeight() / 4);
+
 		// Exit 안내 메시지
 		String exitString = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
 		backBufferGraphics.setColor(Color.WHITE);
@@ -2052,7 +2063,7 @@ public final class DrawManager {
 		int centerY = screen.getHeight() / 2;
 
         // 버튼 간 간격 설정
-		int buttonGap = 50;
+		int buttonGap = 70;
 
 		// 각 버튼의 Y 좌표 계산 (화면 중앙을 기준으로 위아래로 분산)
 		int hitY = centerY - (buttonGap * 3 / 2); // 첫 번째 버튼
