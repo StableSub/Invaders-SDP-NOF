@@ -125,7 +125,7 @@ public class EnemyShip extends Entity {
 	 * known starting properties.
 	 */
 	public EnemyShip(final GameState gameState) {
-		super(-32, 60, 62 * 2, 28 * 2, new Color(31, 64, 78)); // 짙은 청록색
+		super(-32, 60, 62 * 2, 28 * 2, new Color(128, 63, 250)); // 짙은 청록색
 
 		this.spriteType = SpriteType.EnemyShipSpecial;
 		this.isDestroyed = false;
