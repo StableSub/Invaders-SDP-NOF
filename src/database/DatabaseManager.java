@@ -79,10 +79,10 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
                 + "    ShotInterval INT DEFAULT 1,\n"
                 + "    AdditionalLife INT DEFAULT 1,\n"
                 + "    CoinGain INT DEFAULT 1, \n"
-                + "    BulletSpeedBL INT DEFAULT 0, \n"
-                + "    ShotIntervalBL INT DEFAULT 0, \n"
-                + "    AdditionalLifeBL INT DEFAULT 0, \n"
-                + "    CoinGainBL INT DEFAULT 0\n"
+                + "    BulletSpeedBL INT DEFAULT 1, \n"
+                + "    ShotIntervalBL INT DEFAULT 1, \n"
+                + "    AdditionalLifeBL INT DEFAULT 1, \n"
+                + "    CoinGainBL INT DEFAULT 1\n"
                 + ");";
 
         try (Connection conn = this.connect();

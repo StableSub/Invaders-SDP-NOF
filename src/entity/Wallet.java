@@ -3,13 +3,12 @@ package entity;
 import database.DatabaseManager;
 import engine.core.Core;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class Wallet {
     private static Logger logger = Core.getLogger();
@@ -31,6 +30,8 @@ public class Wallet {
     //coin gain level
     private int coin_lv;
     private int coin_bl;
+
+    private static final int ALERT_TIME = 1500;
 
     public Wallet()
     {
@@ -94,87 +95,59 @@ public class Wallet {
     public int getCoin_bl() {return coin_bl;}
 
     public void setBullet_lv(int bullet_lv) {
-        if (this.bullet_lv >= getMaxLevel(0)) {
-            logger.warning("Upgrade failed: Bullet speed level cannot exceed max level (" + getMaxLevel(0) + ")");
-            logger.warning("Withdraw blocked: Bullet level has reached or exceeded the max level.");
-            blockWithdrawForBullet();
-            return;
-        };
         this.bullet_lv = bullet_lv;
         writeWallet();
         logger.info("Upgrade Bullet Speed from " + (bullet_lv - 1) + " to " + bullet_lv);
     }
 
     public void setShot_lv(int shot_lv) {
-        if (this.shot_lv >= getMaxLevel(1)) {
-            logger.warning("Upgrade failed: Shot frequency level cannot exceed max level (" + getMaxLevel(1) + ")");
-            logger.warning("Withdraw blocked: Shot level has reached or exceeded the max level.");
-            blockWithdrawForShot();
-            return;
-        }
+
         this.shot_lv = shot_lv;
         writeWallet();
         logger.info("Upgrade Shop Frequency from " + (shot_lv - 1) + " to " + shot_lv);
     }
 
     public void setLives_lv(int lives_lv) {
-        if (this.lives_lv >= getMaxLevel(2)) {
-            logger.warning("Upgrade failed: Additional lives level cannot exceed max level (" + getMaxLevel(2) + ")");
-            logger.warning("Withdraw blocked: Lives level has reached or exceeded the max level.");
-            blockWithdrawForLives();
-            return;
-        }
+
         this.lives_lv = lives_lv;
         writeWallet();
         logger.info("Upgrade Additional Lives from " + (lives_lv - 1) + " to " + lives_lv);
     }
 
     public void setCoin_lv(int coin_lv) {
-        if (this.coin_lv >= getMaxLevel(3)) {
-            logger.warning("Upgrade failed: Coin gain level cannot exceed max level (" + getMaxLevel(3) + ")");
-            logger.warning("Withdraw blocked: Coin level has reached or exceeded the max level.");
-            blockWithdrawForCoin();
-            return;
-        }
+
         this.coin_lv = coin_lv;
         writeWallet();
         logger.info("Upgrade Gain Coin from " + (coin_lv - 1) + " to " + coin_lv);
     }
 
-    // Bullet 항목 출금 차단
-    private boolean blockWithdrawForBullet() {
-        if (this.bullet_lv >= getMaxLevel(0)) {
-            logger.warning("Withdraw blocked: Bullet speed level has reached or exceeded the max level.");
-            return true;
-        }
-        return false;
-    }
+//     Bullet 항목 출금 차단
 
-    // Shot 항목 출금 차단
-    private boolean blockWithdrawForShot() {
-        if (this.shot_lv >= getMaxLevel(1)) {
-            logger.warning("Withdraw blocked: Shot frequency level has reached or exceeded the max level.");
-            return true;
+    public boolean blockWithdraw(int selected_item) {
+        if (selected_item == 1) {
+            if (this.bullet_lv >= getMaxLevel(0)) {
+                logger.warning("Withdraw blocked: Bullet speed level has reached or exceeded the max level.");
+                return false;
+            }
+        } else if (selected_item == 2) {
+            if (this.shot_lv >= getMaxLevel(1)) {
+                logger.warning("Withdraw blocked: shot level has reached or exceeded the max level.");
+                return false;
+            }
+        } else if (selected_item == 3) {
+            if (this.lives_lv >= getMaxLevel(2)) {
+                logger.warning("Withdraw blocked: lives level has reached or exceeded the max level.");
+                return false;
+            }
+        } else if (selected_item == 4) {
+            if (this.coin_lv >= getMaxLevel(3)) {
+                logger.warning("Withdraw blocked: coin level has reached or exceeded the max level.");
+                return false;
+            }
+        } else {
+            return false;
         }
-        return false;
-    }
-
-    // Lives 항목 출금 차단
-    private boolean blockWithdrawForLives() {
-        if (this.lives_lv >= getMaxLevel(2)) {
-            logger.warning("Withdraw blocked: Additional lives level has reached or exceeded the max level.");
-            return true;
-        }
-        return false;
-    }
-
-    // Coin 항목 출금 차단
-    private boolean blockWithdrawForCoin() {
-        if (this.coin_lv >= getMaxLevel(3)) {
-            logger.warning("Withdraw blocked: Coin gain level has reached or exceeded the max level.");
-            return true;
-        }
-        return false;
+        return true;
     }
 
 
@@ -227,7 +200,6 @@ public class Wallet {
         // 항목별 출금 차단 조건 확인
 
         if (amount <= 0) return false;
-
         // 코인 수량이 충분한지 확인
         if (coin - amount < 0) {
             logger.info("Insufficient coin");
@@ -273,13 +245,13 @@ public class Wallet {
     public int getMaxLevel(int index) {
         switch (index) {
             case 0:
-                return 5 + getBullet_bl();
+                return 4 + getBullet_bl();
             case 1:
-                return 5 + getShot_bl();
+                return 4 + getShot_bl();
             case 2:
-                return 5 + getLives_bl();
+                return 4 + getLives_bl();
             case 3:
-                return 5 + getCoin_bl();
+                return 4 + getCoin_bl();
             default:
                 return 5; // 기본값
         }

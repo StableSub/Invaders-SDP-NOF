@@ -26,6 +26,11 @@ public class ShopScreen extends Screen {
     /** Time until max_lv alert disappear */
     private Cooldown max_alertCooldown;
 
+    /** Time until max_bl alert disappear */
+    private Cooldown max_bl_alertCooldown;
+    /** Time until needBl alert disappear */
+    private Cooldown needBl_alertCooldown;
+
     /** Player's wallet */
     private Wallet wallet;
 
@@ -69,6 +74,8 @@ public class ShopScreen extends Screen {
         this.selectionCooldown.reset();
         this.money_alertCooldown = Core.getCooldown(ALERT_TIME);
         this.max_alertCooldown = Core.getCooldown(ALERT_TIME);
+        this.max_bl_alertCooldown = Core.getCooldown(ALERT_TIME);
+        this.needBl_alertCooldown = Core.getCooldown(ALERT_TIME);
         this.wallet = wallet;
         selected_item = 1;
         isBreakLimitMode = false;
@@ -98,7 +105,9 @@ public class ShopScreen extends Screen {
         if (this.selectionCooldown.checkFinished()
                 && this.inputDelay.checkFinished()
                 && this.money_alertCooldown.checkFinished()
-                && this.max_alertCooldown.checkFinished()) {
+                && this.max_alertCooldown.checkFinished()
+                && this.max_bl_alertCooldown.checkFinished()
+                && this.needBl_alertCooldown.checkFinished()) {
 
             if (inputManager.isKeyDown(KeyEvent.VK_UP)
                     || inputManager.isKeyDown(KeyEvent.VK_W)) {
@@ -120,8 +129,7 @@ public class ShopScreen extends Screen {
                 this.selectionCooldown.reset();
                 soundManager.playSound(Sound.MENU_MOVE);
             }
-            if (inputManager.isKeyDown(KeyEvent.VK_SPACE))
-            {
+            if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
                 if(isBreakLimitMode){
                     switch (selected_item){
                         case 1:
@@ -153,6 +161,7 @@ public class ShopScreen extends Screen {
                     }
                 }
                 else {
+                    this.selectionCooldown.reset();
                     switch (selected_item) {
                         case 1:
                             if (upgrade(wallet.getBullet_lv())) {
@@ -220,13 +229,16 @@ public class ShopScreen extends Screen {
         drawManager.initDrawing(this);
 
 
-        drawManager.drawShop(this,selected_item,wallet,money_alertCooldown,max_alertCooldown);
+        drawManager.drawShop(this,selected_item,wallet,money_alertCooldown,max_alertCooldown, max_bl_alertCooldown, needBl_alertCooldown);
 
         drawManager.completeDrawing(this);
     }
 
+
+
     public boolean upgrade(int level)
     {
+        System.out.println(level);
         if(level == 1)
         {
             if(wallet.withdraw(lv1cost))
@@ -285,7 +297,13 @@ public class ShopScreen extends Screen {
         }
         else if(level == 5)
         {
-            if(wallet.withdraw(lv5cost))
+            System.out.println("1");
+            if (!wallet.blockWithdraw(selected_item)) {
+                System.out.println("1");
+                needBl_alertCooldown.reset();
+                return false;
+            }
+            else if(wallet.withdraw(lv5cost))
             {
                 soundManager.playSound(Sound.COIN_USE);
                 return true;
@@ -299,7 +317,11 @@ public class ShopScreen extends Screen {
         }
         else if(level == 6)
         {
-            if(wallet.withdraw(lv6cost))
+            if (!wallet.blockWithdraw(selected_item)) {
+                needBl_alertCooldown.reset();
+                return false;
+            }
+            else if(wallet.withdraw(lv6cost))
             {
                 soundManager.playSound(Sound.COIN_USE);
                 return true;
@@ -313,7 +335,11 @@ public class ShopScreen extends Screen {
         }
         else if(level == 7)
         {
-            if(wallet.withdraw(lv7cost))
+            if (!wallet.blockWithdraw(selected_item)) {
+                needBl_alertCooldown.reset();
+                return false;
+            }
+            else if(wallet.withdraw(lv7cost))
             {
                 soundManager.playSound(Sound.COIN_USE);
                 return true;
@@ -327,11 +353,16 @@ public class ShopScreen extends Screen {
         }
         else if(level == 8)
         {
-            if(wallet.withdraw(lv8cost))
+            if (!wallet.blockWithdraw(selected_item)) {
+                needBl_alertCooldown.reset();
+                return false;
+            }
+            else if(wallet.withdraw(lv8cost))
             {
                 soundManager.playSound(Sound.COIN_USE);
                 return true;
             }
+
             else
             {
                 soundManager.playSound(Sound.COIN_INSUFFICIENT);
@@ -341,7 +372,11 @@ public class ShopScreen extends Screen {
         }
         else if(level == 9)
         {
-            if(wallet.withdraw(lv9cost))
+            if (!wallet.blockWithdraw(selected_item)) {
+                needBl_alertCooldown.reset();
+                return false;
+            }
+            else if(wallet.withdraw(lv9cost))
             {
                 soundManager.playSound(Sound.COIN_USE);
                 return true;
@@ -363,7 +398,7 @@ public class ShopScreen extends Screen {
     }
 
     public boolean blUpgrade(int level){
-        if(level == 0)
+        if(level == 1)
         {
             if(wallet.withdraw(bl1cost))
             {
@@ -377,7 +412,7 @@ public class ShopScreen extends Screen {
                 return false;
             }
         }
-        else if(level == 1)
+        else if(level == 2)
         {
             if(wallet.withdraw(bl2cost))
             {
@@ -391,7 +426,7 @@ public class ShopScreen extends Screen {
                 return false;
             }
         }
-        else if(level == 2)
+        else if(level == 3)
         {
             if(wallet.withdraw(bl3cost))
             {
@@ -405,7 +440,7 @@ public class ShopScreen extends Screen {
                 return false;
             }
         }
-        else if(level == 3)
+        else if(level == 4)
         {
             if(wallet.withdraw(bl4cost))
             {
@@ -419,7 +454,7 @@ public class ShopScreen extends Screen {
                 return false;
             }
         }
-        else if(level == 4)
+        else if(level == 5)
         {
             if(wallet.withdraw(bl5cost))
             {
@@ -433,13 +468,12 @@ public class ShopScreen extends Screen {
                 return false;
             }
         }
-        else if(level == 5)
+        else if(level == 6)
         {
             soundManager.playSound(Sound.COIN_INSUFFICIENT);
-            max_alertCooldown.reset();
+            max_bl_alertCooldown.reset();
             return false;
         }
         return false;
     }
-
 }
