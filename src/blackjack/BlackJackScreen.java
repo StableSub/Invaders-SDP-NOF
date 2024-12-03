@@ -13,9 +13,10 @@ import engine.utility.Sound;
 public class BlackJackScreen {
     private final JFrame frame;
     private final JPanel statusPanel;
-    private final JLabel actionMessageLabel;
-    private final JLabel gamerStatusLabel;
-    private final JLabel dealerStatusLabel;
+    private  JLabel actionMessageLabel;
+    private  JLabel gamerStatusLabel;
+    private  JLabel dealerStatusLabel;
+    private final CardDeck cardDeck = new CardDeck(); // 카드 덱 추가
 
     // 카드와 점수를 관리하기 위한 변수
     private String gamerCards = "";
@@ -34,7 +35,19 @@ public class BlackJackScreen {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        // 상단 패널: 제목
+        setupTopPanel();
+        statusPanel = setupStatusPanel();
+        setupButtonPanel();
+        setupWindowListeners();
+
+        frame.setVisible(true);
+
+        // 초기 상태 업데이트
+        startGame();
+    }
+
+    // Top Panel 설정
+    private void setupTopPanel() {
         JPanel topPanel = new JPanel(new FlowLayout());
         topPanel.setBackground(Color.DARK_GRAY);
 
@@ -44,27 +57,32 @@ public class BlackJackScreen {
         topPanel.add(titleLabel);
 
         frame.add(topPanel, BorderLayout.NORTH);
+    }
 
-        // 상태 패널: 플레이어 및 딜러 상태 표시
-        statusPanel = new JPanel(new GridLayout(3, 1));
-        statusPanel.setBackground(Color.LIGHT_GRAY);
+    // Status Panel 설정
+    private JPanel setupStatusPanel() {
+        JPanel tempStatusPanel = new JPanel(new GridLayout(3, 1));
+        tempStatusPanel.setBackground(Color.LIGHT_GRAY);
 
         gamerStatusLabel = new JLabel("Your Cards: [] | Your Score: 0", SwingConstants.CENTER);
         gamerStatusLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-        statusPanel.add(gamerStatusLabel);
+        tempStatusPanel.add(gamerStatusLabel);
 
         dealerStatusLabel = new JLabel("Dealer's Cards: [] | Dealer's Score: 0", SwingConstants.CENTER);
         dealerStatusLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-        statusPanel.add(dealerStatusLabel);
+        tempStatusPanel.add(dealerStatusLabel);
 
         actionMessageLabel = new JLabel("", SwingConstants.CENTER);
         actionMessageLabel.setFont(new Font("Arial", Font.BOLD, 16));
         actionMessageLabel.setForeground(Color.RED);
-        statusPanel.add(actionMessageLabel);
+        tempStatusPanel.add(actionMessageLabel);
 
-        frame.add(statusPanel, BorderLayout.CENTER);
+        frame.add(tempStatusPanel, BorderLayout.CENTER);
+        return tempStatusPanel;
+    }
 
-        // 버튼 패널
+    // Button Panel 설정
+    private void setupButtonPanel() {
         JPanel buttonPanel = new JPanel(new GridLayout(1, 3));
         buttonPanel.setBackground(Color.DARK_GRAY);
 
@@ -77,8 +95,10 @@ public class BlackJackScreen {
         buttonPanel.add(exitButton);
 
         frame.add(buttonPanel, BorderLayout.SOUTH);
+    }
 
-        // 창 포커스 이벤트 리스너 추가: 키 상태 초기화
+    // 창 리스너 설정
+    private void setupWindowListeners() {
         frame.addWindowFocusListener(new java.awt.event.WindowFocusListener() {
             @Override
             public void windowGainedFocus(java.awt.event.WindowEvent e) {
@@ -91,7 +111,6 @@ public class BlackJackScreen {
             }
         });
 
-        // 창이 닫힐 때 사운드 전환 및 키 초기화
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -100,13 +119,9 @@ public class BlackJackScreen {
                 inputManager.resetKeys();
             }
         });
-
-        frame.setVisible(true);
-
-        // 초기 상태 업데이트
-        startGame();
     }
 
+    // 스타일 적용 버튼 생성
     private JButton createStyledButton(String text, ActionListener actionListener) {
         JButton button = new JButton(text);
         button.setBackground(new Color(0, 123, 255));
@@ -128,23 +143,34 @@ public class BlackJackScreen {
         return button;
     }
 
+    // 게임 시작 메서드
     private void startGame() {
-        // 초기 카드 배분
-        gamerCards = "[7 of Hearts, 5 of Diamonds]";
-        gamerScore = 12;
-        dealerCards = "[10 of Spades]";
-        dealerScore = 10;
+        cardDeck.reset(); // 카드 덱 초기화
+
+        // 게이머 초기 카드 2장 배분
+        Card gamerCard1 = cardDeck.drawCard();
+        Card gamerCard2 = cardDeck.drawCard();
+        gamerCards = "[" + gamerCard1 + ", " + gamerCard2 + "]";
+        gamerScore = gamerCard1.getValue() + gamerCard2.getValue();
+
+        // 딜러 초기 카드 1장 배분
+        Card dealerCard1 = cardDeck.drawCard();
+        dealerCards = "[" + dealerCard1 + "]";
+        dealerScore = dealerCard1.getValue();
 
         updateGameStatus("Game Started! Good luck!");
+        gamerStatusLabel.setText("Your Cards: " + gamerCards + " | Your Score: " + gamerScore);
+        dealerStatusLabel.setText("Dealer's Cards: " + dealerCards + " | Dealer's Score: " + dealerScore);
     }
 
+    // 히트 액션 메서드
     private void hitAction() {
-        if (!isRunning) return; // 실행 중복 방지
-        isRunning = false; // 동작 중 플래그 설정
+        if (!isRunning) return;
+        isRunning = false;
 
-        // 히트 동작 (예시로 카드 추가)
-        gamerCards += ", 4 of Clubs";
-        gamerScore += 4;
+        Card newCard = cardDeck.drawCard();
+        gamerCards += ", " + newCard;
+        gamerScore += newCard.getValue();
 
         if (gamerScore > 21) {
             updateGameStatus("Bust! Your score exceeded 21.");
@@ -156,33 +182,34 @@ public class BlackJackScreen {
 
         gamerStatusLabel.setText("Your Cards: " + gamerCards + " | Your Score: " + gamerScore);
 
-        // 버튼 활성화 타이머
         Timer timer = new Timer(1000, e -> isRunning = true);
         timer.setRepeats(false);
         timer.start();
     }
 
+    // 스탠드 액션 메서드
     private void standAction() {
-        if (!isRunning) return; // 실행 중복 방지
-        isRunning = false; // 동작 중 플래그 설정
+        if (!isRunning) return;
+        isRunning = false;
 
-        // 스탠드 동작 (딜러 카드 추가)
-        dealerCards += ", 7 of Diamonds";
-        dealerScore += 7;
+        while (dealerScore < 17) {
+            Card newCard = cardDeck.drawCard();
+            dealerCards += ", " + newCard;
+            dealerScore += newCard.getValue();
+        }
 
         updateGameStatus("You chose to Stand. Dealer's turn...");
         dealerStatusLabel.setText("Dealer's Cards: " + dealerCards + " | Dealer's Score: " + dealerScore);
 
         endGame();
 
-        // 버튼 활성화 타이머
         Timer timer = new Timer(1000, e -> isRunning = true);
         timer.setRepeats(false);
         timer.start();
     }
 
+    // 종료 액션 메서드
     private void exitAction() {
-        // 게임 종료 시 사운드 전환
         soundManager.stopSound(Sound.BGM_GAMBLING);
         soundManager.loopSound(Sound.BGM_MAIN);
 
@@ -190,26 +217,39 @@ public class BlackJackScreen {
         frame.dispose();
     }
 
+    // 게임 상태 업데이트 메서드
     private void updateGameStatus(String message) {
         SwingUtilities.invokeLater(() -> {
             actionMessageLabel.setText(message);
 
-            // 메시지를 2초 후에 지우는 타이머
             Timer timer = new Timer(2000, e -> actionMessageLabel.setText(""));
             timer.setRepeats(false);
             timer.start();
         });
     }
 
+    // 게임 종료 메서드
     private void endGame() {
-        String winner = gamerScore > 21 ? "Dealer" : dealerScore > gamerScore ? "Dealer" : "You";
-        JOptionPane.showMessageDialog(frame, "Game Over! Winner: " + winner);
+        if(gamerScore >21 & dealerScore >21){
+            JOptionPane.showMessageDialog(frame, "DRAW");
+        }
+        else if (gamerScore > 21){
+            JOptionPane.showMessageDialog(frame, "Game Over! Your bust Winner:Dealer" );
+        }
+        else if (dealerScore > 21){
+            JOptionPane.showMessageDialog(frame, "Game Over! Dealer bust Winner:Player" );
+        }
+        else if (gamerScore > dealerScore){
+            JOptionPane.showMessageDialog(frame, "Game Over! Winner: Player");
+        }
+        else{
+            JOptionPane.showMessageDialog(frame, "Game Over! Winner:Dealer" );
+        }
 
-        // 게임 종료 시 사운드 전환
         soundManager.stopSound(Sound.BGM_GAMBLING);
         soundManager.loopSound(Sound.BGM_MAIN);
 
-        frame.dispose(); // 창 닫기
+        frame.dispose();
     }
 
     public static void main(String[] args) {
