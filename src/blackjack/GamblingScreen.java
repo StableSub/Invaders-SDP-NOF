@@ -13,21 +13,15 @@ public class GamblingScreen extends Screen {
 
     private final SoundManager soundManager = SoundManager.getInstance();
 
+    private int bettingAmount = 0; // 베팅 금액
+
     public GamblingScreen(int width, int height, int fps, Wallet wallet, Gamer gamer) {
         super(width, height, fps);
         this.wallet = wallet;
         this.gamer = gamer;
 
-        setupKeyBindings();
-
         soundManager.stopSound(Sound.BGM_SHOP);
         soundManager.loopSound(Sound.BGM_GAMBLING);
-    }
-
-
-    private void setupKeyBindings() {
-        // Q키에 대한 바인딩은 update 메서드에서 체크하도록 설정
-        // 더 이상 여기에 직접 키 바인딩 코드는 없습니다.
     }
 
     @Override
@@ -55,11 +49,32 @@ public class GamblingScreen extends Screen {
             this.isRunning = false;
         }
 
+        // 베팅 금액 증가 (UP 키)
+        if (inputManager.isKeyDown(KeyEvent.VK_UP)) {
+            if (bettingAmount + 10 <= wallet.getCoin()) {
+                bettingAmount += 10;
+                System.out.println("베팅 금액 증가: " + bettingAmount);
+            } else {
+                System.out.println("잔액이 부족합니다.");
+            }
+        }
+
+        // 베팅 금액 감소 (DOWN 키)
+        if (inputManager.isKeyDown(KeyEvent.VK_DOWN)) {
+            if (bettingAmount - 10 >= 0) {
+                bettingAmount -= 10;
+                System.out.println("베팅 금액 감소: " + bettingAmount);
+            } else {
+                System.out.println("베팅 금액은 0보다 작을 수 없습니다.");
+            }
+        }
+
         // Q 키를 누르면 블랙잭 게임 시작 - 새로운 창으로 시작합니다.
         if (inputManager.isKeyDown(KeyEvent.VK_Q)) {
             System.out.println("Starting BlackJackScreen...");
             this.isRunning = false; // 현재 화면 종료
-            new BlackJackScreen(); // 블랙잭 게임 창 열기
+            new BlackJackScreen(wallet,bettingAmount);
+            // 블랙잭 게임 창 열기
         }
     }
 

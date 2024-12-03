@@ -6,9 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
+import entity.Wallet;
 import engine.manager.*;
 import engine.utility.Sound;
+
 
 public class BlackJackScreen {
     private final JFrame frame;
@@ -17,6 +18,8 @@ public class BlackJackScreen {
     private  JLabel gamerStatusLabel;
     private  JLabel dealerStatusLabel;
     private final CardDeck cardDeck = new CardDeck(); // 카드 덱 추가
+    private final Wallet wallet;
+    private final int bettingAmount;
 
     // 카드와 점수를 관리하기 위한 변수
     private String gamerCards = "";
@@ -29,11 +32,13 @@ public class BlackJackScreen {
     private final InputManager inputManager = InputManager.getInstance();
     private final SoundManager soundManager = SoundManager.getInstance();
 
-    public BlackJackScreen() {
+    public BlackJackScreen(Wallet wallet,int bettingAmount) {
         frame = new JFrame("BlackJack Game");
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLayout(new BorderLayout());
+        this.wallet = wallet;
+        this.bettingAmount = bettingAmount;
 
         setupTopPanel();
         statusPanel = setupStatusPanel();
@@ -234,15 +239,19 @@ public class BlackJackScreen {
             JOptionPane.showMessageDialog(frame, "DRAW");
         }
         else if (gamerScore > 21){
+            wallet.withdraw(bettingAmount);
             JOptionPane.showMessageDialog(frame, "Game Over! Your bust Winner:Dealer" );
         }
         else if (dealerScore > 21){
+            wallet.deposit(bettingAmount);
             JOptionPane.showMessageDialog(frame, "Game Over! Dealer bust Winner:Player" );
         }
         else if (gamerScore > dealerScore){
+            wallet.deposit(bettingAmount);
             JOptionPane.showMessageDialog(frame, "Game Over! Winner: Player");
         }
         else{
+            wallet.withdraw(bettingAmount);
             JOptionPane.showMessageDialog(frame, "Game Over! Winner:Dealer" );
         }
 
@@ -252,7 +261,5 @@ public class BlackJackScreen {
         frame.dispose();
     }
 
-    public static void main(String[] args) {
-        new BlackJackScreen();
-    }
+
 }
