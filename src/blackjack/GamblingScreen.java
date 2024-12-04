@@ -51,24 +51,19 @@ public class GamblingScreen extends Screen {
 
         // 베팅 금액 증가 (UP 키)
         if (inputManager.isKeyDown(KeyEvent.VK_UP)) {
+            soundManager.playSound(Sound.COIN_USE);
             if (bettingAmount + 10 <= wallet.getCoin()) {
                 bettingAmount += 10;
-                System.out.println("베팅 금액 증가: " + bettingAmount);
-            } else {
-                System.out.println("잔액이 부족합니다.");
             }
         }
 
         // 베팅 금액 감소 (DOWN 키)
         if (inputManager.isKeyDown(KeyEvent.VK_DOWN)) {
+            soundManager.playSound(Sound.COIN_USE);
             if (bettingAmount - 10 >= 0) {
                 bettingAmount -= 10;
-                System.out.println("베팅 금액 감소: " + bettingAmount);
-            } else {
-                System.out.println("베팅 금액은 0보다 작을 수 없습니다.");
             }
         }
-
         // Q 키를 누르면 블랙잭 게임 시작 - 새로운 창으로 시작합니다.
         if (inputManager.isKeyDown(KeyEvent.VK_Q)) {
             System.out.println("Starting BlackJackScreen...");
@@ -80,7 +75,12 @@ public class GamblingScreen extends Screen {
 
     protected final void draw() {
         drawManager.initDrawing(this); // 드로잉 초기화
-        drawManager.drawGambling(this, 150, 150, 150, 200, 150, 50, 150, 300, 150, 400);
+
+        // UI 요소: 배팅 금액과 기타 메시지 모두 표시
+        drawManager.drawGambling(this, bettingAmount);
+
         drawManager.completeDrawing(this); // 드로잉 완료
     }
+
+
 }

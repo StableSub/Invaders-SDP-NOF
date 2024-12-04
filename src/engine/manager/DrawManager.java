@@ -2036,102 +2036,48 @@ public final class DrawManager {
 		}
 	}
 
-	public void drawGambling(Screen screen, int drawButtonX, int drawButtonY,
-							 int releaseButtonX, int releaseButtonY,
-							 int buttonWidth, int buttonHeight,
-							 int startButtonX, int startButtonY, int battingButtonX, int battingButtonY) {
-
-
-		// Blackjack
+	public void drawGambling(Screen screen, int bettingAmount) {
+		// 제목: BLACKJACK
 		String BJString = "BLACKJACK";
-		backBufferGraphics.setColor(Color.yellow);
+		backBufferGraphics.setColor(Color.YELLOW);
 		drawCenteredBigString(screen, BJString, screen.getHeight() / 6);
 
-		// Enter 안내 메세지
-		String enterString = "PRESS \"Q\" TO ENTER TO BLACKJACK TABlE";
-		backBufferGraphics.setColor(Color.white);
+		// 안내 메시지: BLACKJACK 테이블로 이동 (Q)
+		String enterString = "PRESS \"Q\" TO ENTER TO BLACKJACK TABLE";
+		backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, enterString, screen.getHeight() / 4);
 
-		// Exit 안내 메시지
+		// 안내 메시지: 메인 메뉴로 복귀 (ESC)
 		String exitString = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
 		backBufferGraphics.setColor(Color.WHITE);
-		drawCenteredRegularString(screen, exitString, screen.getHeight() / 70 * 70);
+		drawCenteredRegularString(screen, exitString, screen.getHeight() - 50);
 
+		// Blackjack 규칙 설명 첫 줄
+		String ruleExplanationLine1 = "Blackjack rule explanation:";
 		FontMetrics metrics = backBufferGraphics.getFontMetrics();
-		// 화면 중심 계산
-		int centerX = screen.getWidth() / 2;
-		int centerY = screen.getHeight() / 2;
+		int ruleTextWidth1 = metrics.stringWidth(ruleExplanationLine1);
+		int ruleTextX1 = (screen.getWidth() - ruleTextWidth1) / 2;
+		int ruleTextY1 = (screen.getHeight() / 2) - 50;
 
-        // 버튼 간 간격 설정
-		int buttonGap = 70;
+		backBufferGraphics.setColor(Color.LIGHT_GRAY);
+		backBufferGraphics.drawString(ruleExplanationLine1, ruleTextX1, ruleTextY1);
 
-		// 각 버튼의 Y 좌표 계산 (화면 중앙을 기준으로 위아래로 분산)
-		int hitY = centerY - (buttonGap * 3 / 2); // 첫 번째 버튼
-		int standY = centerY - (buttonGap / 2);  // 두 번째 버튼
-		int startY = centerY + (buttonGap / 2);  // 세 번째 버튼
-		int battingY = centerY + (buttonGap * 3 / 2); // 네 번째 버튼
+		// Blackjack 규칙 설명 두 번째 줄
+		String ruleExplanationLine2 = "If you don't know the rules, you can learn by losing money.";
+		int ruleTextWidth2 = metrics.stringWidth(ruleExplanationLine2);
+		int ruleTextX2 = (screen.getWidth() - ruleTextWidth2) / 2;
+		int ruleTextY2 = ruleTextY1 + 20;
 
+		backBufferGraphics.setColor(Color.red);
+		backBufferGraphics.drawString(ruleExplanationLine2, ruleTextX2, ruleTextY2);
 
-		// "HIT" 버튼
-		int hitTextWidth = metrics.stringWidth("HIT");
-		int hitTextX = centerX - (hitTextWidth / 2);
-		int hitTextY = hitY + metrics.getAscent() / 2;
+		// 배팅 금액 표시
+		String bettingString = "Betting Amount: " + bettingAmount;
+		int bettingTextWidth = metrics.stringWidth(bettingString);
+		int bettingTextX = (screen.getWidth() - bettingTextWidth) / 2;
+		int bettingTextY = ruleTextY2 + 100;
 
-		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("HIT", hitTextX, hitTextY);
-
-		// "STAND" 버튼
-		int standTextWidth = metrics.stringWidth("STAND");
-		int standTextX = centerX - (standTextWidth / 2);
-		int standTextY = standY + metrics.getAscent() / 2;
-
-		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("STAND", standTextX, standTextY);
-
-		// "START" 버튼
-		int startTextWidth = metrics.stringWidth("START");
-		int startTextX = centerX - (startTextWidth / 2);
-		int startTextY = startY + metrics.getAscent() / 2;
-
-		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("START", startTextX, startTextY);
-
-		// "BATTING" 버튼
-		int battingTextWidth = metrics.stringWidth("BATTING");
-		int battingTextX = centerX - (battingTextWidth / 2);
-		int battingTextY = battingY + metrics.getAscent() / 2;
-
-		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawString("BATTING", battingTextX, battingTextY);
-
-	}
-	public void drawBlackJack(Screen screen, int hitButtonX, int hitButtonY, int standButtonX, int standButtonY, int buttonWidth, int buttonHeight, Gamer gamer, Dealer dealer) {
-		// Draw Hit 버튼
-		graphics.setColor(Color.GRAY);
-		graphics.fillRect(hitButtonX, hitButtonY, buttonWidth, buttonHeight);
-		graphics.setColor(Color.WHITE);
-		drawCenteredString("HIT", hitButtonX + buttonWidth / 2, hitButtonY + buttonHeight / 2);
-
-		// Draw Stand 버튼
-		graphics.setColor(Color.GRAY);
-		graphics.fillRect(standButtonX, standButtonY, buttonWidth, buttonHeight);
-		graphics.setColor(Color.WHITE);
-		drawCenteredString("STAND", standButtonX + buttonWidth / 2, standButtonY + buttonHeight / 2);
-
-		// Draw gamer cards and score
-		graphics.setColor(Color.WHITE);
-		graphics.drawString("Your Cards: " + gamer.openCards(), 50, 100);
-		graphics.drawString("Your Score: " + gamer.getScore(), 50, 120);
-
-		// Draw dealer cards and score
-		graphics.drawString("Dealer's Cards: " + dealer.openCards(), 50, 200);
-		graphics.drawString("Dealer's Score: " + dealer.getScore(), 50, 220);
-	}
-
-	// 중앙에 문자열 그리기
-	private void drawCenteredString(String text, int x, int y) {
-		FontMetrics metrics = graphics.getFontMetrics(graphics.getFont());
-		int adjustedX = x - metrics.stringWidth(text) / 2;
-		graphics.drawString(text, adjustedX, y);
+		backBufferGraphics.setColor(Color.CYAN);
+		backBufferGraphics.drawString(bettingString, bettingTextX, bettingTextY);
 	}
 }

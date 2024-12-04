@@ -23,14 +23,14 @@ public class BlackJackScreen {
 
     // 카드와 점수를 관리하기 위한 변수
     private String gamerCards = "";
-    private int gamerScore = 0;
+    public int gamerScore = 0;
     private String dealerCards = "";
-    private int dealerScore = 0;
+    public int dealerScore = 0;
     private boolean isRunning = true; // 게임 실행 상태 플래그
 
     // InputManager 및 SoundManager 인스턴스
     private final InputManager inputManager = InputManager.getInstance();
-    private final SoundManager soundManager = SoundManager.getInstance();
+    public SoundManager soundManager = SoundManager.getInstance();
 
     public BlackJackScreen(Wallet wallet,int bettingAmount) {
         frame = new JFrame("BlackJack Game");
@@ -234,7 +234,7 @@ public class BlackJackScreen {
     }
 
     // 게임 종료 메서드
-    private void endGame() {
+    protected void endGame() {
         if(gamerScore >21 & dealerScore >21){
             JOptionPane.showMessageDialog(frame, "DRAW");
         }
