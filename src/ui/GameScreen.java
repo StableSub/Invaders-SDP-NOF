@@ -582,7 +582,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	 * Cleans bullets that go off screen.
 	 */
 	private void cleanBullets() {
-		Set<Bullet> recyclableNomal = new HashSet<>();
+		Set<Bullet> recyclableNormal = new HashSet<>();
 		Set<CurvedBullet> recyclableCurved = new HashSet<>();
 		Set<ExplosionBullet> recyclableExplosion = new HashSet<>();
 
@@ -590,11 +590,11 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		for (Bullet bullet : this.bullets) {
 			bullet.update();
 			if (bullet.getPositionY() < SEPARATION_LINE_HEIGHT || bullet.getPositionY() > this.height) {
-				recyclableNomal.add(bullet);
+				recyclableNormal.add(bullet);
 			}
 		}
-		this.bullets.removeAll(recyclableNomal);
-		BulletPool.recycleNormal(recyclableNomal);
+		this.bullets.removeAll(recyclableNormal);
+		BulletPool.recycleNormal(recyclableNormal);
 
 		// 곡선 총알 정리
 		for (CurvedBullet bullet : this.curvedBullets) {
