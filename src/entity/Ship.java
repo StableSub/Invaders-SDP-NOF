@@ -244,9 +244,9 @@ public abstract class Ship extends Entity {
 	}
 
 
-	public void applyItem(Wallet wallet){
+	public void applyItem(Wallet wallet) {
 		int bulletLv = wallet.getBullet_lv();
-		switch (bulletLv){
+		switch (bulletLv) {
 			case 1:
 				BULLET_SPEED = -6;
 				break;
@@ -254,29 +254,74 @@ public abstract class Ship extends Entity {
 				BULLET_SPEED = -7;
 				break;
 			case 3:
-				BULLET_SPEED = -9;
+				BULLET_SPEED = -8;
 				break;
 			case 4:
+				BULLET_SPEED = -9;
+				break;
+			case 5:
 				BULLET_SPEED = -10;
 				break;
+			case 6:
+				BULLET_SPEED = -12;
+				break;
+			case 7:
+				BULLET_SPEED = -14;
+				break;
+			case 8:
+				BULLET_SPEED = -16;
+				break;
+			case 9:
+				BULLET_SPEED = -18;
+				break;
+			case 10:
+				BULLET_SPEED = -20;
+				break;
 			default:
-				BULLET_SPEED = -6;
+				BULLET_SPEED = -6; // 기본값
+				break;
 		}
 
-		int intervalLv = wallet.getShot_lv();
+
+
+	int intervalLv = wallet.getShot_lv();
 		switch (intervalLv){
 			case 1: //생성자에서 이미 초기화함
 				break;
 			case 2:
-				SHOOTING_INTERVAL = 675;
+				SHOOTING_INTERVAL = 680;
 				shootingCooldown = Core.getCooldown(this.getShootingInterval());
 				break;
 			case 3:
-				SHOOTING_INTERVAL = 607;
+				SHOOTING_INTERVAL = 630;
 				shootingCooldown = Core.getCooldown(this.getShootingInterval());
 				break;
 			case 4:
-				SHOOTING_INTERVAL = 546;
+				SHOOTING_INTERVAL = 580;
+				shootingCooldown = Core.getCooldown(this.getShootingInterval());
+				break;
+			case 5:
+				SHOOTING_INTERVAL = 530;
+				shootingCooldown = Core.getCooldown(this.getShootingInterval());
+				break;
+			case 6:
+				SHOOTING_INTERVAL = 460;
+				shootingCooldown = Core.getCooldown(this.getShootingInterval());
+				break;
+			case 7:
+				SHOOTING_INTERVAL = 390;
+				shootingCooldown = Core.getCooldown(this.getShootingInterval());
+				break;
+			case 8:
+				SHOOTING_INTERVAL = 320;
+				shootingCooldown = Core.getCooldown(this.getShootingInterval());
+				break;
+			case 9:
+				SHOOTING_INTERVAL = 250;
+				shootingCooldown = Core.getCooldown(this.getShootingInterval());
+				break;
+			case 10:
+				SHOOTING_INTERVAL = 100;
 				shootingCooldown = Core.getCooldown(this.getShootingInterval());
 				break;
 			default:
