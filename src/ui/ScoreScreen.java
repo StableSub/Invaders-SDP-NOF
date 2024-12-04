@@ -118,7 +118,11 @@ public class ScoreScreen extends Screen {
 				soundManager.stopSound(Sound.BGM_GAMEOVER);
 				soundManager.playSound(Sound.MENU_BACK);
 			}
-
+			if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
+				this.returnCode = 2;
+				this.isRunning = false;
+				soundManager.stopSound(Sound.BGM_GAMEOVER);
+			}
 		}
 
 	}
