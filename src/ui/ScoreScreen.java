@@ -26,13 +26,13 @@ public class ScoreScreen extends Screen {
 
 
 	/** Current score. */
-	private int score;
+	private final int score;
 	/** Player lives left. */
-	private int livesRemaining;
+	private final int livesRemaining;
 	/** Total ships destroyed by the player. */
-	private int shipsDestroyed;
+	private final int shipsDestroyed;
 	/** Checks if current score is a new high score. */
-	private double accuracy;
+	private final double accuracy;
 	/** Number of coins earned in the game */
 	private int coinsEarned;
 

@@ -21,16 +21,16 @@ public class ShopScreen extends Screen {
     private Cooldown selectionCooldown;
 
     /** Time until not enough coin alert disappear */
-    private Cooldown money_alertCooldown;
+    private Cooldown moneyAlertCooldown;
 
     /** Time until max_lv alert disappear */
-    private Cooldown max_alertCooldown;
+    private Cooldown maxAlertCooldown;
 
     /** Player's wallet */
     private Wallet wallet;
 
     /** 1-bullet speed 2-shot frequency 3-additional lives 4-gain coin upgrade */
-    private int selected_item;
+    private int selectedItem;
 
     /** price per upgrade level */
     private int lv1cost = 2000;
@@ -55,10 +55,10 @@ public class ShopScreen extends Screen {
         this.returnCode = 1;
         this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
         this.selectionCooldown.reset();
-        this.money_alertCooldown = Core.getCooldown(ALERT_TIME);
-        this.max_alertCooldown = Core.getCooldown(ALERT_TIME);
+        this.moneyAlertCooldown = Core.getCooldown(ALERT_TIME);
+        this.maxAlertCooldown = Core.getCooldown(ALERT_TIME);
         this.wallet = wallet;
-        selected_item = 1;
+        selectedItem = 1;
 
         soundManager.stopSound(Sound.BGM_MAIN);
         soundManager.loopSound(Sound.BGM_SHOP);
@@ -84,8 +84,8 @@ public class ShopScreen extends Screen {
         draw();
         if (this.selectionCooldown.checkFinished()
                 && this.inputDelay.checkFinished()
-                && this.money_alertCooldown.checkFinished()
-                && this.max_alertCooldown.checkFinished()) {
+                && this.moneyAlertCooldown.checkFinished()
+                && this.maxAlertCooldown.checkFinished()) {
 
             if (inputManager.isKeyDown(KeyEvent.VK_UP)
                     || inputManager.isKeyDown(KeyEvent.VK_W)) {
@@ -101,7 +101,7 @@ public class ShopScreen extends Screen {
             }
             if (inputManager.isKeyDown(KeyEvent.VK_SPACE))
             {
-                switch (selected_item) {
+                switch (selectedItem) {
                     case 1:
                         if (upgrade(wallet.getBullet_lv())) {
                             wallet.setBullet_lv(wallet.getBullet_lv() + 1);
@@ -143,27 +143,27 @@ public class ShopScreen extends Screen {
      * Shifts the focus to the next shop item.
      */
     private void nextMenuItem() {
-        if (this.selected_item == 4)
-            this.selected_item = 1;
+        if (this.selectedItem == 4)
+            this.selectedItem = 1;
         else
-            this.selected_item++;
+            this.selectedItem++;
     }
 
     /**
      * Shifts the focus to the previous shop item.
      */
     private void previousMenuItem() {
-        if (this.selected_item == 1)
-            this.selected_item = 4;
+        if (this.selectedItem == 1)
+            this.selectedItem = 4;
         else
-            this.selected_item--;
+            this.selectedItem--;
     }
 
     private void draw() {
         drawManager.initDrawing(this);
 
 
-        drawManager.drawShop(this,selected_item,wallet,money_alertCooldown,max_alertCooldown);
+        drawManager.drawShop(this, selectedItem,wallet, moneyAlertCooldown, maxAlertCooldown);
 
         drawManager.completeDrawing();
     }
@@ -180,7 +180,7 @@ public class ShopScreen extends Screen {
             else
             {
                 soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
+                moneyAlertCooldown.reset();
                 return false;
             }
         }
@@ -194,7 +194,7 @@ public class ShopScreen extends Screen {
             else
             {
                 soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
+                moneyAlertCooldown.reset();
                 return false;
             }
         }
@@ -208,14 +208,14 @@ public class ShopScreen extends Screen {
             else
             {
                 soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
+                moneyAlertCooldown.reset();
                 return false;
             }
         }
         else if(level==4)
         {
             soundManager.playSound(Sound.COIN_INSUFFICIENT);
-            max_alertCooldown.reset();
+            maxAlertCooldown.reset();
             return false;
         }
         return false;

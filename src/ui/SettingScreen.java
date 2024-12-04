@@ -23,13 +23,13 @@ public class SettingScreen extends Screen {
     private static final int COOLDOWN_TIME = 200;
 
     /** Menu item list */
-    private String[] menuItems = { "Sound", "Ending Credit" , "Ship Selection"};
+    private final String[] menuItems = { "Sound", "Ending Credit" , "Ship Selection"};
     /** Default selected menu item */
     private int selectedItem = 0;
     /** Default volume value */
     private int volumeLevel;
     /** Time between changes in user selection. */
-    private Cooldown selectionCooldown;
+    private final Cooldown selectionCooldown;
     /** Ship enumeration index*/
     private int currentShip;
     /** Singleton instance of SoundManager */

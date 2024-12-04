@@ -11,8 +11,6 @@ import java.util.logging.Logger;
 public class AchievementManager {
 
     /** Created AchievementManager class to easily manage achievement-related aspects */
-
-    private DatabaseManager db;
     private static final Logger LOGGER = Logger.getLogger(AchievementManager.class.getName());
 
     private Achievement achievement;
@@ -159,7 +157,7 @@ public class AchievementManager {
     public void updateAllAchievements() {
         String sql = "UPDATE user_ach SET HighScore = ?, TotalScore = ?, TotalPlaytime = ?, " +
                 "PerfectStage = ?, HighAccuracy = ?, MaxCombo = ?, FlawlessFailure = ? WHERE id = ?";
-        try (Connection conn = db.connect();
+        try (Connection conn = DatabaseManager.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, achievement.getHighScore());
             pstmt.setInt(2, achievement.getTotalScore());

@@ -40,9 +40,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	private static final int SEPARATION_LINE_HEIGHT = 40;
 
 	/** Current game difficulty settings. */
-	private GameSettings gameSettings;
+	private final GameSettings gameSettings;
 	/** Current difficulty level number. */
-	private int level;
+	private final int level;
 	/** Formation of enemy ships. */
 	private EnemyShipFormation enemyShipFormation;
 	private EnemyShipFormation specialEnemyShipFormation;
@@ -66,7 +66,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/** tempScore records the score up to the previous level. */
 	private int tempScore;
 	/** Current ship type. */
-	private Ship.ShipType shipType;
+	private final Ship.ShipType shipType;
 	/** Player lives left. */
 	private int lives;
 	/** Total bullets shot by the player. */
@@ -82,7 +82,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	/** Checks if the level is finished. */
 	private boolean levelFinished;
 	/** Checks if a bonus life is received. */
-	private boolean bonusLife;
+	private final boolean bonusLife;
 	/** Elapsed time while playing this game.
 	 * lapTime records the time to the previous level. */
 	private int elapsedTime;
@@ -95,8 +95,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
   	private boolean isExecuted = false;
 	/** timer.. */
 	private Timer timer;
-	private TimerTask timerTask;
-	/** Spider webs restricting player movement */
+    /** Spider webs restricting player movement */
 	private List<Web> web;
 	/**
 	 * Obstacles preventing a player's bullet
@@ -105,9 +104,9 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 	private Wallet wallet;
 	/* Blocker appearance cooldown */
-	private Cooldown blockerCooldown;
-	private Random random;
-	private List<Blocker> blockers = new ArrayList<>();
+	private final Cooldown blockerCooldown;
+	private final Random random;
+	private final List<Blocker> blockers = new ArrayList<>();
 	/** Singleton instance of SoundManager */
 	private final SoundManager soundManager = SoundManager.getInstance();
 	/** Singleton instance of ItemManager. */
@@ -120,7 +119,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 
 	private int MAX_BLOCKERS = 0;
 
-	private GameState gameState;
+	private final GameState gameState;
 
 	private int hitBullets;
 	public boolean isSpecialEnemySpawned = false; // 특별 함선 생성 여부 추적
@@ -438,10 +437,10 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		drawManager.drawEntity(this.ship, this.ship.getPositionX(), this.ship.getPositionY());
 
 		//draw Spider Web
-		for (int i = 0; i < web.size(); i++) {
-			drawManager.drawEntity(this.web.get(i), this.web.get(i).getPositionX(),
-					this.web.get(i).getPositionY());
-		}
+        for (Web value : web) {
+            drawManager.drawEntity(value, value.getPositionX(),
+                    value.getPositionY());
+        }
 		//draw Blocks
 		for (Block block : block)
 			drawManager.drawEntity(block, block.getPositionX(),
@@ -526,20 +525,13 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		else if (level >= 11) MAX_BLOCKERS = 3;
 
 		int kind = random.nextInt(2-1 + 1) +1; // 1~2
-		DrawManager.SpriteType newSprite;
-		switch (kind) {
-			case 1:
-				newSprite = DrawManager.SpriteType.Blocker1; // artificial satellite
-				break;
-			case 2:
-				newSprite = DrawManager.SpriteType.Blocker2; // astronaut
-				break;
-			default:
-				newSprite = DrawManager.SpriteType.Blocker1;
-				break;
-		}
+		DrawManager.SpriteType newSprite = switch (kind) {
+            case 1 -> DrawManager.SpriteType.Blocker1; // artificial satellite
+            case 2 -> DrawManager.SpriteType.Blocker2; // astronaut
+            default -> DrawManager.SpriteType.Blocker1;
+        };
 
-		// Check number of blockers, check timing of exit
+        // Check number of blockers, check timing of exit
 		if (blockers.size() < MAX_BLOCKERS && blockerCooldown.checkFinished()) {
 			boolean moveLeft = random.nextBoolean(); // Randomly sets the movement direction of the current blocker
 			int startY = random.nextInt(this.height - 90) + 25; // Random Y position with margins at the top and bottom of the screen
@@ -637,14 +629,14 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		Set<Bullet> recyclableNomal = new HashSet<Bullet>();
 		Set<CurvedBullet> recyclableCurved = new HashSet<CurvedBullet>();
 		Set<ExplosionBullet> recyclableExplosion = new HashSet<ExplosionBullet>();
-		if (isExecuted == false){
+		if (!isExecuted){
 			isExecuted = true;
 			timer = new Timer();
-			timerTask = new TimerTask() {
-				public void run() {
-					combo = 0;
-				}
-			};
+            TimerTask timerTask = new TimerTask() {
+                public void run() {
+                    combo = 0;
+                }
+            };
 			timer.schedule(timerTask, 3000);
 		}
 
@@ -666,7 +658,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					recyclableNomal.add(bullet);
 					if (!this.ship.isDestroyed()) {
 						this.ship.destroy();
-						lvdamage();
+						damage();
 						this.logger.info("Hit on player ship, " + this.lives + " lives remaining.");
 					}
 				}
@@ -772,7 +764,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				recyclableCurved.add(bullet);
 				if (!this.ship.isDestroyed()) {
 					this.ship.destroy();
-					lvdamage();
+					damage();
 					this.logger.info("Hit on player ship, " + this.lives + " lives remaining.");
 				}
 			}
@@ -797,7 +789,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 					recyclableExplosion.add(child);
 					if (!this.ship.isDestroyed()) {
 						this.ship.destroy();
-						lvdamage();
+						damage();
 						this.logger.info("Hit on player ship, " + this.lives + " lives remaining.");
 					}
 				}
@@ -873,8 +865,7 @@ public class GameScreen extends Screen implements Callable<GameState> {
 		run();
 		return getGameState();
 	}
-	//Enemy bullet damage increases depending on stage level
-	public void lvdamage(){
+	public void damage(){
 		for(int i=0; i<=level/3;i++){
 			this.lives--;
 		}

@@ -12,8 +12,8 @@ import java.sql.SQLException;
 public class LoginFrame extends JFrame {
 
     private String userID;
-    private JTextField textID; // ID// 입력 필드
-    private JPasswordField textPassword; // 비밀번호 입력 필드
+    private final JTextField textID; // ID// 입력 필드
+    private final JPasswordField textPassword; // 비밀번호 입력 필드
 
     public LoginFrame(DatabaseManager db) {
 

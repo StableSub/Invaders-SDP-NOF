@@ -39,7 +39,6 @@ public final class FileManager {
 	 * Application logger.
 	 */
 	private static Logger logger;
-	/** Max number of high scores. */
 
 	/**
 	 * private constructor.

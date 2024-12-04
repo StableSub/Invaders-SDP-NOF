@@ -47,7 +47,7 @@ class GameScreenTest {
     void playerLivesDecreaseOnHitTest() {
 
         //플레이어가 적 총알에 맞는 상황 시뮬레이션
-        gameScreen.lvdamage();
+        gameScreen.damage();
 
         //생명이 줄어들었는지 확인
         assertEquals(2, gameScreen.getGameState().getLivesRemaining(), "플레이어의 생명이 제대로 감소하지 않았습니다.");

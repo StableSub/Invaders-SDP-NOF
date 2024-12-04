@@ -7,9 +7,9 @@ import java.awt.event.ActionEvent; // 이벤트 처리
 import java.awt.event.ActionListener; // 이벤트 리스너
 
 public class RegisterFrame extends JFrame {
-    private JTextField textID; // ID 입력 필드
-    private JPasswordField textPassword; // 비밀번호 입력 필드
-    private JTextField textEmail; // 이메일 입력 필드
+    private final JTextField textID; // ID 입력 필드
+    private final JPasswordField textPassword; // 비밀번호 입력 필드
+    private final JTextField textEmail; // 이메일 입력 필드
 
     public RegisterFrame(DatabaseManager db) {
         Color textColor = new Color(101, 255, 94); // 텍스트 색상 설정 (어두운 회색)

@@ -33,8 +33,6 @@ public class Screen {
 	protected int height;
 	/** Frames per second shown on the screen. */
 	protected int fps;
-	/** Screen insets. */
-	protected Insets insets;
 	/** Time until the screen accepts user input. */
 	protected Cooldown inputDelay;
 

@@ -16,13 +16,11 @@ import engine.core.Core;
 public class Frame extends JFrame {
 
 	/** Frame width. */
-	private int width;
+	private final int width;
 	/** Frame height. */
-	private int height;
-	/** Screen currently shown. */
-	private Screen currentScreen;
+	private final int height;
 
-	/**
+    /**
 	 * Initializes the new frame.
 	 * 
 	 * @param width
@@ -54,9 +52,9 @@ public class Frame extends JFrame {
 	 * @return Return code of the finished screen.
 	 */
 	public final int setScreen(final Screen screen) {
-		currentScreen = screen;
-		currentScreen.initialize();
-		return currentScreen.run();
+        /** Screen currently shown. */
+        screen.initialize();
+		return screen.run();
 	}
 
 	/**

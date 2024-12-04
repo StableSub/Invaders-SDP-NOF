@@ -25,9 +25,6 @@ public class SoundManager {
     private boolean soundEnabled;
     /** Value of current volume */
     private static int currentVolume = 10;
-    /** Maximum and minimum values of volume */
-    private final float MIN_VOL = -80.0f;
-    private final float MAX_VOL = 6.0f;
     /** Current playing BGM */
     private Sound currentBGM;
 
@@ -152,6 +149,9 @@ public class SoundManager {
      * @param volume Int value of volume (0-10)
      */
     private void setVolume(int volume) {
+        /** Maximum and minimum values of volume */
+        float MIN_VOL = -80.0f;
+        float MAX_VOL = 6.0f;
         float newVolume = MIN_VOL + (float)(Math.log(volume + 1) / Math.log(11)) * (MAX_VOL - MIN_VOL);
 
         for (Clip clip : soundClips.values()) {

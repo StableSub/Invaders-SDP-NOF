@@ -27,7 +27,7 @@ public abstract class Ship extends Entity {
     /** Play the sound every 0.5 second */
 	private static final int SOUND_COOLDOWN_INTERVAL = 500;
     /** Cooldown for playing sound */
-	private Cooldown soundCooldown;
+	private final Cooldown soundCooldown;
 
 	/** Multipliers for the ship's properties. */
 	protected final ShipMultipliers multipliers;
@@ -39,7 +39,7 @@ public abstract class Ship extends Entity {
 	/** Minimum time between shots. */
 	private Cooldown shootingCooldown;
 	/** Time spent inactive between hits. */
-	private Cooldown destructionCooldown;
+	private final Cooldown destructionCooldown;
 	/** Singleton instance of SoundManager */
 	private final SoundManager soundManager = SoundManager.getInstance();
 
@@ -91,24 +91,7 @@ public abstract class Ship extends Entity {
 		GalacticGuardian,
 		CosmicCruiser,
 	}
-
-	/**
-	 * Moves the ship speed uni ts right, or until the right screen border is
-	 * reached.
-	 */
 	public final void moveRight() {
-		moveRight(0.0f);
-	}
-
-	/**
-	 * Moves the ship speed units left, or until the left screen border is
-	 * reached.
-	 */
-	public final void moveLeft() {
-		moveLeft(0.0f);
-	}
-
-	public final void moveRight(float balance) {
 		if(threadWeb){
 			this.positionX += this.getSpeed() / 2;
 		} else {
@@ -120,7 +103,7 @@ public abstract class Ship extends Entity {
 		}
 	}
 
-	public final void moveLeft(float balance) {
+	public final void moveLeft() {
 		if(threadWeb){
 			this.positionX -= this.getSpeed() / 2;
 		} else {
