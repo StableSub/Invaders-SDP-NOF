@@ -243,90 +243,25 @@ public abstract class Ship extends Entity {
 		return remainingTime > 0 ? remainingTime : 0;
 	}
 
+	private final int[] bulletSpeedLv = {-6, -7, -8, -9, -10, -12, -14, -16, -18, -20};
+	private final int[] shotIntervalLv = {750, 700, 650, 600, 550, 500, 400, 300, 200, 100};
 
 	public void applyItem(Wallet wallet) {
 		int bulletLv = wallet.getBullet_lv();
-		switch (bulletLv) {
-			case 1:
-				BULLET_SPEED = -6;
-				break;
-			case 2:
-				BULLET_SPEED = -7;
-				break;
-			case 3:
-				BULLET_SPEED = -8;
-				break;
-			case 4:
-				BULLET_SPEED = -9;
-				break;
-			case 5:
-				BULLET_SPEED = -10;
-				break;
-			case 6:
-				BULLET_SPEED = -12;
-				break;
-			case 7:
-				BULLET_SPEED = -14;
-				break;
-			case 8:
-				BULLET_SPEED = -16;
-				break;
-			case 9:
-				BULLET_SPEED = -18;
-				break;
-			case 10:
-				BULLET_SPEED = -20;
-				break;
-			default:
-				BULLET_SPEED = -6; // 기본값
-				break;
+		if (bulletLv >= 1 && bulletLv <= 10){
+			BULLET_SPEED = bulletSpeedLv[bulletLv - 1];
+		} else{
+			BULLET_SPEED = bulletSpeedLv[0];
 		}
 
 
 
-	int intervalLv = wallet.getShot_lv();
-		switch (intervalLv){
-			case 1: //생성자에서 이미 초기화함
-				break;
-			case 2:
-				SHOOTING_INTERVAL = 680;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			case 3:
-				SHOOTING_INTERVAL = 630;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			case 4:
-				SHOOTING_INTERVAL = 580;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			case 5:
-				SHOOTING_INTERVAL = 530;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			case 6:
-				SHOOTING_INTERVAL = 460;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			case 7:
-				SHOOTING_INTERVAL = 390;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			case 8:
-				SHOOTING_INTERVAL = 320;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			case 9:
-				SHOOTING_INTERVAL = 250;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			case 10:
-				SHOOTING_INTERVAL = 100;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			default:
-				SHOOTING_INTERVAL = 750;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
+		int intervalLv = wallet.getShot_lv();
+		if (intervalLv >= 1 && intervalLv <= 10) {
+			SHOOTING_INTERVAL = shotIntervalLv[intervalLv - 1];
+		} else {
+			SHOOTING_INTERVAL = shotIntervalLv[0];
 		}
+		shootingCooldown = Core.getCooldown(this.getShootingInterval());
 	}
 }
