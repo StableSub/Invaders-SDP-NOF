@@ -37,22 +37,36 @@ public class CreditScreen extends Screen{
         return this.returnCode;
     }
 
+
+
     protected final void update() {
         super.update();
-        currentFrame++;
 
-        if (currentFrame > 50 * 60) {//임시로 50초
+        int frameIncrement = 1;
+
+        // 스페이스바를 누르면 더 빠르게 증가
+        if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
+            frameIncrement = 5; // 스페이스바를 누르면 5배 더 빠르게
+        }
+
+        currentFrame += frameIncrement;
+
+        // 크레딧 종료 조건
+        if (currentFrame > 50 * 60) { // 임시로 50초
             this.isRunning = false;
             this.returnCode = 1;
         }
 
         draw();
+
+        // ESC 키로 종료
         if (inputManager.isKeyDown(KeyEvent.VK_ESCAPE)
                 && this.inputDelay.checkFinished()) {
             this.isRunning = false;
             soundManager.playSound(Sound.MENU_BACK);
         }
     }
+
 
     private void draw(){
         drawManager.initDrawing(this);

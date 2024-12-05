@@ -213,45 +213,25 @@ public abstract class Ship extends Entity {
 		return remainingTime > 0 ? remainingTime : 0;
 	}
 
+	private final int[] bulletSpeedLv = {-6, -7, -8, -9, -10, -12, -14, -16, -18, -20};
+	private final int[] shotIntervalLv = {750, 700, 650, 600, 550, 500, 400, 300, 200, 100};
 
-	public void applyItem(Wallet wallet){
+	public void applyItem(Wallet wallet) {
 		int bulletLv = wallet.getBullet_lv();
-		switch (bulletLv){
-			case 1:
-				BULLET_SPEED = -6;
-				break;
-			case 2:
-				BULLET_SPEED = -7;
-				break;
-			case 3:
-				BULLET_SPEED = -9;
-				break;
-			case 4:
-				BULLET_SPEED = -10;
-				break;
-			default:
-				BULLET_SPEED = -6;
+		if (bulletLv >= 1 && bulletLv <= 10){
+			BULLET_SPEED = bulletSpeedLv[bulletLv - 1];
+		} else{
+			BULLET_SPEED = bulletSpeedLv[0];
 		}
+
+
 
 		int intervalLv = wallet.getShot_lv();
-		switch (intervalLv){
-			case 1: //생성자에서 이미 초기화함
-				break;
-			case 2:
-				SHOOTING_INTERVAL = 675;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			case 3:
-				SHOOTING_INTERVAL = 607;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			case 4:
-				SHOOTING_INTERVAL = 546;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			default:
-				SHOOTING_INTERVAL = 750;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
+		if (intervalLv >= 1 && intervalLv <= 10) {
+			SHOOTING_INTERVAL = shotIntervalLv[intervalLv - 1];
+		} else {
+			SHOOTING_INTERVAL = shotIntervalLv[0];
 		}
+		shootingCooldown = Core.getCooldown(this.getShootingInterval());
 	}
 }

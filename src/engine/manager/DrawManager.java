@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import blackjack.*;
 
 import database.DatabaseManager;
 import engine.utility.Cooldown;
@@ -23,6 +24,7 @@ import engine.utility.Score;
 import entity.*;
 import ui.Frame;
 import ui.Screen;
+import ui.ShopScreen;
 
 /**
  * Manages screen drawing.
@@ -622,66 +624,66 @@ public final class DrawManager {
 
 		// draw "achievement"
 		backBufferGraphics.setColor(Color.GREEN);
-		drawCenteredBigString(screen, achievementTitle, screen.getHeight() / 8);
+		drawCenteredBigString(screen, achievementTitle, screen.getHeight() / 8-10);
 
 		// draw instruction
 		backBufferGraphics.setColor(Color.GRAY);
 		drawCenteredRegularString(screen, instructionsString,
-				screen.getHeight() / 8 + fontRegularMetrics.getHeight());
+				screen.getHeight() / 8 + fontRegularMetrics.getHeight()-10);
 
 
 		// draw "high score"
 		backBufferGraphics.setColor(Color.GREEN);
 		drawLeftSideScoreRegularString(screen, highScoreTitle,
-				screen.getHeight() / 5+ fontBigMetrics.getHeight());
+				screen.getHeight() / 5+ fontBigMetrics.getHeight()-10);
 
 		// draw total score
 		backBufferGraphics.setColor(Color.yellow);
 		drawRightSideCumulativeRegularString(screen, totalScoreTitle,
-				screen.getHeight() / 5 + fontBigMetrics.getHeight());
+				screen.getHeight() / 5 + fontBigMetrics.getHeight()-10);
 
 		// draw "Total play-time"
 		backBufferGraphics.setColor(Color.yellow);
 		drawRightSideCumulativeRegularString(screen, totalPlayTimesTitle,
-				screen.getHeight() / 5 + 2*fontRegularMetrics.getHeight()+2* fontBigMetrics.getHeight()+10 );
+				screen.getHeight() / 5 + 2*fontRegularMetrics.getHeight()+2* fontBigMetrics.getHeight());
 
 		// draw "Total Score"
 		backBufferGraphics.setColor(Color.WHITE);
 		String totalScoreString = String.format("%s", totalScore);
 		drawRightSideCumulativeBigString(screen, totalScoreString, screen.getHeight() / 3
-				- fontRegularMetrics.getHeight() + 10);
+				- fontRegularMetrics.getHeight());
 
 		// draw "achievement status"
 		backBufferGraphics.setColor(Color.MAGENTA);
 		drawCenteredBigString(screen, achievementsStatusTitle,
-				screen.getHeight() / 2 + fontBigMetrics.getHeight() );
+				screen.getHeight() / 2 + fontBigMetrics.getHeight()-10 );
 
 
 
 		// draw "max combo"
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, maxComboTitle,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()+7);
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight() - 13);
 
 		// draw "Perfect clear"
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, perfectClearTitle,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2+7);
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*4+fontBigMetrics.getHeight()*2 - 13);
 
 		// draw "high accuracy"
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, accuracyTitle,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*3+5);
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*5+fontBigMetrics.getHeight()*3 - 15);
 
 		// draw "Flawless Failure"
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, flawlessFailureTitle,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6 - 8+fontBigMetrics.getHeight()*4+5);
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*6 - 8+fontBigMetrics.getHeight()*4 - 15);
 
 		// draw "Eternity Time"
 		backBufferGraphics.setColor(Color.WHITE);
 		drawLeftSideAchievementRegularString(screen, eternityTimeTitle,
-				screen.getHeight() /2 + fontRegularMetrics.getHeight()*7-10 +fontBigMetrics.getHeight()*5-2);
+				screen.getHeight() /2 + fontRegularMetrics.getHeight()*7-10 +fontBigMetrics.getHeight()*5-22);
 
 		int totalHours = totalPlayTime / 3600;
 		int remainHours = totalPlayTime % 3600;
@@ -695,7 +697,7 @@ public final class DrawManager {
 		String totalPlayTimeeString = String.format("%02dH %02dm %02ds",totalHours,totalMinutes,totalSeconds);
 		backBufferGraphics.setColor(Color.WHITE);
 		drawRightSideCumulativeBigString(screen, totalPlayTimeeString, screen.getHeight() / 2
-				- fontRegularMetrics.getHeight() - 15);
+				- fontRegularMetrics.getHeight() - 25);
 
 		// draw combo reward
 		final String[] MAX_COMBO_REWARD = {"500", "1500", "2000", "2500"};
@@ -704,48 +706,48 @@ public final class DrawManager {
 		if (maxCombo >= 25) {
 			backBufferGraphics.setColor(Color.gray);
 			drawRightSideAchievementCoinBigString(screen, MAX_COMBO_REWARD[3],
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*2);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*2-20);
 
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementSmallEventString(screen, "You record high combo",
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()+8);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()-12);
 
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementBigString(screen, "You are crazy!",
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*2);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*2-20);
 		} else {
 			backBufferGraphics.setColor(Color.orange);
 
 			drawRightSideAchievementComboString_1(screen, "combo",
-					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5+5);
+					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5-15);
 			drawRightSideAchievementComboString_2(screen, "combo",
-					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5+5);
+					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5-15);
 
 
 			backBufferGraphics.setColor(Color.green);
 			drawRightSideAchievementSmallString_1(screen, "current",
-					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 4 - 2);
+					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 4 - 22);
 			backBufferGraphics.setColor(Color.red);
 			drawRightSideAchievementSmallString_2(screen, "target",
-					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 4 - 2);
+					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 4 - 22);
 			if (maxCombo < 10) {
 				backBufferGraphics.setColor(Color.orange);
 				drawRightSideAchievementCoinBigString(screen, MAX_COMBO_REWARD[0],
-						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 2 + fontBigMetrics.getHeight() * 2);
+						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 2 + fontBigMetrics.getHeight() * 2-20);
 
 				backBufferGraphics.setColor(Color.WHITE);
-				String accuracyAchievement = String.format("             %d", maxCombo) + " =>" + "         10";
+				String accuracyAchievement = String.format("             %d", maxCombo) + "  => " + "       10";
 				drawRightSideAchievementBigString(screen, accuracyAchievement,
-						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5 + 5);
+						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5 - 15);
 			} else {
 				backBufferGraphics.setColor(Color.orange);
 				drawRightSideAchievementCoinBigString(screen, MAX_COMBO_REWARD[maxCombo <= 9 ? 0 : maxCombo / 5 - 1],
-						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 2 + fontBigMetrics.getHeight() * 2);
+						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 2 + fontBigMetrics.getHeight() * 2-20);
 
 				backBufferGraphics.setColor(Color.WHITE);
 				String accuracyAchievement = String.format("             %d", maxCombo) + " =>" + String.format("         %d", maxCombo <= 9 ? 10 : (((( (maxCombo - 10) / 5) + 1) * 5 ) + 10));
 				drawRightSideAchievementBigString(screen, accuracyAchievement,
-						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5 + 5);
+						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 5 - 15);
 			}
 		}
 
@@ -755,35 +757,35 @@ public final class DrawManager {
 			String[] PERFECT_COIN_REWARD = { "200", "400", "800", "2000", "3000", "4000", "5000"}; // 퍼펙트 스테이지 리워드
 			backBufferGraphics.setColor(Color.orange);
 			drawRightSideAchievementCoinBigString(screen, PERFECT_COIN_REWARD[currentPerfectStage],
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3-20);
 
 			backBufferGraphics.setColor(Color.green);
 			drawRightSideAchievementSmallString_1(screen,"current",
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*2+7);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*2-13);
 			backBufferGraphics.setColor(Color.red);
 			drawRightSideAchievementSmallString_2(screen,"target",
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*2+7);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*2-13);
 
 			String sampleAchievementsString2 = "lv." + currentPerfectStage + "   =>  lv." +
 					nextPerfectStage;
 			backBufferGraphics.setColor(Color.WHITE);
 			drawRightSideAchievementBigString(screen, sampleAchievementsString2,
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3-20);
 
 		}
 		else{
 			backBufferGraphics.setColor(Color.gray);
 			drawRightSideAchievementCoinBigString(screen, "5000",
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3-20);
 
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementSmallEventString2(screen, "You clear all levels perfectly",
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*3-5);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*2+fontBigMetrics.getHeight()*3-25);
 
 			String sampleAchievementsString2 = " 100% Clear !! ";
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementBigString(screen, sampleAchievementsString2,
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*3+fontBigMetrics.getHeight()*3-20);
 
 		}
 
@@ -805,48 +807,48 @@ public final class DrawManager {
 		if (highAccuracy >= 100) {
 			backBufferGraphics.setColor(Color.gray);
 			drawRightSideAchievementCoinBigString(screen, HIGH_ACCURACY_REWARD[3],
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7+fontBigMetrics.getHeight()*2);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7+fontBigMetrics.getHeight()*2-20);
 
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementSmallEventString(screen, "You record high accuracy",
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7+fontBigMetrics.getHeight()+8);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7+fontBigMetrics.getHeight()-12);
 
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementBigString(screen, "You are insane!",
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7+fontBigMetrics.getHeight()*2);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7+fontBigMetrics.getHeight()*2-20);
 		} else {
 			backBufferGraphics.setColor(Color.orange);
 
 
 			backBufferGraphics.setColor(Color.green);
 			drawRightSideAchievementSmallString_1(screen, "current",
-					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 10 - 13);
+					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 10 - 33);
 
 			backBufferGraphics.setColor(Color.red);
 			drawRightSideAchievementSmallString_2(screen, "target",
-					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 10 - 13);
+					screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 10 - 33);
 
 			if (highAccuracy < 50) {
 				backBufferGraphics.setColor(Color.orange);
 				drawRightSideAchievementCoinBigString(screen, HIGH_ACCURACY_REWARD[0],
-						screen.getHeight() /2 + fontRegularMetrics.getHeight()*2 + 4 +fontBigMetrics.getHeight()*5);
+						screen.getHeight() /2 + fontRegularMetrics.getHeight()*2 + 4 +fontBigMetrics.getHeight()*5-20);
 				// 얘를 기반으로 위치 조정 (코인) 인덱스 오류 잘 찾기.
 
 				backBufferGraphics.setColor(Color.WHITE);
-				String accuracyAchievement = String.format("     %.2f", highAccuracy) + " =>" + " 50";
+				String accuracyAchievement = String.format(" %.2f%%", highAccuracy) + "  =>  " + " 50%";
 				// 명중률 달성 하나도 안 했을때 다음 목표 정하기
 				drawRightSideAchievementBigString(screen, accuracyAchievement,
-						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 11 - 6);
+						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 11 - 26);
 			} else {
 				backBufferGraphics.setColor(Color.orange);
 				drawRightSideAchievementCoinBigString(screen, HIGH_ACCURACY_REWARD[nextAccuracy],
-						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 2 + 4 + fontBigMetrics.getHeight() * 5);
+						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 2 + 4 + fontBigMetrics.getHeight() * 5-20);
 
 				backBufferGraphics.setColor(Color.WHITE);
-				String accuracyAchievement = String.format("     %.2f", highAccuracy) + " =>" + String.format("   %d", nextAccuracy == 0 ? 50 : nextAccuracy == 1 ? 70 : nextAccuracy == 2 ? 90 : 100);
+				String accuracyAchievement = String.format("  %.2f%%", highAccuracy) + " => " + String.format("  %d%%", nextAccuracy == 0 ? 50 : nextAccuracy == 1 ? 70 : nextAccuracy == 2 ? 90 : 100);
 				// 목표를 1개라도 달성 시 그 다음 목표 설정, 소수점 설정하기
 				drawRightSideAchievementBigString(screen, accuracyAchievement,
-						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 11 - 6);
+						screen.getHeight() / 2 + fontRegularMetrics.getHeight() * 11 - 26);
 			}
 		}
 
@@ -858,24 +860,24 @@ public final class DrawManager {
 		if (checkFlawlessFailure) {
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementBigString(screen, "Complete!",
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4-2);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4-22);
 			backBufferGraphics.setColor(Color.gray);
 			drawRightSideAchievementCoinBigString(screen, flawlessFailureReward,
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4-2);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+fontBigMetrics.getHeight()*4-22);
 
 		} else {
 			String explainFlawlessFailure_1 = "    Achieved when the game ends";
 			String explainFlawlessFailure_2 = "                with 0% accuracy.";
 			backBufferGraphics.setColor(Color.GRAY);
 			drawRightSideAchievementSmallString_3(screen, explainFlawlessFailure_1,
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+5+fontBigMetrics.getHeight()*3+3+fontSmallMetrics.getHeight());
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+5+fontBigMetrics.getHeight()*3+3+fontSmallMetrics.getHeight()-20);
 
 			backBufferGraphics.setColor(Color.GRAY);
 			drawRightSideAchievementSmallString_3(screen, explainFlawlessFailure_2,
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+5+fontBigMetrics.getHeight()*3+3+fontSmallMetrics.getHeight()*2);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+5+fontBigMetrics.getHeight()*3+3+fontSmallMetrics.getHeight()*2-20);
 			backBufferGraphics.setColor(Color.orange);
 			drawRightSideAchievementCoinBigString(screen, flawlessFailureReward,
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+5+fontBigMetrics.getHeight()*4-2);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*6+5+fontBigMetrics.getHeight()*4-22);
 		}
 
 
@@ -887,21 +889,21 @@ public final class DrawManager {
 		if (totalPlayTime >= 600) {
 			backBufferGraphics.setColor(Color.GREEN);
 			drawRightSideAchievementBigString(screen, sampleAchievementsString,
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7 - 3+fontBigMetrics.getHeight()*5-5);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7 - 3+fontBigMetrics.getHeight()*5-25);
 			backBufferGraphics.setColor(Color.gray);
 			drawRightSideAchievementCoinBigString(screen, eternityTimeReward,
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7 - 3+fontBigMetrics.getHeight()*5-5);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7 - 3+fontBigMetrics.getHeight()*5-25);
 
 		} else {
 			backBufferGraphics.setColor(Color.GRAY);
 			drawRightSideAchievementSmallString_3(screen, explainEternityTime_1,
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7 - 3+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight());
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7 - 3+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight()-20);
 			backBufferGraphics.setColor(Color.GRAY);
 			drawRightSideAchievementSmallString_3(screen, explainEternityTime_2,
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7 - 3+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight()*2);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7 - 3+fontBigMetrics.getHeight()*4+fontSmallMetrics.getHeight()*2-20);
 			backBufferGraphics.setColor(Color.orange);
 			drawRightSideAchievementCoinBigString(screen, eternityTimeReward,
-					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7 - 3+fontBigMetrics.getHeight()*5-5);
+					screen.getHeight() /2 + fontRegularMetrics.getHeight()*7 - 3+fontBigMetrics.getHeight()*5-20);
 
 		}
 	}
@@ -924,7 +926,7 @@ public final class DrawManager {
 		for (Score score : highScores) {
 			scoreString = String.format("%s        %04d", score.getUserId(), score.getScore());
 			drawLeftSideScoreRegularString(screen, scoreString, screen.getHeight()
-					/ 4 + fontRegularMetrics.getHeight() * (i + 1) * 2);
+					/ 4 + fontRegularMetrics.getHeight() * (i + 1) * 2-20);
 			i++;
 			countDrawingScore++;
 			if(countDrawingScore >= limitDrawingScore) {
@@ -1409,7 +1411,7 @@ public final class DrawManager {
 	 * @param max_alertcooldown
 	 * 				cooldown for max level alert
 	 */
-	public void drawShop(final Screen screen, final int option, final Wallet wallet, final Cooldown money_alertcooldown, final Cooldown max_alertcooldown) {
+	public void drawShop(final Screen screen, final int option, final Wallet wallet, final Cooldown money_alertcooldown, final Cooldown max_alertcooldown, final Cooldown max_bl_alertcooldown, final Cooldown needBl_alertcooldown) {
 
 		String shopString = "Shop";
 		int shopStringY = Math.round(screen.getHeight() * 0.15f);
@@ -1417,72 +1419,155 @@ public final class DrawManager {
 
 		String coinString = ":  " + wallet.getCoin();
 		String exitString = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
-		String[] costs = new String[] {"2000", "4000", "8000", "MAX LEVEL"};
+		String[] costs = new String[]{"1000", "2000", "4000", "8000", "16000", "32000", "64000", "128000", "256000", "MAX LEVEL"};
+		String[] breakLimitCosts = new String[]{"5000", "10000", "30000", "120000", "600000", "MAX LEVEL"};
+		boolean isBreakLimitMode = ShopScreen.isBreakLimitMode;
+		String GamblingString = "PRESS \"ENTER\" TO GO TO GAMBLING SPACE";
 
-		String[] itemString = new String[]{"BULLET SPEED", "SHOT INTERVAL", "ADDITIONAL LIFE","COIN GAIN"};
-		int[] walletLevel = new int[]{wallet.getBullet_lv(), wallet.getShot_lv(), wallet.getLives_lv(), wallet.getCoin_lv()};
+//		String[] itemString = new String[]{"BULLET SPEED", "SHOT INTERVAL", "ADDITIONAL LIFE", "COIN GAIN"};
+//		int[] walletLevel = new int[]{wallet.getBullet_lv(), wallet.getShot_lv(), wallet.getLives_lv(), wallet.getCoin_lv()};
+		int[] breakLimitLevel = new int[]{wallet.getBullet_bl(), wallet.getShot_bl(), wallet.getLives_bl(), wallet.getCoin_bl()};
+		String[] itemString = new String[]{"BULLET SPEED", "SHOT INTERVAL", "ADDITIONAL LIFE","COIN GAIN", "GAMBLING"};
+		int[] walletLevel = new int[]{wallet.getBullet_lv(), wallet.getShot_lv(), wallet.getLives_lv(), wallet.getCoin_lv(), 0};
 
-		BufferedImage[] itemImages = new BufferedImage[]{img_bulletspeed,img_shotinterval,img_additionallife,img_coingain};
+		BufferedImage[] itemImages = new BufferedImage[]{img_bulletspeed, img_shotinterval, img_additionallife, img_coingain};
 
-		int imgstartx = screen.getWidth()/80*23;
-		int imgstarty = screen.getHeight()/80*27;
-		int imgdis = screen.getHeight()/80*12;
-		int coinstartx = screen.getWidth()/80*55;
-		int coinstarty = screen.getHeight()/160*66;
-		int coindis = screen.getHeight()/80*12;
+		int imgstartx = screen.getWidth() / 80 * 20;
+		int imgstarty = screen.getHeight() / 80 * 27;
+		int imgdis = screen.getHeight() / 80 * 12;
+		int coinstartx = screen.getWidth() / 80 * 54;
+		int coinstarty = screen.getHeight() / 160 * 73;
+		int coindis = screen.getHeight() / 80 * 12;
 		int coinSize = 20;
-		int cointextstartx = screen.getWidth()/80*60;
-		int cointextstarty = screen.getHeight()/160*71;
-		int cointextdis = screen.getHeight()/80*12;
+		int cointextstartx = screen.getWidth() / 80 * 58;
+		int cointextstarty = screen.getHeight() / 160 * 78;
+		int cointextdis = screen.getHeight() / 80 * 12;
+		int breaklimitstartx = screen.getWidth() / 80 * 68;
+		int breaklimitstarty = screen.getHeight() / 80 * 27;
+		int breaklimitdis = screen.getHeight() / 80 * 12;
 
 		backBufferGraphics.setColor(Color.GREEN);
 		drawCenteredBigString(screen, shopString, shopStringY);
-		backBufferGraphics.drawImage(img_coin, screen.getWidth()/80*39-(coinString.length()-3)*screen.getWidth()/80,screen.getHeight()/80*18,coinSize,coinSize,null);
+		int chkbreaklimitx = isBreakLimitMode ? screen.getWidth() / 80 * 69 - (coinString.length() - 6) * screen.getWidth() / 80 - 3 : screen.getWidth() / 80 * 36 - (coinString.length() - 6) * screen.getWidth() / 80 - 3;
+		int chkbreaklimity = screen.getHeight() / 80 * 18 - 2;
+		backBufferGraphics.drawImage(img_coin, chkbreaklimitx, chkbreaklimity, coinSize, coinSize, null);
 		backBufferGraphics.setColor(Color.WHITE);
 		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.drawString(coinString,screen.getWidth()/80*44-(coinString.length()-3)*screen.getWidth()/80,screen.getHeight()/80*20);
+		int coinx = isBreakLimitMode ? screen.getWidth() / 80 * 73 - (coinString.length() - 6) * screen.getWidth() / 80 - 3 : screen.getWidth() / 80 * 40 - (coinString.length() - 6) * screen.getWidth() / 100;
+		int coiny = screen.getHeight() / 80 * 20;
+		backBufferGraphics.drawString(coinString, coinx, coiny);
 
-		for(int i = 0;i<4;i++)
-		{
+
+		for (int i = 0; i < 4; i++) {
 			backBufferGraphics.setColor(Color.WHITE);
-			drawCenteredRegularString(screen,itemString[i],screen.getHeight()/80*(28 + 12*i));
-			for (int j = 0; j < 3; j++)
-			{
-				if (j + 2 <= walletLevel[i])
-				{
-					backBufferGraphics.setColor(Color.GREEN);
-					backBufferGraphics.fillRect(screen.getWidth() / 40 * (33 / 2) + j * (screen.getWidth() / 10), screen.getHeight() / 80 * (30 + 12*i), 20, 20);
-				} else
-				{
-					backBufferGraphics.setColor(Color.WHITE);
-					backBufferGraphics.fillRect(screen.getWidth() / 40 * (33 / 2) + j * (screen.getWidth() / 10), screen.getHeight() / 80 * (30 + 12*i), 20, 20);
-				}
-			}
+			drawCenteredRegularString(screen, itemString[i], screen.getHeight() / 80 * (28 + 12 * i));
+
+			// Wallet에서 currentMaxLevel 가져오기
+			int currentMaxLevel = wallet.getMaxLevel(i);
+
+			String levelText = walletLevel[i] + " / " + currentMaxLevel;
+			int textY = screen.getHeight() / 80 * (34 + 12 * i);
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredRegularString(screen, levelText, textY);
 		}
 
+		Font smallFont = fontRegular.deriveFont(Font.PLAIN, 12f);
+		backBufferGraphics.setColor(Color.GRAY);
+		backBufferGraphics.fillRect(screen.getWidth() - 120, screen.getHeight() / 80 * 5, 100, 40);
+		FontMetrics metrics = backBufferGraphics.getFontMetrics();
+		int textWidth = metrics.stringWidth("GAMBLING");
+		int textHeight = metrics.getHeight();
+		int textX = screen.getWidth() - 120 + (100 - textWidth) / 2; // X position
+		int textY = screen.getHeight() / 80 * 5 + (40 - textHeight) / 2 + metrics.getAscent(); // Y position
+		backBufferGraphics.setColor(Color.YELLOW);
+		backBufferGraphics.drawString("GAMBLING", textX, textY);
+
 		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawImage(itemImages[option-1],imgstartx,imgstarty + (imgdis*(option-1)),50,40,null);
-		backBufferGraphics.drawImage(img_coin,coinstartx,coinstarty + (coindis*(option-1)),coinSize,coinSize,null);
-		backBufferGraphics.drawString("X "+costs[walletLevel[option-1]-1],cointextstartx,cointextstarty + (cointextdis*(option-1)));
+		backBufferGraphics.drawImage(itemImages[option - 1], imgstartx, imgstarty + (imgdis * (option - 1)), 50, 40, null);
+		backBufferGraphics.setFont(smallFont);
+		backBufferGraphics.drawImage(img_coin, coinstartx, coinstarty + (coindis * (option - 1)), coinSize, coinSize, null);
+		backBufferGraphics.drawString("X " + (isBreakLimitMode ? breakLimitCosts[breakLimitLevel[option - 1] - 1] : costs[walletLevel[option - 1] - 1]), cointextstartx, cointextstarty + (cointextdis * (option - 1)));
+		backBufferGraphics.drawString("Break Limit", breaklimitstartx, breaklimitstarty + (breaklimitdis * (option - 1)));
+
+		String breakLimitText = breakLimitLevel[option - 1] - 1 + "/ 5";
+		backBufferGraphics.setColor(Color.GREEN);
+		backBufferGraphics.drawString(breakLimitText, breaklimitstartx + 30, breaklimitstarty + 45 + (breaklimitdis * (option - 1)));
 
 		backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen,exitString,screen.getHeight()/80*80);
+		drawCenteredRegularString(screen,GamblingString,screen.getHeight()/90*90);
+		drawCenteredRegularString(screen, exitString, screen.getHeight() / 80 * 80);
 
-		if (!money_alertcooldown.checkFinished())
-		{
-			backBufferGraphics.setColor(Color.red);
-			backBufferGraphics.fillRect((screen.getWidth()-300)/2, (screen.getHeight()-100)/2, 300, 80);
-			backBufferGraphics.setColor(Color.black);
-			drawCenteredBigString(screen, "Insufficient coin", screen.getHeight()/2);
-		}
-		if(!max_alertcooldown.checkFinished())
-		{
-			backBufferGraphics.setColor(Color.red);
-			backBufferGraphics.fillRect((screen.getWidth()-300)/2, (screen.getHeight()-100)/2, 300, 80);
-			backBufferGraphics.setColor(Color.black);
-			drawCenteredBigString(screen, "Already max level", screen.getHeight()/2);
 
+		if (!money_alertcooldown.checkFinished()) {
+			backBufferGraphics.setColor(Color.red);
+			backBufferGraphics.fillRect((screen.getWidth() - 300) / 2, (screen.getHeight() - 100) / 2, 300, 80);
+			backBufferGraphics.setColor(Color.black);
+			drawCenteredBigString(screen, "Insufficient coin", screen.getHeight() / 2);
 		}
+		if (!max_alertcooldown.checkFinished()) {
+			backBufferGraphics.setColor(Color.red);
+			backBufferGraphics.fillRect((screen.getWidth() - 300) / 2, (screen.getHeight() - 100) / 2, 300, 80);
+			backBufferGraphics.setColor(Color.black);
+			drawCenteredBigString(screen, "Max Level", screen.getHeight() / 2);
+		}
+		if (!max_bl_alertcooldown.checkFinished()) {
+			backBufferGraphics.setColor(Color.red);
+			backBufferGraphics.fillRect((screen.getWidth() - 300) / 2, (screen.getHeight() - 100) / 2, 300, 80);
+			backBufferGraphics.setColor(Color.black);
+			drawCenteredBigString(screen, "Break Limit Max", screen.getHeight() / 2);
+		}
+		if (!needBl_alertcooldown.checkFinished()) {
+			backBufferGraphics.setColor(Color.red);
+			backBufferGraphics.fillRect((screen.getWidth() - 300) / 2, (screen.getHeight() - 100) / 2, 300, 80);
+			backBufferGraphics.setColor(Color.black);
+			drawCenteredBigString(screen, "Needs Break Limit", screen.getHeight() / 2);
+		}
+	}
+
+	public void drawGambling(Screen screen, int bettingAmount) {
+		// 제목: BLACKJACK
+		String BJString = "BLACKJACK";
+		backBufferGraphics.setColor(Color.YELLOW);
+		drawCenteredBigString(screen, BJString, screen.getHeight() / 6);
+
+		// 안내 메시지: BLACKJACK 테이블로 이동 (Q)
+		String enterString = "PRESS \"Q\" TO ENTER TO BLACKJACK TABLE";
+		backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, enterString, screen.getHeight() / 4);
+
+		// 안내 메시지: 메인 메뉴로 복귀 (ESC)
+		String exitString = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
+		backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, exitString, screen.getHeight() - 50);
+
+		// Blackjack 규칙 설명 첫 줄
+		String ruleExplanationLine1 = "Blackjack rule explanation:";
+		FontMetrics metrics = backBufferGraphics.getFontMetrics();
+		int ruleTextWidth1 = metrics.stringWidth(ruleExplanationLine1);
+		int ruleTextX1 = (screen.getWidth() - ruleTextWidth1) / 2;
+		int ruleTextY1 = (screen.getHeight() / 2) - 50;
+
+		backBufferGraphics.setColor(Color.LIGHT_GRAY);
+		backBufferGraphics.drawString(ruleExplanationLine1, ruleTextX1, ruleTextY1);
+
+		// Blackjack 규칙 설명 두 번째 줄
+		String ruleExplanationLine2 = "If you don't know the rules, you can learn by losing money.";
+		int ruleTextWidth2 = metrics.stringWidth(ruleExplanationLine2);
+		int ruleTextX2 = (screen.getWidth() - ruleTextWidth2) / 2;
+		int ruleTextY2 = ruleTextY1 + 20;
+
+		backBufferGraphics.setColor(Color.red);
+		backBufferGraphics.drawString(ruleExplanationLine2, ruleTextX2, ruleTextY2);
+
+		// 배팅 금액 표시
+		String bettingString = "Betting Amount: " + bettingAmount;
+		int bettingTextWidth = metrics.stringWidth(bettingString);
+		int bettingTextX = (screen.getWidth() - bettingTextWidth) / 2;
+		int bettingTextY = ruleTextY2 + 100;
+
+		backBufferGraphics.setColor(Color.CYAN);
+		backBufferGraphics.drawString(bettingString, bettingTextX, bettingTextY);
 	}
 
 	public void drawRotatedBullet(CurvedBullet bullet, int positionX, int positionY, double angle) {

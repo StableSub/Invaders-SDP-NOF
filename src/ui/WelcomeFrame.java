@@ -198,15 +198,13 @@ public class WelcomeFrame extends JFrame {
                 + "<strong>D , &#8594;</strong> : Move right</p>" // 오른쪽 화살표 추가
                 + "<p style='color: gray; font-size: 18px;'>"
                 + "<strong>Space Bar</strong> : Fire your weapon</p>"
-                + "<p style='color: #00D8FB; font-size: 16px; font-style: italic;'>"
+                + "<p style='color: #00D8FB; font-size: 16px; font-style: italic;font-weight: normal;'>"
                 + "Press Start to begin your mission!</p>"
                 + "</body></html>";
 
 
-
-
         JLabel guideStrings = new JLabel(guideText);
-        guideStrings.setBounds(0, 300, 500, 300); // x: 0, y: 50, 너비: 400, 높이: 25
+        guideStrings.setBounds(0, 300, 530, 300); // x: 0, y: 50, 너비: 400, 높이: 25
         guideStrings.setHorizontalAlignment(SwingConstants.CENTER); // 수평 정렬 중앙 설정
         storyFrame.add(guideStrings); // 레이블 추가
 
