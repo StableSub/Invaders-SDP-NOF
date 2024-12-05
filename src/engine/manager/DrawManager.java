@@ -24,6 +24,7 @@ import engine.utility.Score;
 import entity.*;
 import ui.Frame;
 import ui.Screen;
+import ui.ShopScreen;
 
 /**
  * Manages screen drawing.
@@ -1947,8 +1948,7 @@ public final class DrawManager {
 	 * @param max_alertcooldown
 	 * 				cooldown for max level alert
 	 */
-	public void drawShop(final Screen screen, final int option, final Wallet wallet,
-						 final Cooldown money_alertcooldown, final Cooldown max_alertcooldown) {
+	public void drawShop(final Screen screen, final int option, final Wallet wallet, final Cooldown money_alertcooldown, final Cooldown max_alertcooldown, final Cooldown max_bl_alertcooldown, final Cooldown needBl_alertcooldown) {
 
 		String shopString = "Shop";
 		int shopStringY = Math.round(screen.getHeight() * 0.15f);
@@ -1956,50 +1956,59 @@ public final class DrawManager {
 
 		String coinString = ":  " + wallet.getCoin();
 		String exitString = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
+		String[] costs = new String[]{"1000", "2000", "4000", "8000", "16000", "32000", "64000", "128000", "256000", "MAX LEVEL"};
+		String[] breakLimitCosts = new String[]{"5000", "10000", "30000", "120000", "600000", "MAX LEVEL"};
+		boolean isBreakLimitMode = ShopScreen.isBreakLimitMode;
 		String GamblingString = "PRESS \"ENTER\" TO GO TO GAMBLING SPACE";
-		String[] costs = new String[] {"2000", "4000", "8000", "MAX LEVEL"};
 
+//		String[] itemString = new String[]{"BULLET SPEED", "SHOT INTERVAL", "ADDITIONAL LIFE", "COIN GAIN"};
+//		int[] walletLevel = new int[]{wallet.getBullet_lv(), wallet.getShot_lv(), wallet.getLives_lv(), wallet.getCoin_lv()};
+		int[] breakLimitLevel = new int[]{wallet.getBullet_bl(), wallet.getShot_bl(), wallet.getLives_bl(), wallet.getCoin_bl()};
 		String[] itemString = new String[]{"BULLET SPEED", "SHOT INTERVAL", "ADDITIONAL LIFE","COIN GAIN", "GAMBLING"};
 		int[] walletLevel = new int[]{wallet.getBullet_lv(), wallet.getShot_lv(), wallet.getLives_lv(), wallet.getCoin_lv(), 0};
 
-		BufferedImage[] itemImages = new BufferedImage[]{img_bulletspeed,img_shotinterval,img_additionallife,img_coingain};
+		BufferedImage[] itemImages = new BufferedImage[]{img_bulletspeed, img_shotinterval, img_additionallife, img_coingain};
 
-		int imgstartx = screen.getWidth()/80*23;
-		int imgstarty = screen.getHeight()/80*27;
-		int imgdis = screen.getHeight()/80*12;
-		int coinstartx = screen.getWidth()/80*55;
-		int coinstarty = screen.getHeight()/160*66;
-		int coindis = screen.getHeight()/80*12;
+		int imgstartx = screen.getWidth() / 80 * 20;
+		int imgstarty = screen.getHeight() / 80 * 27;
+		int imgdis = screen.getHeight() / 80 * 12;
+		int coinstartx = screen.getWidth() / 80 * 54;
+		int coinstarty = screen.getHeight() / 160 * 73;
+		int coindis = screen.getHeight() / 80 * 12;
 		int coinSize = 20;
-		int cointextstartx = screen.getWidth()/80*60;
-		int cointextstarty = screen.getHeight()/160*71;
-		int cointextdis = screen.getHeight()/80*12;
+		int cointextstartx = screen.getWidth() / 80 * 58;
+		int cointextstarty = screen.getHeight() / 160 * 78;
+		int cointextdis = screen.getHeight() / 80 * 12;
+		int breaklimitstartx = screen.getWidth() / 80 * 68;
+		int breaklimitstarty = screen.getHeight() / 80 * 27;
+		int breaklimitdis = screen.getHeight() / 80 * 12;
 
 		backBufferGraphics.setColor(Color.GREEN);
 		drawCenteredBigString(screen, shopString, shopStringY);
-		backBufferGraphics.drawImage(img_coin, screen.getWidth()/80*39-(coinString.length()-3)*screen.getWidth()/80,screen.getHeight()/80*18,coinSize,coinSize,null);
+		int chkbreaklimitx = isBreakLimitMode ? screen.getWidth() / 80 * 69 - (coinString.length() - 6) * screen.getWidth() / 80 - 3 : screen.getWidth() / 80 * 36 - (coinString.length() - 6) * screen.getWidth() / 80 - 3;
+		int chkbreaklimity = screen.getHeight() / 80 * 18 - 2;
+		backBufferGraphics.drawImage(img_coin, chkbreaklimitx, chkbreaklimity, coinSize, coinSize, null);
 		backBufferGraphics.setColor(Color.WHITE);
 		backBufferGraphics.setFont(fontRegular);
-		backBufferGraphics.drawString(coinString,screen.getWidth()/80*44-(coinString.length()-3)*screen.getWidth()/80,screen.getHeight()/80*20);
+		int coinx = isBreakLimitMode ? screen.getWidth() / 80 * 73 - (coinString.length() - 6) * screen.getWidth() / 80 - 3 : screen.getWidth() / 80 * 40 - (coinString.length() - 6) * screen.getWidth() / 100;
+		int coiny = screen.getHeight() / 80 * 20;
+		backBufferGraphics.drawString(coinString, coinx, coiny);
 
-		for(int i = 0;i<4;i++)
-		{
+
+		for (int i = 0; i < 4; i++) {
 			backBufferGraphics.setColor(Color.WHITE);
-			drawCenteredRegularString(screen,itemString[i],screen.getHeight()/80*(28 + 12*i));
-			for (int j = 0; j < 3; j++)
-			{
-				if (j + 2 <= walletLevel[i])
-				{
-					backBufferGraphics.setColor(Color.GREEN);
-					backBufferGraphics.fillRect(screen.getWidth() / 40 * (33 / 2) + j * (screen.getWidth() / 10), screen.getHeight() / 80 * (30 + 12*i), 20, 20);
-				} else
-				{
-					backBufferGraphics.setColor(Color.WHITE);
-					backBufferGraphics.fillRect(screen.getWidth() / 40 * (33 / 2) + j * (screen.getWidth() / 10), screen.getHeight() / 80 * (30 + 12*i), 20, 20);
-				}
-			}
+			drawCenteredRegularString(screen, itemString[i], screen.getHeight() / 80 * (28 + 12 * i));
+
+			// Wallet에서 currentMaxLevel 가져오기
+			int currentMaxLevel = wallet.getMaxLevel(i);
+
+			String levelText = walletLevel[i] + " / " + currentMaxLevel;
+			int textY = screen.getHeight() / 80 * (34 + 12 * i);
+			backBufferGraphics.setColor(Color.GREEN);
+			drawCenteredRegularString(screen, levelText, textY);
 		}
 
+		Font smallFont = fontRegular.deriveFont(Font.PLAIN, 12f);
 		backBufferGraphics.setColor(Color.GRAY);
 		backBufferGraphics.fillRect(screen.getWidth() - 120, screen.getHeight() / 80 * 5, 100, 40);
 		FontMetrics metrics = backBufferGraphics.getFontMetrics();
@@ -2011,28 +2020,45 @@ public final class DrawManager {
 		backBufferGraphics.drawString("GAMBLING", textX, textY);
 
 		backBufferGraphics.setColor(Color.WHITE);
-		backBufferGraphics.drawImage(itemImages[option-1],imgstartx,imgstarty + (imgdis*(option-1)),50,40,null);
-		backBufferGraphics.drawImage(img_coin,coinstartx,coinstarty + (coindis*(option-1)),coinSize,coinSize,null);
-		backBufferGraphics.drawString("X "+costs[walletLevel[option-1]-1],cointextstartx,cointextstarty + (cointextdis*(option-1)));
+		backBufferGraphics.drawImage(itemImages[option - 1], imgstartx, imgstarty + (imgdis * (option - 1)), 50, 40, null);
+		backBufferGraphics.setFont(smallFont);
+		backBufferGraphics.drawImage(img_coin, coinstartx, coinstarty + (coindis * (option - 1)), coinSize, coinSize, null);
+		backBufferGraphics.drawString("X " + (isBreakLimitMode ? breakLimitCosts[breakLimitLevel[option - 1] - 1] : costs[walletLevel[option - 1] - 1]), cointextstartx, cointextstarty + (cointextdis * (option - 1)));
+		backBufferGraphics.drawString("Break Limit", breaklimitstartx, breaklimitstarty + (breaklimitdis * (option - 1)));
+
+		String breakLimitText = breakLimitLevel[option - 1] - 1 + "/ 5";
+		backBufferGraphics.setColor(Color.GREEN);
+		backBufferGraphics.drawString(breakLimitText, breaklimitstartx + 30, breaklimitstarty + 45 + (breaklimitdis * (option - 1)));
 
 		backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen,exitString,screen.getHeight()/80*80);
 		drawCenteredRegularString(screen,GamblingString,screen.getHeight()/90*90);
+		drawCenteredRegularString(screen, exitString, screen.getHeight() / 80 * 80);
 
-		if (!money_alertcooldown.checkFinished())
-		{
+
+		if (!money_alertcooldown.checkFinished()) {
 			backBufferGraphics.setColor(Color.red);
-			backBufferGraphics.fillRect((screen.getWidth()-300)/2, (screen.getHeight()-100)/2, 300, 80);
+			backBufferGraphics.fillRect((screen.getWidth() - 300) / 2, (screen.getHeight() - 100) / 2, 300, 80);
 			backBufferGraphics.setColor(Color.black);
-			drawCenteredBigString(screen, "Insufficient coin", screen.getHeight()/2);
+			drawCenteredBigString(screen, "Insufficient coin", screen.getHeight() / 2);
 		}
-		if(!max_alertcooldown.checkFinished())
-		{
+		if (!max_alertcooldown.checkFinished()) {
 			backBufferGraphics.setColor(Color.red);
-			backBufferGraphics.fillRect((screen.getWidth()-300)/2, (screen.getHeight()-100)/2, 300, 80);
+			backBufferGraphics.fillRect((screen.getWidth() - 300) / 2, (screen.getHeight() - 100) / 2, 300, 80);
 			backBufferGraphics.setColor(Color.black);
-			drawCenteredBigString(screen, "Already max level", screen.getHeight()/2);
-
+			drawCenteredBigString(screen, "Max Level", screen.getHeight() / 2);
+		}
+		if (!max_bl_alertcooldown.checkFinished()) {
+			backBufferGraphics.setColor(Color.red);
+			backBufferGraphics.fillRect((screen.getWidth() - 300) / 2, (screen.getHeight() - 100) / 2, 300, 80);
+			backBufferGraphics.setColor(Color.black);
+			drawCenteredBigString(screen, "Break Limit Max", screen.getHeight() / 2);
+		}
+		if (!needBl_alertcooldown.checkFinished()) {
+			backBufferGraphics.setColor(Color.red);
+			backBufferGraphics.fillRect((screen.getWidth() - 300) / 2, (screen.getHeight() - 100) / 2, 300, 80);
+			backBufferGraphics.setColor(Color.black);
+			drawCenteredBigString(screen, "Needs Break Limit", screen.getHeight() / 2);
 		}
 	}
 
