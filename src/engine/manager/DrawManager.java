@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import blackjack.*;
 
 import database.DatabaseManager;
 import engine.utility.Cooldown;
@@ -1935,29 +1936,37 @@ public final class DrawManager {
 	}
 
 	/**
-	 * draw shop
-	 *
-	 * @param screen              		Screen to draw on.
-	 * @param option              		selected shop item
-	 * @param wallet              		player's wallet
-	 * @param money_alertcooldown 		cooldown for insufficient coin alert
-	 * @param max_alertcooldown   		cooldown for max level alert
-	 * @param max_bl_alertcooldown   	cooldown for max break limit alert
+	 *  draw shop
+	 * @param screen
+	 * 				Screen to draw on.
+	 * @param option
+	 * 				selected shop item
+	 * @param wallet
+	 * 				player's wallet
+	 * @param money_alertcooldown
+	 * 				cooldown for insufficient coin alert
+	 * @param max_alertcooldown
+	 * 				cooldown for max level alert
 	 */
 	public void drawShop(final Screen screen, final int option, final Wallet wallet, final Cooldown money_alertcooldown, final Cooldown max_alertcooldown, final Cooldown max_bl_alertcooldown, final Cooldown needBl_alertcooldown) {
 
 		String shopString = "Shop";
 		int shopStringY = Math.round(screen.getHeight() * 0.15f);
 
+
 		String coinString = ":  " + wallet.getCoin();
 		String exitString = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
 		String[] costs = new String[]{"1000", "2000", "4000", "8000", "16000", "32000", "64000", "128000", "256000", "MAX LEVEL"};
 		String[] breakLimitCosts = new String[]{"5000", "10000", "30000", "120000", "600000", "MAX LEVEL"};
 		boolean isBreakLimitMode = ShopScreen.isBreakLimitMode;
+		String GamblingString = "PRESS \"ENTER\" TO GO TO GAMBLING SPACE";
+		String[] costs = new String[] {"2000", "4000", "8000", "MAX LEVEL"};
 
 		String[] itemString = new String[]{"BULLET SPEED", "SHOT INTERVAL", "ADDITIONAL LIFE", "COIN GAIN"};
 		int[] walletLevel = new int[]{wallet.getBullet_lv(), wallet.getShot_lv(), wallet.getLives_lv(), wallet.getCoin_lv()};
 		int[] breakLimitLevel = new int[]{wallet.getBullet_bl(), wallet.getShot_bl(), wallet.getLives_bl(), wallet.getCoin_bl()};
+		String[] itemString = new String[]{"BULLET SPEED", "SHOT INTERVAL", "ADDITIONAL LIFE","COIN GAIN", "GAMBLING"};
+		int[] walletLevel = new int[]{wallet.getBullet_lv(), wallet.getShot_lv(), wallet.getLives_lv(), wallet.getCoin_lv(), 0};
 
 		BufferedImage[] itemImages = new BufferedImage[]{img_bulletspeed, img_shotinterval, img_additionallife, img_coingain};
 
@@ -2000,8 +2009,17 @@ public final class DrawManager {
 			drawCenteredRegularString(screen, levelText, textY);
 		}
 
-
 		Font smallFont = fontRegular.deriveFont(Font.PLAIN, 12f);
+		backBufferGraphics.setColor(Color.GRAY);
+		backBufferGraphics.fillRect(screen.getWidth() - 120, screen.getHeight() / 80 * 5, 100, 40);
+		FontMetrics metrics = backBufferGraphics.getFontMetrics();
+		int textWidth = metrics.stringWidth("GAMBLING");
+		int textHeight = metrics.getHeight();
+		int textX = screen.getWidth() - 120 + (100 - textWidth) / 2; // X position
+		int textY = screen.getHeight() / 80 * 5 + (40 - textHeight) / 2 + metrics.getAscent(); // Y position
+		backBufferGraphics.setColor(Color.YELLOW);
+		backBufferGraphics.drawString("GAMBLING", textX, textY);
+
 		backBufferGraphics.setColor(Color.WHITE);
 		backBufferGraphics.drawImage(itemImages[option - 1], imgstartx, imgstarty + (imgdis * (option - 1)), 50, 40, null);
 		backBufferGraphics.setFont(smallFont);
@@ -2014,6 +2032,8 @@ public final class DrawManager {
 		backBufferGraphics.drawString(breakLimitText, breaklimitstartx + 30, breaklimitstarty + 45 + (breaklimitdis * (option - 1)));
 
 		backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen,exitString,screen.getHeight()/80*80);
+		drawCenteredRegularString(screen,GamblingString,screen.getHeight()/90*90);
 		drawCenteredRegularString(screen, exitString, screen.getHeight() / 80 * 80);
 
 
@@ -2041,8 +2061,50 @@ public final class DrawManager {
 			backBufferGraphics.setColor(Color.black);
 			drawCenteredBigString(screen, "Needs Break Limit", screen.getHeight() / 2);
 		}
+	}
 
+	public void drawGambling(Screen screen, int bettingAmount) {
+		// 제목: BLACKJACK
+		String BJString = "BLACKJACK";
+		backBufferGraphics.setColor(Color.YELLOW);
+		drawCenteredBigString(screen, BJString, screen.getHeight() / 6);
 
+		// 안내 메시지: BLACKJACK 테이블로 이동 (Q)
+		String enterString = "PRESS \"Q\" TO ENTER TO BLACKJACK TABLE";
+		backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, enterString, screen.getHeight() / 4);
 
+		// 안내 메시지: 메인 메뉴로 복귀 (ESC)
+		String exitString = "PRESS \"ESC\" TO RETURN TO MAIN MENU";
+		backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, exitString, screen.getHeight() - 50);
+
+		// Blackjack 규칙 설명 첫 줄
+		String ruleExplanationLine1 = "Blackjack rule explanation:";
+		FontMetrics metrics = backBufferGraphics.getFontMetrics();
+		int ruleTextWidth1 = metrics.stringWidth(ruleExplanationLine1);
+		int ruleTextX1 = (screen.getWidth() - ruleTextWidth1) / 2;
+		int ruleTextY1 = (screen.getHeight() / 2) - 50;
+
+		backBufferGraphics.setColor(Color.LIGHT_GRAY);
+		backBufferGraphics.drawString(ruleExplanationLine1, ruleTextX1, ruleTextY1);
+
+		// Blackjack 규칙 설명 두 번째 줄
+		String ruleExplanationLine2 = "If you don't know the rules, you can learn by losing money.";
+		int ruleTextWidth2 = metrics.stringWidth(ruleExplanationLine2);
+		int ruleTextX2 = (screen.getWidth() - ruleTextWidth2) / 2;
+		int ruleTextY2 = ruleTextY1 + 20;
+
+		backBufferGraphics.setColor(Color.red);
+		backBufferGraphics.drawString(ruleExplanationLine2, ruleTextX2, ruleTextY2);
+
+		// 배팅 금액 표시
+		String bettingString = "Betting Amount: " + bettingAmount;
+		int bettingTextWidth = metrics.stringWidth(bettingString);
+		int bettingTextX = (screen.getWidth() - bettingTextWidth) / 2;
+		int bettingTextY = ruleTextY2 + 100;
+
+		backBufferGraphics.setColor(Color.CYAN);
+		backBufferGraphics.drawString(bettingString, bettingTextX, bettingTextY);
 	}
 }
