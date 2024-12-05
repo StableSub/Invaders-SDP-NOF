@@ -106,7 +106,6 @@ public final class Core {
 		int width = frame.getWidth();
 		int height = frame.getHeight();
 		Wallet wallet = db.loadWalletData(login.getID());
-		wallet.deposit(10000000);
 		int returnCode = 1;
 		do {
 			MAX_LIVES = 3+ wallet.getLives_lv()-1;
