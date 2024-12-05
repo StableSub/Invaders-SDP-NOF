@@ -108,7 +108,6 @@ public class ShopScreen extends Screen {
     protected final void update() {
         super.update();
 
-        drawManager.drawShop(this,selected_item,wallet,money_alertCooldown,max_alertCooldown);
         draw();
 
         // ENTER 키를 눌렀을 때 갬블링 화면으로 이동
@@ -244,7 +243,6 @@ public class ShopScreen extends Screen {
 
     private void draw() {
         drawManager.initDrawing(this);
-        drawManager.drawShop(this,selected_item,wallet,money_alertCooldown,max_alertCooldown);
 
 
         drawManager.drawShop(this,selected_item,wallet,money_alertCooldown,max_alertCooldown, max_bl_alertCooldown, needBl_alertCooldown);

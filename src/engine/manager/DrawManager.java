@@ -1960,10 +1960,9 @@ public final class DrawManager {
 		String[] breakLimitCosts = new String[]{"5000", "10000", "30000", "120000", "600000", "MAX LEVEL"};
 		boolean isBreakLimitMode = ShopScreen.isBreakLimitMode;
 		String GamblingString = "PRESS \"ENTER\" TO GO TO GAMBLING SPACE";
-		String[] costs = new String[] {"2000", "4000", "8000", "MAX LEVEL"};
 
-		String[] itemString = new String[]{"BULLET SPEED", "SHOT INTERVAL", "ADDITIONAL LIFE", "COIN GAIN"};
-		int[] walletLevel = new int[]{wallet.getBullet_lv(), wallet.getShot_lv(), wallet.getLives_lv(), wallet.getCoin_lv()};
+//		String[] itemString = new String[]{"BULLET SPEED", "SHOT INTERVAL", "ADDITIONAL LIFE", "COIN GAIN"};
+//		int[] walletLevel = new int[]{wallet.getBullet_lv(), wallet.getShot_lv(), wallet.getLives_lv(), wallet.getCoin_lv()};
 		int[] breakLimitLevel = new int[]{wallet.getBullet_bl(), wallet.getShot_bl(), wallet.getLives_bl(), wallet.getCoin_bl()};
 		String[] itemString = new String[]{"BULLET SPEED", "SHOT INTERVAL", "ADDITIONAL LIFE","COIN GAIN", "GAMBLING"};
 		int[] walletLevel = new int[]{wallet.getBullet_lv(), wallet.getShot_lv(), wallet.getLives_lv(), wallet.getCoin_lv(), 0};
