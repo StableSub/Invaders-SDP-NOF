@@ -2,13 +2,19 @@ package ui;
 
 import java.awt.event.KeyEvent;
 
+import engine.manager.DrawManager;
 import engine.utility.Cooldown;
 import engine.core.Core;
 import engine.utility.Sound;
 import engine.manager.SoundManager;
 import entity.Wallet;
+import blackjack.*;
+
+
+
 
 public class ShopScreen extends Screen {
+
 
     /** Milliseconds between changes in user selection. */
     private static final int SELECTION_TIME = 200;
@@ -28,7 +34,7 @@ public class ShopScreen extends Screen {
 
     /** Player's wallet */
     private Wallet wallet;
-
+    private Gamer gamer;
     /** 1-bullet speed 2-shot frequency 3-additional lives 4-gain coin upgrade */
     private int selected_item;
 
@@ -36,6 +42,7 @@ public class ShopScreen extends Screen {
     private int lv1cost = 2000;
     private int lv2cost = 4000;
     private int lv3cost = 8000;
+
 
     /**
      * Constructor, establishes the properties of the screen.
@@ -62,6 +69,8 @@ public class ShopScreen extends Screen {
 
         soundManager.stopSound(Sound.BGM_MAIN);
         soundManager.loopSound(Sound.BGM_SHOP);
+
+        this.drawManager = DrawManager.getInstance();  // DrawManager 초기화 확인
     }
 
     /**
@@ -81,7 +90,17 @@ public class ShopScreen extends Screen {
     protected final void update() {
         super.update();
 
+        drawManager.drawShop(this,selected_item,wallet,money_alertCooldown,max_alertCooldown);
         draw();
+
+        // ENTER 키를 눌렀을 때 갬블링 화면으로 이동
+        if (inputManager.isKeyDown(KeyEvent.VK_ENTER)) {
+            this.isRunning = false; // ShopScreen 종료
+            GamblingScreen gamblingScreen = new GamblingScreen(this.width, this.height, this.fps, this.wallet);
+            gamblingScreen.run(); // 다음 화면 실행
+            return;
+        }
+
         if (this.selectionCooldown.checkFinished()
                 && this.inputDelay.checkFinished()
                 && this.money_alertCooldown.checkFinished()
@@ -161,10 +180,7 @@ public class ShopScreen extends Screen {
 
     private void draw() {
         drawManager.initDrawing(this);
-
-
         drawManager.drawShop(this,selected_item,wallet,money_alertCooldown,max_alertCooldown);
-
         drawManager.completeDrawing(this);
     }
 

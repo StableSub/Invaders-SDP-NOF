@@ -44,7 +44,7 @@ public class TitleScreen extends Screen {
 		super(width, height, fps);
 
 		// Defaults to play.
-		if (!soundManager.isSoundPlaying(Sound.BGM_MAIN))
+		if (!soundManager.isSoundPlaying(Sound.BGM_MAIN) && !soundManager.isSoundPlaying(Sound.BGM_GAMBLING))
 			soundManager.loopSound(Sound.BGM_MAIN);
 
 		this.returnCode = 6;
