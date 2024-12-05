@@ -38,25 +38,12 @@ public class ShopScreen extends Screen {
 
     /** Player's wallet */
     private Wallet wallet;
-    private Gamer gamer;
     /** 1-bullet speed 2-shot frequency 3-additional lives 4-gain coin upgrade */
     private int selected_item;
 
-    /** price per upgrade level */
-    private int lv1cost = 1000;
-    private int lv2cost = 2000;
-    private int lv3cost = 4000;
-    private int lv4cost = 8000;
-    private int lv5cost = 16000;
-    private int lv6cost = 32000;
-    private int lv7cost = 64000;
-    private int lv8cost = 128000;
-    private int lv9cost = 256000;
-    private int bl1cost = 5000;
-    private int bl2cost = 10000;
-    private int bl3cost = 30000;
-    private int bl4cost = 120000;
-    private int bl5cost = 600000;
+    private final int[] lvCost = {1000, 2000, 4000, 8000, 16000, 32000, 64000, 128000, 256000};
+
+    private final int[] blCost = {5000, 10000, 30000, 120000, 600000};
 
     public static boolean isBreakLimitMode;
     /**
@@ -252,241 +239,53 @@ public class ShopScreen extends Screen {
 
     public boolean upgrade(int level)
     {
-        if(level == 1)
-        {
-            if(wallet.withdraw(lv1cost))
-            {
-                soundManager.playSound(Sound.COIN_USE);
-                return true;
-            }
-            else
-            {
-                soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
-                return false;
-            }
-        }
-        else if(level == 2)
-        {
-            if(wallet.withdraw(lv2cost))
-            {
-                soundManager.playSound(Sound.COIN_USE);
-                return true;
-            }
-            else
-            {
-                soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
-                return false;
-            }
-        }
-        else if(level == 3)
-        {
-            if(wallet.withdraw(lv3cost))
-            {
-                soundManager.playSound(Sound.COIN_USE);
-                return true;
-            }
-            else
-            {
-                soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
-                return false;
-            }
-        }
-        else if(level == 4)
-        {
-            if(wallet.withdraw(lv4cost))
-            {
-                soundManager.playSound(Sound.COIN_USE);
-                return true;
-            }
-            else
-            {
-                soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
-                return false;
-            }
-        }
-        else if(level == 5)
-        {
-            System.out.println("1");
-            if (!wallet.blockWithdraw(selected_item)) {
-                System.out.println("1");
-                needBl_alertCooldown.reset();
-                return false;
-            }
-            else if(wallet.withdraw(lv5cost))
-            {
-                soundManager.playSound(Sound.COIN_USE);
-                return true;
-            }
-            else
-            {
-                soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
-                return false;
-            }
-        }
-        else if(level == 6)
-        {
-            if (!wallet.blockWithdraw(selected_item)) {
-                needBl_alertCooldown.reset();
-                return false;
-            }
-            else if(wallet.withdraw(lv6cost))
-            {
-                soundManager.playSound(Sound.COIN_USE);
-                return true;
-            }
-            else
-            {
-                soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
-                return false;
-            }
-        }
-        else if(level == 7)
-        {
-            if (!wallet.blockWithdraw(selected_item)) {
-                needBl_alertCooldown.reset();
-                return false;
-            }
-            else if(wallet.withdraw(lv7cost))
-            {
-                soundManager.playSound(Sound.COIN_USE);
-                return true;
-            }
-            else
-            {
-                soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
-                return false;
-            }
-        }
-        else if(level == 8)
-        {
-            if (!wallet.blockWithdraw(selected_item)) {
-                needBl_alertCooldown.reset();
-                return false;
-            }
-            else if(wallet.withdraw(lv8cost))
-            {
-                soundManager.playSound(Sound.COIN_USE);
-                return true;
-            }
-
-            else
-            {
-                soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
-                return false;
-            }
-        }
-        else if(level == 9)
-        {
-            if (!wallet.blockWithdraw(selected_item)) {
-                needBl_alertCooldown.reset();
-                return false;
-            }
-            else if(wallet.withdraw(lv9cost))
-            {
-                soundManager.playSound(Sound.COIN_USE);
-                return true;
-            }
-            else
-            {
-                soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
-                return false;
-            }
-        }
-        else if(level == 10)
-        {
+        if (level == 10) {
             soundManager.playSound(Sound.COIN_INSUFFICIENT);
             max_alertCooldown.reset();
             return false;
         }
-        return false;
+        if (level >= 5) {
+            if (!wallet.blockWithdraw(selected_item)) {
+                needBl_alertCooldown.reset();
+                return false;
+            }
+            else if(wallet.withdraw(lvCost[level-1]))
+            {
+                soundManager.playSound(Sound.COIN_USE);
+                return true;
+            }
+            else
+            {
+                soundManager.playSound(Sound.COIN_INSUFFICIENT);
+                money_alertCooldown.reset();
+                return false;
+            }
+        } else {
+            if (wallet.withdraw(lvCost[level - 1])) {
+                soundManager.playSound(Sound.COIN_USE);
+                return true;
+            } else {
+                soundManager.playSound(Sound.COIN_INSUFFICIENT);
+                money_alertCooldown.reset();
+                return false;
+            }
+        }
     }
 
     public boolean blUpgrade(int level){
-        if(level == 1)
-        {
-            if(wallet.withdraw(bl1cost))
-            {
-                soundManager.playSound(Sound.COIN_USE);
-                return true;
-            }
-            else
-            {
-                soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
-                return false;
-            }
-        }
-        else if(level == 2)
-        {
-            if(wallet.withdraw(bl2cost))
-            {
-                soundManager.playSound(Sound.COIN_USE);
-                return true;
-            }
-            else
-            {
-                soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
-                return false;
-            }
-        }
-        else if(level == 3)
-        {
-            if(wallet.withdraw(bl3cost))
-            {
-                soundManager.playSound(Sound.COIN_USE);
-                return true;
-            }
-            else
-            {
-                soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
-                return false;
-            }
-        }
-        else if(level == 4)
-        {
-            if(wallet.withdraw(bl4cost))
-            {
-                soundManager.playSound(Sound.COIN_USE);
-                return true;
-            }
-            else
-            {
-                soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
-                return false;
-            }
-        }
-        else if(level == 5)
-        {
-            if(wallet.withdraw(bl5cost))
-            {
-                soundManager.playSound(Sound.COIN_USE);
-                return true;
-            }
-            else
-            {
-                soundManager.playSound(Sound.COIN_INSUFFICIENT);
-                money_alertCooldown.reset();
-                return false;
-            }
-        }
-        else if(level == 6)
-        {
+        if (level >= 6) {
             soundManager.playSound(Sound.COIN_INSUFFICIENT);
             max_bl_alertCooldown.reset();
             return false;
         }
-        return false;
+        if (wallet.withdraw(blCost[level-1])) {
+            soundManager.playSound(Sound.COIN_USE);
+            return true;
+        } else
+        {
+            soundManager.playSound(Sound.COIN_INSUFFICIENT);
+            money_alertCooldown.reset();
+            return false;
+        }
     }
 }
