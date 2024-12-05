@@ -40,11 +40,6 @@ public class CardDeck {
         return cards.remove(0); // 맨 앞의 카드 반환 후 제거
     }
 
-    // 남은 카드 수 반환
-    public int getRemainingCards() {
-        return cards.size();
-    }
-
     // 카드 덱 확인 (디버깅용)
     @Override
     public String toString() {

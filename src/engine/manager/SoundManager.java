@@ -47,7 +47,7 @@ public class SoundManager {
     /**
      * Private constructor.
      */
-    private SoundManager() {
+    public SoundManager() {
         logger = Core.getLogger();
         logger.info("Started loading sound resources.");
 

@@ -9,10 +9,6 @@ public class Card {
         this.denomination = denomination;
     }
 
-    public String getPattern() {
-        return pattern;
-    }
-
     public String getDenomination() {
         return denomination;
     }

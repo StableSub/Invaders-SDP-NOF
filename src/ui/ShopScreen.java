@@ -96,7 +96,7 @@ public class ShopScreen extends Screen {
         // ENTER 키를 눌렀을 때 갬블링 화면으로 이동
         if (inputManager.isKeyDown(KeyEvent.VK_ENTER)) {
             this.isRunning = false; // ShopScreen 종료
-            GamblingScreen gamblingScreen = new GamblingScreen(this.width, this.height, this.fps, this.wallet,this.gamer);
+            GamblingScreen gamblingScreen = new GamblingScreen(this.width, this.height, this.fps, this.wallet);
             gamblingScreen.run(); // 다음 화면 실행
             return;
         }

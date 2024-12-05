@@ -3,8 +3,6 @@ package entity;
 import database.DatabaseManager;
 import engine.core.Core;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

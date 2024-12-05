@@ -8,17 +8,15 @@ import ui.Screen;
 import java.awt.event.KeyEvent;
 
 public class GamblingScreen extends Screen {
-    private final Gamer gamer; // Gamer 객체 추가
     private final Wallet wallet;
 
     private final SoundManager soundManager = SoundManager.getInstance();
 
     private int bettingAmount = 0; // 베팅 금액
 
-    public GamblingScreen(int width, int height, int fps, Wallet wallet, Gamer gamer) {
+    public GamblingScreen(int width, int height, int fps, Wallet wallet) {
         super(width, height, fps);
         this.wallet = wallet;
-        this.gamer = gamer;
 
         soundManager.stopSound(Sound.BGM_SHOP);
         soundManager.loopSound(Sound.BGM_GAMBLING);

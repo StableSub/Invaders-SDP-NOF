@@ -10,11 +10,6 @@ public abstract class Player {
         hand = new ArrayList<>();
     }
 
-    // 카드 받기
-    public void receiveCard(Card card) {
-        hand.add(card);
-    }
-
     // 현재 손에 있는 카드 반환
     public List<Card> openCards() {
         return hand;
@@ -49,10 +44,5 @@ public abstract class Player {
         }
 
         return total;
-    }
-
-    // 손에 있는 카드 초기화
-    public void resetCards() {
-        hand.clear();
     }
 }

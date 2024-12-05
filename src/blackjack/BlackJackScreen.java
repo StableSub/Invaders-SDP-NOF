@@ -13,7 +13,6 @@ import engine.utility.Sound;
 
 public class BlackJackScreen {
     private final JFrame frame;
-    private final JPanel statusPanel;
     private  JLabel actionMessageLabel;
     private  JLabel gamerStatusLabel;
     private  JLabel dealerStatusLabel;
@@ -41,7 +40,7 @@ public class BlackJackScreen {
         this.bettingAmount = bettingAmount;
 
         setupTopPanel();
-        statusPanel = setupStatusPanel();
+        setupStatusPanel();
         setupButtonPanel();
         setupWindowListeners();
 
