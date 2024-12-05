@@ -854,7 +854,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 				this.bulletsShot, this.shipsDestroyed, this.elapsedTime, this.alertMessage, this.maxCombo, this.lapTime, this.tempScore, this.hitBullets);
 	}
 
-
 	/**
 	 * Start the action for two player mode
 	 *

@@ -245,13 +245,10 @@ public class WelcomeFrame extends JFrame {
 
         storyFrame.add(drawingPanel);
 
-        STARTButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        STARTButton.addActionListener(e -> {
 
-                storyFrame.dispose(); // 현재 창 닫기
-                setStart(false);
-            }
+            storyFrame.dispose(); // 현재 창 닫기
+            setStart(false);
         });
 
         storyFrame.setVisible(true); // 새로운 창 표시

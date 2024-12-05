@@ -33,7 +33,7 @@ public class GameSettingScreen extends Screen {
 	private final Cooldown selectionCooldown;
 
 	/** Total number of rows for selection. */
-	private static final int TOTAL_ROWS = 2; // Difficulty, Start
+	private static final int TOTAL_ROWS = 3; // Name, Difficulty, Start
 
 	/** Singleton instance of SoundManager */
 	private final SoundManager soundManager = SoundManager.getInstance();
