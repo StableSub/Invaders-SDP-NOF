@@ -1,26 +1,37 @@
 package entity;
 
-import engine.Core;
+import database.DatabaseManager;
+import engine.core.Core;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 public class Wallet {
     private static Logger logger = Core.getLogger();
     private int coin;
 
+    private String id;
     //bullet speed level
     private int bullet_lv;
+    private int bullet_bl;
 
     //shot frequency level
     private int shot_lv;
+    private int shot_bl;
 
     //additional lives level
     private int lives_lv;
+    private int lives_bl;
 
     //coin gain level
     private int coin_lv;
+    private int coin_bl;
+
+    private static final int ALERT_TIME = 1500;
 
     public Wallet()
     {
@@ -29,16 +40,25 @@ public class Wallet {
         this.shot_lv = 1;
         this.lives_lv = 1;
         this.coin_lv = 1;
+        this.bullet_bl = 0;
+        this.shot_bl = 0;
+        this.lives_bl = 0;
+        this.coin_bl = 0;
         writeWallet();
     }
 
-    public Wallet(int coin, int bullet_lv, int shot_lv, int lives_lv, int coin_lv)
+    public Wallet(String id, int coin, int bullet_lv, int shot_lv, int lives_lv, int coin_lv, int bullet_bl, int shot_bl, int lives_bl, int coin_bl)
     {
+        this.id = id;
         this.coin = coin;
         this.bullet_lv = bullet_lv;
         this.shot_lv = shot_lv;
         this.lives_lv = lives_lv;
         this.coin_lv = coin_lv;
+        this.bullet_bl = bullet_bl;
+        this.shot_bl = shot_bl;
+        this.lives_bl = lives_bl;
+        this.coin_bl = coin_bl;
     }
 
     public int getCoin()
@@ -66,33 +86,101 @@ public class Wallet {
         return coin_lv;
     }
 
-    public void setBullet_lv(int bullet_lv)
-    {
+    public int getBullet_bl() {return bullet_bl;}
+
+    public int getShot_bl() {return shot_bl;}
+
+    public int getLives_bl() {return lives_bl;}
+
+    public int getCoin_bl() {return coin_bl;}
+
+    public void setBullet_lv(int bullet_lv) {
         this.bullet_lv = bullet_lv;
         writeWallet();
-        logger.info("Upgrade Bullet Speed " + (bullet_lv-1) + "to " + bullet_lv);
+        logger.info("Upgrade Bullet Speed from " + (bullet_lv - 1) + " to " + bullet_lv);
     }
 
-    public void setShot_lv(int shot_lv)
-    {
+    public void setShot_lv(int shot_lv) {
+
         this.shot_lv = shot_lv;
         writeWallet();
-        logger.info("Upgrade Shop Frequency  " + (shot_lv-1) + "to " + shot_lv);
+        logger.info("Upgrade Shop Frequency from " + (shot_lv - 1) + " to " + shot_lv);
     }
 
-    public void setLives_lv(int lives_lv)
-    {
+    public void setLives_lv(int lives_lv) {
+
         this.lives_lv = lives_lv;
         writeWallet();
-        logger.info("Upgrade Additional Lives " + (lives_lv-1) + "to " + lives_lv);
+        logger.info("Upgrade Additional Lives from " + (lives_lv - 1) + " to " + lives_lv);
     }
 
-    public void setCoin_lv(int coin_lv)
-    {
+    public void setCoin_lv(int coin_lv) {
+
         this.coin_lv = coin_lv;
         writeWallet();
-        logger.info("Upgrade Gain Coin " + (coin_lv-1) + "to " + coin_lv);
+        logger.info("Upgrade Gain Coin from " + (coin_lv - 1) + " to " + coin_lv);
     }
+
+//     Bullet 항목 출금 차단
+
+    public boolean blockWithdraw(int selected_item) {
+        if (selected_item == 1) {
+            if (this.bullet_lv >= getMaxLevel(0)) {
+                logger.warning("Withdraw blocked: Bullet speed level has reached or exceeded the max level.");
+                return false;
+            }
+        } else if (selected_item == 2) {
+            if (this.shot_lv >= getMaxLevel(1)) {
+                logger.warning("Withdraw blocked: shot level has reached or exceeded the max level.");
+                return false;
+            }
+        } else if (selected_item == 3) {
+            if (this.lives_lv >= getMaxLevel(2)) {
+                logger.warning("Withdraw blocked: lives level has reached or exceeded the max level.");
+                return false;
+            }
+        } else if (selected_item == 4) {
+            if (this.coin_lv >= getMaxLevel(3)) {
+                logger.warning("Withdraw blocked: coin level has reached or exceeded the max level.");
+                return false;
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+
+
+    public void setBullet_bl(int bullet_bl)
+    {
+        this.bullet_bl = bullet_bl;
+        writeWallet();
+        logger.info("Break Limit of Bullet Speed " + (bullet_bl-1) + "to " + bullet_bl);
+    }
+
+    public void setShot_bl(int shot_bl)
+    {
+        this.shot_bl = shot_bl;
+        writeWallet();
+        logger.info("Break Limit of Shop Frequency  " + (shot_bl-1) + "to " + shot_bl);
+    }
+
+    public void setLives_bl(int lives_bl)
+    {
+        this.lives_bl = lives_bl;
+        writeWallet();
+        logger.info("Break Limit of Additional Lives " + (lives_bl-1) + "to " + lives_bl);
+    }
+
+    public void setCoin_bl(int coin_bl)
+    {
+        this.coin_bl = coin_bl;
+        writeWallet();
+        logger.info("Break Limit of Gain Coin " + (coin_bl-1) + "to " + coin_bl);
+    }
+
+
 
     public boolean deposit(int amount)
     {
@@ -108,79 +196,66 @@ public class Wallet {
         return true;
     }
 
-    public boolean withdraw(int amount)
-    {
-        if(amount <= 0) return false;
-        if(coin - amount < 0)
-        {
+    public boolean withdraw(int amount) {
+        // 항목별 출금 차단 조건 확인
+
+        if (amount <= 0) return false;
+        // 코인 수량이 충분한지 확인
+        if (coin - amount < 0) {
             logger.info("Insufficient coin");
-            return false;
+            return false; // 코인이 부족하면 출금하지 않음
         }
-        coin -= amount;
-        writeWallet();
-        logger.info("Withdraw completed. Your coin: " + this.coin);
-        return true;
-    }
-
-    //현재 지갑상태를 파일에 저장. 저장방식: coin, bullet_lv, shot_lv, lives_lv, coin_lv 순으로 한줄씩 저장
-    //Save the current wallet state to a file. Save format: coin, bullet_lv, shot_lv, lives_lv, coin_lv, each in one line
-    private void writeWallet()
-    {
-        try {
-            Core.getFileManager().saveWallet(this);
-        } catch (IOException e) {
-//            throw new RuntimeException(e);
-            logger.warning("Couldn't load wallet!");
+        else {
+            coin -= amount;
+            writeWallet();
+            logger.info("Withdraw completed. Your coin: " + this.coin);
+            return true;
         }
     }
 
-    // 파일에 적힌 정보로 지갑 생성. 만약 파일이 손상되어 읽을 수 없다면 초기값(0)으로 생성하기
-    //Create a wallet using the information written in the file. If the file is damaged or unreadable, create it with initial values (0)
-    public static Wallet getWallet() {
-        BufferedReader bufferedReader = null;
-
-        try {
-            //FileManager를 통해 파일에서 지갑 데이터를 불러옴
-            //Load wallet data from the file via FileManager
-            bufferedReader = Core.getFileManager().loadWallet();
-
-            if (bufferedReader == null) {
-                logger.info("Wallet file does not exist, initializing with default values.");
-
-                return new Wallet();
+    private void writeWallet() {
+        String sql = "UPDATE user_wallet SET Coin = ?, BulletSpeed = ?, ShotInterval = ?, " +
+                "AdditionalLife = ?, CoinGain = ?, BulletSpeedBL = ?, ShotIntervalBL = ?, AdditionalLifeBL = ?, CoinGainBL = ? WHERE id = ?";
+        try (Connection conn = new DatabaseManager().connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            // 매개변수 설정
+            pstmt.setInt(1, coin);
+            pstmt.setInt(2, bullet_lv);
+            pstmt.setInt(3, shot_lv);
+            pstmt.setInt(4, lives_lv);
+            pstmt.setDouble(5, coin_lv);
+            pstmt.setInt(6, bullet_bl);
+            pstmt.setInt(7, shot_bl);
+            pstmt.setInt(8, lives_bl);
+            pstmt.setDouble(9, coin_bl);
+            pstmt.setString(10, id);
+            // SQL 실행
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                logger.log(Level.SEVERE, "Wallet updated successfully!");
+            } else {
+                logger.log(Level.SEVERE, "No records updated. Check the ID.");
             }
-
-            //파일에서 각 줄을 읽어와서 값 설정
-            //Read each line from the file and set the values
-            int coin = Integer.parseInt(bufferedReader.readLine());
-            int levelSeq [] = new int[4]; //bullet_lv, shot_lv, lives_lv, coin_lv
-            for (int i = 0; i < 4; i++) {
-                int level = Integer.parseInt(bufferedReader.readLine());
-                if(level > 4 || level <= 0){
-                    logger.info("Weird level. Initializing with default values.");
-                    return new Wallet();
-                }
-                levelSeq[i] = level;
-            }
-
-            return new Wallet(coin, levelSeq[0], levelSeq[1], levelSeq[2], levelSeq[3]);
-
-        } catch (IOException | NumberFormatException e) {
-            //파일을 읽지 못하거나 손상된 경우 기본값으로 반환
-            //If there is an error reading the file or if it's corrupted, return with default values
-            logger.info("Error loading wallet data. Initializing with default values.");
-            return new Wallet();
-        } finally {
-            //파일 리소스 해제
-            //Release file resources
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+    // 기존의 필드와 메서드는 생략
+
+    public int getMaxLevel(int index) {
+        switch (index) {
+            case 0:
+                return 4 + getBullet_bl();
+            case 1:
+                return 4 + getShot_bl();
+            case 2:
+                return 4 + getLives_bl();
+            case 3:
+                return 4 + getCoin_bl();
+            default:
+                return 5; // 기본값
+        }
+    }
+
 
 }

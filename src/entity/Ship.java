@@ -3,11 +3,11 @@ package entity;
 import java.awt.Color;
 import java.util.Set;
 
-import engine.Cooldown;
-import engine.Core;
-import engine.DrawManager.SpriteType;
-import engine.Sound;
-import engine.SoundManager;
+import engine.utility.Cooldown;
+import engine.core.Core;
+import engine.manager.DrawManager.SpriteType;
+import engine.utility.Sound;
+import engine.manager.SoundManager;
 
 /**
  * Implements a ship, to be controlled by the player.
@@ -27,7 +27,7 @@ public abstract class Ship extends Entity {
     /** Play the sound every 0.5 second */
 	private static final int SOUND_COOLDOWN_INTERVAL = 500;
     /** Cooldown for playing sound */
-	private Cooldown soundCooldown;
+	private final Cooldown soundCooldown;
 
 	/** Multipliers for the ship's properties. */
 	protected final ShipMultipliers multipliers;
@@ -39,7 +39,7 @@ public abstract class Ship extends Entity {
 	/** Minimum time between shots. */
 	private Cooldown shootingCooldown;
 	/** Time spent inactive between hits. */
-	private Cooldown destructionCooldown;
+	private final Cooldown destructionCooldown;
 	/** Singleton instance of SoundManager */
 	private final SoundManager soundManager = SoundManager.getInstance();
 
@@ -91,70 +91,40 @@ public abstract class Ship extends Entity {
 		GalacticGuardian,
 		CosmicCruiser,
 	}
-
-	/**
-	 * Moves the ship speed uni ts right, or until the right screen border is
-	 * reached.
-	 */
 	public final void moveRight() {
-		moveRight(0.0f);
-	}
-
-	/**
-	 * Moves the ship speed units left, or until the left screen border is
-	 * reached.
-	 */
-	public final void moveLeft() {
-		moveLeft(0.0f);
-	}
-
-	public final void moveRight(float balance) {
 		if(threadWeb){
 			this.positionX += this.getSpeed() / 2;
 		} else {
 			this.positionX += this.getSpeed();
 		}
 		if (soundCooldown.checkFinished()) {
-			soundManager.playSound(Sound.PLAYER_MOVE, balance);
+			soundManager.playSound(Sound.PLAYER_MOVE);
 			soundCooldown.reset();
 		}
 	}
 
-	public final void moveLeft(float balance) {
+	public final void moveLeft() {
 		if(threadWeb){
 			this.positionX -= this.getSpeed() / 2;
 		} else {
 			this.positionX -= this.getSpeed();
 		}
 		if (soundCooldown.checkFinished()) {
-			soundManager.playSound(Sound.PLAYER_MOVE, balance);
+			soundManager.playSound(Sound.PLAYER_MOVE);
 			soundCooldown.reset();
 		}
-	}
-
-	/**
-	 * Shoots a bullet upwards.
-	 * 
-	 * @param bullets
-	 *            List of bullets on screen, to add the new bullet.
-	 * @return Checks if the bullet was shot correctly.
-	 */
-	public final boolean shoot(final Set<Bullet> bullets, int shotNum) {
-		return shoot(bullets, shotNum, 0.0f);
 	}
 
 	/**
 	 * bullet sound (2-players)
 	 * @param bullets
 	 *          List of bullets on screen, to add the new bullet.
-	 * @param balance
-	 * 			1p -1.0, 2p 1.0, both 0.0
 	 * @param shotNum
 	 * 			Upgraded shot.
 	 *
 	 * @return Checks if the bullet was shot correctly.
 	 */
-	public final boolean shoot(final Set<Bullet> bullets, int shotNum, float balance) {
+	public final boolean shoot(final Set<Bullet> bullets, int shotNum) {
 		if (this.shootingCooldown.checkFinished()) {
 
 			this.shootingCooldown.reset();
@@ -162,19 +132,19 @@ public abstract class Ship extends Entity {
 
 			switch (shotNum) {
 				case 1:
-					bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY, this.getBulletSpeed()));
-					soundManager.playSound(Sound.PLAYER_LASER, balance);
+					bullets.add(BulletPool.getNomalBullet(positionX + this.width / 2, positionY, this.getBulletSpeed()));
+					soundManager.playSound(Sound.PLAYER_LASER);
 					break;
 				case 2:
-					bullets.add(BulletPool.getBullet(positionX + this.width, positionY, this.getBulletSpeed()));
-					bullets.add(BulletPool.getBullet(positionX, positionY, this.getBulletSpeed()));
-					soundManager.playSound(Sound.ITEM_2SHOT, balance);
+					bullets.add(BulletPool.getNomalBullet(positionX + this.width, positionY, this.getBulletSpeed()));
+					bullets.add(BulletPool.getNomalBullet(positionX, positionY, this.getBulletSpeed()));
+					soundManager.playSound(Sound.ITEM_2SHOT);
 					break;
 				case 3:
-					bullets.add(BulletPool.getBullet(positionX + this.width, positionY, this.getBulletSpeed()));
-					bullets.add(BulletPool.getBullet(positionX, positionY, this.getBulletSpeed()));
-					bullets.add(BulletPool.getBullet(positionX + this.width / 2, positionY, this.getBulletSpeed()));
-					soundManager.playSound(Sound.ITEM_3SHOT, balance);
+					bullets.add(BulletPool.getNomalBullet(positionX + this.width, positionY, this.getBulletSpeed()));
+					bullets.add(BulletPool.getNomalBullet(positionX, positionY, this.getBulletSpeed()));
+					bullets.add(BulletPool.getNomalBullet(positionX + this.width / 2, positionY, this.getBulletSpeed()));
+					soundManager.playSound(Sound.ITEM_3SHOT);
 					break;
 			}
 
@@ -197,9 +167,9 @@ public abstract class Ship extends Entity {
 	/**
 	 * Switches the ship to its destroyed state.
 	 */
-	public final void destroy(float balance) {
+	public final void destroy() {
 		this.destructionCooldown.reset();
-		soundManager.playSound(Sound.PLAYER_HIT, balance);
+		soundManager.playSound(Sound.PLAYER_HIT);
 	}
 
 	/**
@@ -225,7 +195,7 @@ public abstract class Ship extends Entity {
 	 * @return Speed of the bullets.
 	 */
 	public final int getBulletSpeed() {
-		return Math.round(BULLET_SPEED * this.multipliers.bulletSpeed());
+		return -Math.abs(Math.round(BULLET_SPEED * this.multipliers.bulletSpeed()));
 	}
 
 	/**
@@ -243,45 +213,25 @@ public abstract class Ship extends Entity {
 		return remainingTime > 0 ? remainingTime : 0;
 	}
 
+	private final int[] bulletSpeedLv = {-6, -7, -8, -9, -10, -12, -14, -16, -18, -20};
+	private final int[] shotIntervalLv = {750, 700, 650, 600, 550, 500, 400, 300, 200, 100};
 
-	public void applyItem(Wallet wallet){
+	public void applyItem(Wallet wallet) {
 		int bulletLv = wallet.getBullet_lv();
-		switch (bulletLv){
-			case 1:
-				BULLET_SPEED = -6;
-				break;
-			case 2:
-				BULLET_SPEED = -7;
-				break;
-			case 3:
-				BULLET_SPEED = -9;
-				break;
-			case 4:
-				BULLET_SPEED = -10;
-				break;
-			default:
-				BULLET_SPEED = -6;
+		if (bulletLv >= 1 && bulletLv <= 10){
+			BULLET_SPEED = bulletSpeedLv[bulletLv - 1];
+		} else{
+			BULLET_SPEED = bulletSpeedLv[0];
 		}
+
+
 
 		int intervalLv = wallet.getShot_lv();
-		switch (intervalLv){
-			case 1: //생성자에서 이미 초기화함
-				break;
-			case 2:
-				SHOOTING_INTERVAL = 675;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			case 3:
-				SHOOTING_INTERVAL = 607;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			case 4:
-				SHOOTING_INTERVAL = 546;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
-				break;
-			default:
-				SHOOTING_INTERVAL = 750;
-				shootingCooldown = Core.getCooldown(this.getShootingInterval());
+		if (intervalLv >= 1 && intervalLv <= 10) {
+			SHOOTING_INTERVAL = shotIntervalLv[intervalLv - 1];
+		} else {
+			SHOOTING_INTERVAL = shotIntervalLv[0];
 		}
+		shootingCooldown = Core.getCooldown(this.getShootingInterval());
 	}
 }

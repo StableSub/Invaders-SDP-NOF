@@ -1,9 +1,9 @@
 package entity;
 import java.awt.Color;
 
-import engine.DrawManager.SpriteType;
-import engine.Sound;
-import engine.SoundManager;
+import engine.manager.DrawManager.SpriteType;
+import engine.utility.Sound;
+import engine.manager.SoundManager;
 
 public class Barrier extends Entity{
 
@@ -18,18 +18,13 @@ public class Barrier extends Entity{
         this.health = 1;
     }
 
-    public void reduceHealth(final float balance) {
+    public void reduceHealth() {
         this.health--;
-        soundManager.playSound(Sound.ITEM_BARRIER_OFF, balance);
+        soundManager.playSound(Sound.ITEM_BARRIER_OFF);
     }
 
     public boolean isDestroyed() {
         return this.health <= 0;
     }
-
-    public int getHealth() {
-        return this.health;
-    }
-
 
 }

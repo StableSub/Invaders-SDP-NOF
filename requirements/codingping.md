@@ -30,7 +30,7 @@ Our team's goal is to develop the UI of the game's main menu and other screens s
 - https://www.figma.com/design/iQ7mdOSli2JtlgYo5jymDF/Space-Invaders?node-id=0-1&node-type=canvas&t=KVKJi2zSHLBtCSMH-0
 
 ### GAME SETTING
-- Go to the GAME SETTINGS screen when playing from the Main Menu
+- Go to the GAME SETTINGS ui when playing from the Main Menu
   - Main Menu 에서 Play시 GAME SETTING 화면으로 이동
 - Add the 1Player and 2Player options
   - 1Player와 2Player 선택지 추가
@@ -49,13 +49,13 @@ Our team's goal is to develop the UI of the game's main menu and other screens s
   - 획득한 코인 표시
 
 ### ACHIEVEMENT
-- Show achievement history
+- Show record history
   - 업적 기록 표시
 
 ### SETTINGS
 - Add sound volume control
   - 사운드 볼륨 조절 기능 추가
-- Added a Credit screen to display dev team information (TBA)
+- Added a Credit ui to display dev team information (TBA)
   - 개발팀 정보 출력하는 Credit 화면 추가 (미정)
 
 ## Team Members and Roles
@@ -74,7 +74,7 @@ Our team's goal is to develop the UI of the game's main menu and other screens s
   - 현재 Coin 획득 정보 필요
 - Coins earned at end of game information required
   - 게임 종료시 획득 Coin 정보 필요
-- Requires player achievement information
+- Requires player record information
   - 플레이어 업적 정보 필요
 - Need sound information from sound settings
   - 사운드 설정에서 사운드 정보 필요
