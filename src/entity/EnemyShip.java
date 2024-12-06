@@ -34,7 +34,7 @@ public class EnemyShip extends Entity {
 	/** Cooldown between sprite changes. */
 	private Cooldown animationCooldown;
 	/** Checks if the ship has been hit by a bullet. */
-	private boolean isDestroyed;
+    public boolean isDestroyed;
 	/** Values of the ship, in points, when destroyed. */
 	private int pointValue;
 
@@ -98,7 +98,7 @@ public class EnemyShip extends Entity {
 	/**
 	 * Giving color for each enemy ship
 	 */
-		public static Color getDefaultColor(SpriteType spriteType) {
+	public static Color getDefaultColor(SpriteType spriteType) {
 			switch (spriteType) {
 				case EnemyShipA1:
 				case EnemyShipA2:
@@ -124,12 +124,13 @@ public class EnemyShip extends Entity {
 	 * Constructor, establishes the ship's properties for a special ship, with
 	 * known starting properties.
 	 */
-	public EnemyShip() {
-		super(-32, 60, 16 * 2, 7 * 2, Color.RED);
+	public EnemyShip(final GameState gameState) {
+		super(-32, 60, 62 * 2, 28 * 2, new Color(128, 63, 250)); // 짙은 보라색
 
 		this.spriteType = SpriteType.EnemyShipSpecial;
 		this.isDestroyed = false;
 		this.pointValue = BONUS_TYPE_POINTS;
+		this.health = gameState.getLevel()+1;
 	}
 
 	/**
@@ -200,23 +201,25 @@ public class EnemyShip extends Entity {
 
 	/**
 	 * Destroys the ship, causing an explosion.
-	 *
-	 * @param balance 1p -1.0, 2p 1.0, both 0.0
 	 */
-	public final void destroy(final float balance) {
+	public final void destroy() {
 		this.isDestroyed = true;
 		this.spriteType = SpriteType.Explosion;
-        soundManager.playSound(Sound.ALIEN_HIT, balance);
+        soundManager.playSound(Sound.ALIEN_HIT);
 	}
 
-    public final void HealthManageDestroy(final float balance) { //Determine whether to destroy the enemy ship based on its health
+    public final void HealthManageDestroy(final EnemyShip destroyedShip) { //Determine whether to destroy the enemy ship based on its health
         if(this.health <= 0){
             this.isDestroyed = true;
-            this.spriteType = SpriteType.Explosion;
+			if (destroyedShip.spriteType.equals(spriteType.EnemyShipSpecial)) {
+				this.spriteType = SpriteType.SpecialExplosion;
+			} else {
+				this.spriteType = SpriteType.Explosion;
+			}
         }else{
             this.health--;
         }
-        soundManager.playSound(Sound.ALIEN_HIT, balance);
+        soundManager.playSound(Sound.ALIEN_HIT);
     }
 
 	public int getHealth(){return this.health; }  //Receive enemy ship health

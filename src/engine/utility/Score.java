@@ -8,8 +8,6 @@ package engine.utility;
  */
 public class Score implements Comparable<Score> {
 
-	/** Player's name. */
-	private String name;
 	/** Score points. */
 	private int score;
 
@@ -28,15 +26,6 @@ public class Score implements Comparable<Score> {
 
 	public String getUserId() {
 		return userId;
-	}
-
-	/**
-	 * Getter for the player's name.
-	 * 
-	 * @return Name of the player.
-	 */
-	public final String getName() {
-		return this.name;
 	}
 
 	/**

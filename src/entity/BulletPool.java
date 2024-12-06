@@ -4,27 +4,23 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Implements a pool of recyclable bullets.
- * 
+ * Implements a nomalPool of recyclable bullets.
+ *
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
- * 
+ *
  */
 public final class BulletPool {
 
 	/** Set of already created bullets. */
-	private static Set<Bullet> pool = new HashSet<Bullet>();
+	private static Set<Bullet> nomalPool = new HashSet<Bullet>();
+	private static Set<CurvedBullet> curvedPool = new HashSet<CurvedBullet>();
+
+	private static Set<ExplosionBullet> explosionPool = new HashSet<ExplosionBullet>();
 
 	/**
-	 * Constructor, not called.
-	 */
-	private BulletPool() {
-
-	}
-
-	/**
-	 * Returns a bullet from the pool if one is available, a new one if there
+	 * Returns a bullet from the nomalPool if one is available, a new one if there
 	 * isn't.
-	 * 
+	 *
 	 * @param positionX
 	 *            Requested position of the bullet in the X axis.
 	 * @param positionY
@@ -34,12 +30,12 @@ public final class BulletPool {
 	 *            on direction - positive is down.
 	 * @return Requested bullet.
 	 */
-	public static Bullet getBullet(final int positionX,
-			final int positionY, final int speed) {
+	public static Bullet getNomalBullet(final int positionX, final int positionY, final int speed) {
 		Bullet bullet;
-		if (!pool.isEmpty()) {
-			bullet = pool.iterator().next();
-			pool.remove(bullet);
+
+		if (!nomalPool.isEmpty()) {
+			bullet = nomalPool.iterator().next();
+			nomalPool.remove(bullet);
 			bullet.setPositionX(positionX - bullet.getWidth() / 2);
 			bullet.setPositionY(positionY);
 			bullet.setSpeed(speed);
@@ -51,13 +47,58 @@ public final class BulletPool {
 		return bullet;
 	}
 
+	public static CurvedBullet getCurvedBullet(final int positionX, final int positionY, final int speed) {
+		CurvedBullet bullet;
+
+		if (!curvedPool.isEmpty()) {
+			bullet = curvedPool.iterator().next();
+			curvedPool.remove(bullet);
+			bullet.setPositionX(positionX - bullet.getWidth() / 2);
+			bullet.setPositionY(positionY);
+			bullet.setSpeed(speed);
+			bullet.setSprite();
+		} else {
+			bullet = new CurvedBullet(positionX, positionY, speed);
+			bullet.setPositionX(positionX - bullet.getWidth() / 2);
+		}
+		return bullet;
+	}
+
+	public static ExplosionBullet getExplosionBullet(final int positionX, final int positionY, final int speed) {
+		ExplosionBullet bullet;
+
+		if (!explosionPool.isEmpty()) {
+			bullet = explosionPool.iterator().next();
+			explosionPool.remove(bullet);
+			bullet.setPositionX(positionX - bullet.getWidth() / 2);
+			bullet.setPositionY(positionY);
+			bullet.setSpeedX(0); // X 속도 초기화
+			bullet.setSpeedY(speed); // Y 속도 초기화
+			bullet.setExploed(false); // 폭발 상태 초기화
+			bullet.setChild(false); // 자식 상태 초기화
+			bullet.getChildBullets().clear(); // 자식 총알 초기화
+			bullet.setSprite();
+		} else {
+			bullet = new ExplosionBullet(positionX, positionY, speed);
+			bullet.setPositionX(positionX - bullet.getWidth() / 2);
+		}
+		return bullet;
+	}
 	/**
 	 * Adds one or more bullets to the list of available ones.
-	 * 
+	 *
 	 * @param bullet
 	 *            Bullets to recycle.
 	 */
-	public static void recycle(final Set<Bullet> bullet) {
-		pool.addAll(bullet);
+	public static void recycleNormal(final Set<Bullet> bullet) {
+		nomalPool.addAll(bullet);
+	}
+
+	public static void recycleCurved(final Set<CurvedBullet> bullet) {
+		curvedPool.addAll(bullet);
+	}
+
+	public static void recycleExplosion(final Set<ExplosionBullet> bullet) {
+		explosionPool.addAll(bullet);
 	}
 }

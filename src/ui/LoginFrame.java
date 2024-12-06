@@ -12,12 +12,10 @@ import java.sql.SQLException;
 public class LoginFrame extends JFrame {
 
     private String userID;
-    private JTextField textID; // ID// 입력 필드
-    private JPasswordField textPassword; // 비밀번호 입력 필드
-    private DatabaseManager db; // UserDatabase 객체 (데이터베이스 작업 담당)
+    private final JTextField textID; // ID// 입력 필드
+    private final JPasswordField textPassword; // 비밀번호 입력 필드
 
     public LoginFrame(DatabaseManager db) {
-        this.db = db; // 전달받은 UserDatabase 객체를 인스턴스 변수에 저장
 
         // GUI 구성
         setTitle("Login"); // 창 제목 설정

@@ -23,7 +23,6 @@ public class GameSettingScreen extends Screen {
 	 * draw를 용이하게 하기 위해 NAME_LIMIT을 4로 제한 */
 	private static final int NAME_LIMIT = 4;
 
-
 	/** Player name for record input. */
 	private static String name;
 	/** Difficulty level. */
@@ -34,7 +33,7 @@ public class GameSettingScreen extends Screen {
 	private final Cooldown selectionCooldown;
 
 	/** Total number of rows for selection. */
-	private static final int TOTAL_ROWS = 3; // Multiplayer, Difficulty, Start
+	private static final int TOTAL_ROWS = 3; // Name, Difficulty, Start
 
 	/** Singleton instance of SoundManager */
 	private final SoundManager soundManager = SoundManager.getInstance();
@@ -52,7 +51,7 @@ public class GameSettingScreen extends Screen {
 	public GameSettingScreen(String id, final int width, final int height, final int fps) {
 		super(width, height, fps);
 		// row 0: multiplayer
-		this.name = id;
+		name = id;
 
 		// row 1: difficulty level
 		this.difficultyLevel = 1; 	// 0: easy, 1: normal, 2: hard
@@ -148,9 +147,8 @@ public class GameSettingScreen extends Screen {
 	private void handleNameInput(InputManager inputManager) {
 		for (int keyCode = KeyEvent.VK_A; keyCode <= KeyEvent.VK_Z; keyCode++) {
 			if (inputManager.isKeyDown(keyCode)) {
-				// Delete Naming of name2
-				if (this.name.length() < NAME_LIMIT) {
-					this.name += (char) keyCode;
+				if (name.length() < NAME_LIMIT) {
+					name += (char) keyCode;
 					this.selectionCooldown.reset();
 					soundManager.playSound(Sound.MENU_TYPING);
 				}
@@ -164,7 +162,6 @@ public class GameSettingScreen extends Screen {
 		}
 		return instance;
 	}
-
 
 	public static String getName() { return name;}
 
@@ -180,7 +177,7 @@ public class GameSettingScreen extends Screen {
 
 		drawManager.drawGameSettingElements(this, this.selectedRow, name ,this.difficultyLevel);
 
-		drawManager.completeDrawing(this);
+		drawManager.completeDrawing();
 
 		Core.setLevelSetting(this.difficultyLevel);
 	}

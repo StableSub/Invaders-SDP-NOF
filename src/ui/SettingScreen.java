@@ -23,13 +23,13 @@ public class SettingScreen extends Screen {
     private static final int COOLDOWN_TIME = 200;
 
     /** Menu item list */
-    private String[] menuItems = { "Sound", "Ending Credit" , "Ship Selection"};
+    private final String[] menuItems = { "Sound", "Ending Credit" , "Ship Selection"};
     /** Default selected menu item */
     private int selectedItem = 0;
     /** Default volume value */
     private int volumeLevel;
     /** Time between changes in user selection. */
-    private Cooldown selectionCooldown;
+    private final Cooldown selectionCooldown;
     /** Ship enumeration index*/
     private int currentShip;
     /** Singleton instance of SoundManager */
@@ -141,15 +141,15 @@ public class SettingScreen extends Screen {
         boolean isVolumeSelected = (selectedItem == 0);
         boolean isShipChoiceSelected = (selectedItem == 2);
 
-        drawManager.drawVolumeBar(this, this.getWidth() / 2 - VOLUME_BAR_WIDTH / 2, this.getHeight() / 3 + VOLUME_BAR_GAP, VOLUME_BAR_WIDTH, filledWidth, isVolumeSelected);
+        drawManager.drawVolumeBar(this.getWidth() / 2 - VOLUME_BAR_WIDTH / 2, this.getHeight() / 3 + VOLUME_BAR_GAP, VOLUME_BAR_WIDTH, filledWidth, isVolumeSelected);
 
         drawManager.drawVolumePercentage(this, this.getWidth() / 2, this.getHeight() / 3 + VOLUME_BAR_GAP + VOLUME_PERCENTAGE_GAP, volumeLevel, isVolumeSelected);
 
         int NumberOfShips = Ship.ShipType.values().length;
         for (int j = 0; j < NumberOfShips; j++){
-            drawManager.drawShipBoxes(this, this.getWidth() / 2 - 30*NumberOfShips, this.getHeight() - 150, isShipChoiceSelected, j, j==this.currentShip);
+            drawManager.drawShipBoxes(this.getWidth() / 2 - 30*NumberOfShips, this.getHeight() - 150, isShipChoiceSelected, j, j==this.currentShip);
         }
 
-        drawManager.completeDrawing(this);
+        drawManager.completeDrawing();
     }
 }

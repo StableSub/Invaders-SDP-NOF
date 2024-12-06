@@ -7,7 +7,7 @@ package engine.core;
  * 
  */
 public class GameSettings {
-	private int difficulty;
+
 	/** Width of the level's enemy formation. */
 	private int formationWidth;
 	/** Height of the level's enemy formation. */
@@ -85,7 +85,6 @@ public class GameSettings {
 	 */
 	public GameSettings LevelSettings(int formationWidth, int formationHeight,
 									  int baseSpeed, int shootingFrecuency, int level, int difficulty) {
-		this.difficulty = difficulty;
 		return switch (difficulty) {
 			case 0 -> {
 				if(level%3 == 0 && level < 5){
@@ -163,13 +162,6 @@ public class GameSettings {
 				yield null;
 			}
 		};
-	}
-
-	/**
-	 * @return difficulty
-	 */
-	public int getDifficulty() {
-		return difficulty;
 	}
 
 }

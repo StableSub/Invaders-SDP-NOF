@@ -11,8 +11,11 @@ public class WelcomeFrame extends JFrame {
     static boolean start = true;
     private static final Logger LOGGER = Logger.getLogger(WelcomeFrame.class.getName());
 
-    public void wellcome(String user_name){
-
+    public WelcomeFrame(String userName){
+        welcome(userName);
+    }
+    public void welcome(String user_name){
+        
         setTitle(" Welcome frame "); // 창 제목 설정
         setSize(500, 400); // 창 크기 설정
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // 창 닫을 때 프로그램 종료 설정
@@ -97,25 +100,19 @@ public class WelcomeFrame extends JFrame {
         add(explainNext2);
 
 
-        skipButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setStart(false); // start 값을 false로 설정
-                LOGGER.info("Skip and start Invaders");
+        skipButton.addActionListener(e -> {
+            setStart(false); // start 값을 false로 설정
+            LOGGER.info("Skip and start Invaders");
 
-                dispose();
-            }
+            dispose();
         });
 
-        nextButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setStart(true); // start 값을 true로 설정
-                Explain_story();
-                dispose();
-                LOGGER.info("Show story and guide for Invaders");
+        nextButton.addActionListener(e -> {
+            setStart(true); // start 값을 true로 설정
+            Explain_story();
+            dispose();
+            LOGGER.info("Show story and guide for Invaders");
 
-            }
         });
 
         // Panel 추가
@@ -246,13 +243,10 @@ public class WelcomeFrame extends JFrame {
 
         storyFrame.add(drawingPanel);
 
-        STARTButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        STARTButton.addActionListener(e -> {
 
-                storyFrame.dispose(); // 현재 창 닫기
-                setStart(false);
-            }
+            storyFrame.dispose(); // 현재 창 닫기
+            setStart(false);
         });
 
         storyFrame.setVisible(true); // 새로운 창 표시
@@ -265,9 +259,5 @@ public class WelcomeFrame extends JFrame {
     public void setStart(boolean start){
         this.start = start;
 
-    }
-
-    public WelcomeFrame(String user_name){
-        wellcome(user_name);
     }
 }

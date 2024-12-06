@@ -77,7 +77,7 @@ public class GamblingScreen extends Screen {
         // UI 요소: 배팅 금액과 기타 메시지 모두 표시
         drawManager.drawGambling(this, bettingAmount);
 
-        drawManager.completeDrawing(this); // 드로잉 완료
+        drawManager.completeDrawing(); // 드로잉 완료
     }
 
 

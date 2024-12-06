@@ -17,16 +17,16 @@ import entity.Achievement;
 public class AchievementScreen extends Screen {
 
 	/** List of past high scores. */
-	private List<Score> highScores;
+	private final List<Score> highScores;
 	/** Singleton instance of SoundManager */
 	private final SoundManager soundManager = SoundManager.getInstance();
 
-	private int totalScore;
-	private int totalPlayTime;
-	private int currentPerfectStage;
-	private int maxCombo;
-	private double highAccuracy;
-	private boolean checkFlawlessFailure;
+	private final int totalScore;
+	private final int totalPlayTime;
+	private final int currentPerfectStage;
+	private final int maxCombo;
+	private final double highAccuracy;
+	private final boolean checkFlawlessFailure;
 
 	/**
 	 * Constructor, establishes the properties of the screen.
@@ -86,7 +86,7 @@ public class AchievementScreen extends Screen {
 		drawManager.drawAchievementMenu(this, this.totalScore, this.totalPlayTime,
 				this.maxCombo, this.highAccuracy, this.currentPerfectStage, this.currentPerfectStage+1,
 				this.checkFlawlessFailure);
-		drawManager.drawHighScores(this);
-		drawManager.completeDrawing(this);
+		drawManager.drawHighScores(this, this.highScores);
+		drawManager.completeDrawing();
 	}
 }
