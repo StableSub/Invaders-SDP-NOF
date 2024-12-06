@@ -26,7 +26,7 @@ import entity.*;
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
  *
  */
-public class GameScreen extends Screen implements Callable<GameState> {
+public class GameScreen extends Screen {
 
 	/** Milliseconds until the screen accepts user input. */
 	private static final int INPUT_DELAY = 6000;
@@ -852,17 +852,6 @@ public class GameScreen extends Screen implements Callable<GameState> {
 	public final GameState getGameState() {
 		return new GameState(this.level, this.score, this.shipType, this.lives,
 				this.bulletsShot, this.shipsDestroyed, this.elapsedTime, this.alertMessage, this.maxCombo, this.lapTime, this.tempScore, this.hitBullets);
-	}
-
-	/**
-	 * Start the action for two player mode
-	 *
-	 * @return Current game state.
-	 */
-	@Override
-	public final GameState call() {
-		run();
-		return getGameState();
 	}
 	public void damage(){
 		for(int i=0; i<=level/3;i++){
