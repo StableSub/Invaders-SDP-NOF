@@ -797,7 +797,7 @@ public class GameScreen extends Screen {
 					while (barrierIterator.hasNext()) {
 						Barrier barrier = barrierIterator.next();
 						if (checkCollision(child, barrier)) {
-							recyclableNomal.add(child);
+							recyclableExplosion.add(child);
 							barrier.reduceHealth();
 							if (barrier.isDestroyed()) {
 								barrierIterator.remove();

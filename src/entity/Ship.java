@@ -185,7 +185,7 @@ public abstract class Ship extends Entity {
 	 * @return Speed of the bullets.
 	 */
 	public final int getBulletSpeed() {
-		return -Math.abs(Math.round(BULLET_SPEED * this.multipliers.bulletSpeed()));
+		return Math.round(BULLET_SPEED * this.multipliers.bulletSpeed());
 	}
 
 	/**
