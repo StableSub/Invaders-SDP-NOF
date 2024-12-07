@@ -1,7 +1,6 @@
 package entity;
 
 import java.awt.Color;
-import java.util.Random;
 
 import engine.manager.DrawManager.SpriteType;
 

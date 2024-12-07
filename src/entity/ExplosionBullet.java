@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExplosionBullet extends Bullet {
-    private boolean exploed, isChild;
+    private boolean exploded, isChild;
     private List<ExplosionBullet> childBullets; // 폭발로 생성된 자식 총알을 관리하는 리스트
 
     private int speedX, speedY;
@@ -13,7 +13,7 @@ public class ExplosionBullet extends Bullet {
         super(positionX, positionY, speedY);
         this.speedX = 0;
         this.speedY = speedY;
-        this.exploed = false;
+        this.exploded = false;
         this.isChild = false;
         this.childBullets = new ArrayList<>(); // 내부에서 관리하는 자식 총알 리스트
         setSprite();
@@ -23,7 +23,7 @@ public class ExplosionBullet extends Bullet {
         super(positionX, positionY, speedY);
         this.speedX = speedX;
         this.speedY = speedY;
-        this.exploed = true;
+        this.exploded = true;
         this.isChild = true;
         this.childBullets = new ArrayList<>();
         setSprite();
@@ -31,7 +31,7 @@ public class ExplosionBullet extends Bullet {
 
     public final void update() {
         // 폭발한 경우에는 자식 총알만 업데이트
-        if (exploed) {
+        if (exploded) {
             if (isChild) {
                 this.positionY += this.speedY;
                 this.positionX += this.speedX;
@@ -43,7 +43,7 @@ public class ExplosionBullet extends Bullet {
         this.positionX += this.speedX;
         if (shouldExplode()) {
             explode();
-            this.exploed = true;
+            this.exploded = true;
         }
     }
 
@@ -68,8 +68,8 @@ public class ExplosionBullet extends Bullet {
     public List<ExplosionBullet> getChildBullets() {
         return childBullets;
     }
-    public boolean getExploed() {
-        return exploed;
+    public boolean getExploded() {
+        return exploded;
     }
     public void setSpeedX(int speedX) {
         this.speedX = speedX;
@@ -77,8 +77,8 @@ public class ExplosionBullet extends Bullet {
     public void setSpeedY(int speedY) {
         this.speedY = speedY;
     }
-    public void setExploed(boolean exploed) {
-        this.exploed = exploed;
+    public void setExploded(boolean exploded) {
+        this.exploded = exploded;
     }
     public void setChild(boolean isChild) {
         this.isChild = isChild;

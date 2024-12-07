@@ -52,8 +52,8 @@ public class CurvedBullet extends Bullet {
         if (this.positionX < 0) {
             this.positionX = 0; // 경계 안으로 복구
             this.angle += Math.PI; // 방향 반전
-        } else if (this.positionX > 650) {
-            this.positionX = 650; // 경계 안으로 복구
+        } else if (this.positionX > 600) {
+            this.positionX = 600; // 경계 안으로 복구
             this.angle += Math.PI; // 방향 반전
         }
     }
