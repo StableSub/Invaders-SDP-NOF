@@ -5,7 +5,6 @@ import java.awt.event.KeyEvent;
 import java.util.*;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.concurrent.Callable;
 
 
 import engine.core.Core;
@@ -466,7 +465,7 @@ public class GameScreen extends Screen {
 		for (CurvedBullet bullet : this.curvedBullets)
 			drawManager.drawRotatedBullet(bullet, bullet.getPositionX(), bullet.getPositionY(), bullet.getAngle());
 		for (ExplosionBullet bullet : this.explosionBullets) {
-			if (!bullet.getExploed()) {
+			if (!bullet.getExploded()) {
 				drawManager.drawEntity(bullet, bullet.getPositionX(), bullet.getPositionY());
 			}
 			for (ExplosionBullet child : bullet.getChildBullets()) {
@@ -614,7 +613,7 @@ public class GameScreen extends Screen {
 			recyclableExplosion.addAll(childToRecycle);
 
 			// 부모 총알 정리 (폭발 상태이며 자식이 모두 제거된 경우)
-			if (bullet.getExploed() && bullet.getChildBullets().isEmpty()) {
+			if (bullet.getExploded() && bullet.getChildBullets().isEmpty()) {
 				recyclableExplosion.add(bullet);
 			}
 		}
@@ -798,7 +797,7 @@ public class GameScreen extends Screen {
 					while (barrierIterator.hasNext()) {
 						Barrier barrier = barrierIterator.next();
 						if (checkCollision(child, barrier)) {
-							recyclableNomal.add(child);
+							recyclableExplosion.add(child);
 							barrier.reduceHealth();
 							if (barrier.isDestroyed()) {
 								barrierIterator.remove();
