@@ -114,16 +114,6 @@ public abstract class Ship extends Entity {
 			soundCooldown.reset();
 		}
 	}
-
-	/**
-	 * bullet sound (2-players)
-	 * @param bullets
-	 *          List of bullets on screen, to add the new bullet.
-	 * @param shotNum
-	 * 			Upgraded shot.
-	 *
-	 * @return Checks if the bullet was shot correctly.
-	 */
 	public final boolean shoot(final Set<Bullet> bullets, int shotNum) {
 		if (this.shootingCooldown.checkFinished()) {
 
@@ -195,7 +185,7 @@ public abstract class Ship extends Entity {
 	 * @return Speed of the bullets.
 	 */
 	public final int getBulletSpeed() {
-		return -Math.abs(Math.round(BULLET_SPEED * this.multipliers.bulletSpeed()));
+		return Math.round(BULLET_SPEED * this.multipliers.bulletSpeed());
 	}
 
 	/**
