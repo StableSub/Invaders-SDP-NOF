@@ -73,7 +73,7 @@ public class ResetPassword {
                 String email = textEmail.getText();
                 String newPassword = new String(textNewPassword.getPassword());
 
-                if (finder_PASSWORD(id, email, newPassword)) {
+                if (finderPassword(id, email, newPassword)) {
                     JOptionPane.showMessageDialog(frame, "Password has been reset successfully.");
                     frame.dispose();
                 } else {
@@ -86,7 +86,7 @@ public class ResetPassword {
     }
 
     // 비밀번호 찾기 및 재설정 메서드
-    public boolean finder_PASSWORD(String id, String email, String newPassword) {
+    public boolean finderPassword(String id, String email, String newPassword) {
         String selectSql = "SELECT id FROM user_account WHERE id = ? AND email = ?";
         String updateSql = "UPDATE user_account SET password = ? WHERE id = ?";
 

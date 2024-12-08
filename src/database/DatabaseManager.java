@@ -78,7 +78,11 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
                 + "    BulletSpeed INT DEFAULT 1,\n"
                 + "    ShotInterval INT DEFAULT 1,\n"
                 + "    AdditionalLife INT DEFAULT 1,\n"
-                + "    CoinGain INT DEFAULT 1\n"
+                + "    CoinGain INT DEFAULT 1, \n"
+                + "    BulletSpeedBL INT DEFAULT 1, \n"
+                + "    ShotIntervalBL INT DEFAULT 1, \n"
+                + "    AdditionalLifeBL INT DEFAULT 1, \n"
+                + "    CoinGainBL INT DEFAULT 1\n"
                 + ");";
 
         try (Connection conn = this.connect();
@@ -238,9 +242,13 @@ public class DatabaseManager { //아이디,비밀번호 찾기에서 사용하�
                     int shotInterval = rs.getInt("ShotInterval");
                     int additionalLife = rs.getInt("AdditionalLife");
                     int coinGain = rs.getInt("CoinGain");
+                    int bulletSpeedBL = rs.getInt("BulletSpeedBL");
+                    int shotIntervalBL = rs.getInt("ShotIntervalBL");
+                    int additionalLifeBL = rs.getInt("AdditionalLifeBL");
+                    int coinGainBL = rs.getInt("CoinGainBL");
 
                     // UserDataLoader 객체 생성 및 반환 준비
-                    userData = new Wallet(id, coin, bulletSpeed, shotInterval, additionalLife, coinGain);
+                    userData = new Wallet(id, coin, bulletSpeed, shotInterval, additionalLife, coinGain, bulletSpeedBL, shotIntervalBL, additionalLifeBL, coinGainBL);
                     LOGGER.log(Level.SEVERE, "Data loaded successfully for user ID: " + userID);
                 } else {
                     LOGGER.log(Level.SEVERE,"No data found for user ID: " + userID);

@@ -7,13 +7,11 @@ import java.awt.event.ActionEvent; // 이벤트 처리
 import java.awt.event.ActionListener; // 이벤트 리스너
 
 public class RegisterFrame extends JFrame {
-    private JTextField textID; // ID 입력 필드
-    private JPasswordField textPassword; // 비밀번호 입력 필드
-    private JTextField textEmail; // 이메일 입력 필드
-    private DatabaseManager db; // UserDatabase 객체 (데이터베이스 작업 담당)
+    private final JTextField textID; // ID 입력 필드
+    private final JPasswordField textPassword; // 비밀번호 입력 필드
+    private final JTextField textEmail; // 이메일 입력 필드
 
     public RegisterFrame(DatabaseManager db) {
-        this.db = db; // 전달받은 UserDatabase 객체를 인스턴스 변수에 저장
         Color textColor = new Color(101, 255, 94); // 텍스트 색상 설정 (어두운 회색)
         Font font = new Font("Arial", Font.BOLD, 16); // Arial 폰트 설정
 

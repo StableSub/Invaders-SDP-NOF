@@ -109,7 +109,7 @@ public final class Core {
 		int returnCode = 1;
 		do {
 			MAX_LIVES = 3+ wallet.getLives_lv()-1;
-			GameState gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0, 0);
+			GameState gameState = new GameState(1, 0, BASE_SHIP, MAX_LIVES, 0, 0, 0, "", 0, 0, 0 ,0);
 			Achievement achievement = db.loadAchData(login.getID());
 			AchievementManager achievementManager = new AchievementManager(achievement);
 
@@ -164,7 +164,7 @@ public final class Core {
 						+ gameState.getLivesRemaining() + " lives remaining, "
 						+ gameState.getBulletsShot() + " bullets shot and "
 						+ gameState.getShipsDestroyed() + " ships destroyed.");
-				currentScreen = new ScoreScreen(login.getID(), width, height, FPS, gameState, wallet, achievementManager);
+				currentScreen = new ScoreScreen(width, height, FPS, gameState, wallet, achievementManager);
 
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing score screen.");

@@ -25,9 +25,6 @@ public class SoundManager {
     private boolean soundEnabled;
     /** Value of current volume */
     private static int currentVolume = 10;
-    /** Maximum and minimum values of volume */
-    private final float MIN_VOL = -80.0f;
-    private final float MAX_VOL = 6.0f;
     /** Current playing BGM */
     private Sound currentBGM;
 
@@ -47,7 +44,7 @@ public class SoundManager {
     /**
      * Private constructor.
      */
-    private SoundManager() {
+    public SoundManager() {
         logger = Core.getLogger();
         logger.info("Started loading sound resources.");
 
@@ -90,6 +87,7 @@ public class SoundManager {
             loadSound(Sound.BGM_LV5, "res/sound/BGM/Lv5.wav");
             loadSound(Sound.BGM_LV6, "res/sound/BGM/Lv6.wav");
             loadSound(Sound.BGM_LV7, "res/sound/BGM/Lv7.wav");
+            loadSound(Sound.BGM_GAMBLING, "res/sound/BGM/Gambling.wav");
 
             setVolume(currentVolume);
             logger.info("Finished loading all sounds.");
@@ -152,6 +150,9 @@ public class SoundManager {
      * @param volume Int value of volume (0-10)
      */
     private void setVolume(int volume) {
+        /** Maximum and minimum values of volume */
+        float MIN_VOL = -80.0f;
+        float MAX_VOL = 6.0f;
         float newVolume = MIN_VOL + (float)(Math.log(volume + 1) / Math.log(11)) * (MAX_VOL - MIN_VOL);
 
         for (Clip clip : soundClips.values()) {
@@ -219,60 +220,6 @@ public class SoundManager {
             } else {
                 logger.warning("Sound not found: " + sound);
             }
-        }
-    }
-
-    /**
-     * Play the sound file.
-     *
-     * @param sound Key value of sound
-     * @param balance Balance value (-1.0 for left, 1.0 for right, 0.0 for center)
-     */
-    public void playSound(Sound sound, float balance) {
-        if (soundEnabled) {
-            List<Clip> clipPool = soundPools.get(sound);
-            if (clipPool != null) {
-                Clip availableClip = clipPool.stream()
-                        .filter(clip -> !clip.isRunning())
-                        .findFirst()
-                        .orElse(null);
-
-                if (availableClip != null) {
-                    availableClip.setFramePosition(0);
-                    try {
-                        if (POSITIONAL_SOUNDS.contains(sound)) {
-                            setVolumeBalance(availableClip, balance, sound);
-                        }
-                        availableClip.start();
-                        logger.info("Started playing sound: " + sound + " with balance: " + balance);
-                    } catch (Exception e) {
-                        logger.warning("Error playing sound: " + sound + ". Error: " + e.getMessage());
-                        e.printStackTrace();
-                    }
-                } else {
-                    logger.warning("No available clips in pool for sound: " + sound);
-                }
-            } else {
-                logger.warning("Sound not found: " + sound);
-            }
-        }
-    }
-
-    private void setVolumeBalance(Clip clip, float balance, Sound sound) {
-        try {
-            if (clip.isControlSupported(FloatControl.Type.BALANCE)) {
-                FloatControl balanceControl = (FloatControl) clip.getControl(FloatControl.Type.BALANCE);
-                balanceControl.setValue(balance);
-                logger.info("Set BALANCE: " + balance + " for sound: " + sound);
-            } else if (clip.isControlSupported(FloatControl.Type.PAN)) {
-                FloatControl panControl = (FloatControl) clip.getControl(FloatControl.Type.PAN);
-                panControl.setValue(balance);
-                logger.info("Set PAN: " + balance + " for sound: " + sound);
-            } else {
-                logger.info("No supported balance control. Playing in center for sound: " + sound);
-            }
-        } catch (Exception e) {
-            logger.warning("Failed to set balance for sound: " + sound + ". Error: " + e.getMessage());
         }
     }
 

@@ -12,12 +12,10 @@ import java.sql.SQLException;
 public class LoginFrame extends JFrame {
 
     private String userID;
-    private JTextField textID; // ID// 입력 필드
-    private JPasswordField textPassword; // 비밀번호 입력 필드
-    private DatabaseManager db; // UserDatabase 객체 (데이터베이스 작업 담당)
+    private final JTextField textID; // ID// 입력 필드
+    private final JPasswordField textPassword; // 비밀번호 입력 필드
 
     public LoginFrame(DatabaseManager db) {
-        this.db = db; // 전달받은 UserDatabase 객체를 인스턴스 변수에 저장
 
         // GUI 구성
         setTitle("Login"); // 창 제목 설정
@@ -35,7 +33,7 @@ public class LoginFrame extends JFrame {
         Color buttonBorderColor = (Color.BLACK); // 버튼 테두리 색상
 
         JLabel welcome_string = new JLabel("SPACE INVADERS"); // 환영 메시지 레이블 생성
-        welcome_string.setBounds(40, 27, 400, 25); // 레이블 위치 및 크기 설정
+        welcome_string.setBounds(40, 27, 400, 30); // 레이블 위치 및 크기 설정
         welcome_string.setFont(titleFont); // 폰트 크기 조정
         welcome_string.setForeground(textColor);
         add(welcome_string); // 레이블 추가
@@ -60,8 +58,8 @@ public class LoginFrame extends JFrame {
         add(textID); // 필드 추가
 
         JLabel labelPassword = new JLabel("Password:"); // 비밀번호 레이블 생성
-        labelPassword.setBounds(60, 130, 80, 25); // 위치 및 크기 설정
-        labelPassword.setFont(font); // 폰트 설정
+        labelPassword.setBounds(60, 130, 80, 30); // 위치 및 크기 설정
+        labelPassword.setFont( new Font("Arial", Font.BOLD, 15)); // 폰트 설정
         labelPassword.setForeground(textColor);
 
         add(labelPassword); // 레이블 추가

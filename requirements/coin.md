@@ -31,13 +31,13 @@
 
 코인은 게임 점수에 비례해 지급할 예정이며(점수10%), 1000-2000-4000 이런식으로 업그레이드 당 필요 코인이 증가하는 식으로 벨류를 잡았습니다.
 
-> Regarding the application of shop upgrades, our team plans to adjust values like speed when creating the ship in the GameScreen.initialize() section during development.
+> Regarding the application of shop upgrades, our team plans to adjust values like speedY when creating the ship in the GameScreen.initialize() section during development.
 
 상점 업그레이드 적용과 관련해 저희 팀에서 GameScreen.initialize()부분에서 ship생성 시 속도 등의 수치를 조정하며 개발할 것 같습니다.
 
 ### Shop-list
 > We plan to offer the following upgrades in the shop:
-> - Increased bullet speed
+> - Increased bullet speedY
 > - Increased firing rate
 > - Extra life
 > - Increased coin acquisition
